@@ -40,7 +40,8 @@ fun InitialScreen() {
 
     val painter = rememberAsyncImagePainter(R.drawable.splashscreen)
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.BottomCenter
     ) {
         Image(
             modifier = Modifier.fillMaxSize(),
