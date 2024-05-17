@@ -1,5 +1,6 @@
 package com.example.myanimelist
 
+import android.graphics.Color.rgb
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -56,14 +57,14 @@ fun InitialScreen() {
                 .height(90.dp)
                 .padding(bottom = 40.dp),
             shape = RoundedCornerShape(24.dp),
-            borderWidth = 1.dp,
-            gradient = Brush.linearGradient(listOf(Color.Magenta, Color.Cyan)),
+            borderWidth = 2.dp,
+            gradient = Brush.linearGradient(listOf(Color(rgb(219, 137, 79)), Color.Cyan)),
             onCardClick = {}
         ) {
             Column(
                 modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center, // Centralizando verticalmente o texto
-                horizontalAlignment = Alignment.CenterHorizontally // Centralizando horizontalmente o texto
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     text = "Get started",
@@ -117,7 +118,7 @@ fun AnimatedBorderCard(
                     }
                     drawContent()
                 },
-            color = Color.Black,
+            color = Color(rgb(46, 65, 120)),
             shape = shape
         ) {
             content()
