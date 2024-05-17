@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -51,17 +52,24 @@ fun InitialScreen() {
         )
         AnimatedBorderCard(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(all = 40.dp),
-            shape = RoundedCornerShape(8.dp),
+                .width(130.dp)
+                .height(90.dp)
+                .padding(bottom = 40.dp),
+            shape = RoundedCornerShape(24.dp),
             borderWidth = 1.dp,
             gradient = Brush.linearGradient(listOf(Color.Magenta, Color.Cyan)),
             onCardClick = {}
         ) {
-            Text(
-                text = "Get started",
-                color = Color.White,
-            )
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center, // Centralizando verticalmente o texto
+                horizontalAlignment = Alignment.CenterHorizontally // Centralizando horizontalmente o texto
+            ) {
+                Text(
+                    text = "Get started",
+                    color = Color.White,
+                )
+            }
         }
     }
 
