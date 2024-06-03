@@ -33,8 +33,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 
 @Composable
@@ -51,6 +53,18 @@ fun InitialScreen() {
             contentDescription = "Anime Screen",
             contentScale = ContentScale.FillBounds
         )
+        Column(
+            modifier = Modifier.fillMaxSize().padding(0.dp, 100.dp, 0.dp, 0.dp),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "MY ANIME LIST",
+                color = Color.White,
+                fontFamily = FontFamily.Cursive,
+                fontSize = 22.sp
+            )
+        }
         AnimatedBorderCard(
             modifier = Modifier
                 .width(130.dp)
