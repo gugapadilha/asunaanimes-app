@@ -8,10 +8,12 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -54,15 +56,22 @@ fun InitialScreen() {
             contentScale = ContentScale.FillBounds
         )
         Column(
-            modifier = Modifier.fillMaxSize().padding(0.dp, 100.dp, 0.dp, 0.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(0.dp, 100.dp, 0.dp, 0.dp),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = "MY ANIME LIST",
                 color = Color.White,
-                fontFamily = FontFamily.Cursive,
-                fontSize = 22.sp
+                fontFamily = FontFamily.Monospace,
+                fontSize = 20.sp
+            )
+            Spacer(modifier = Modifier
+                .width(250.dp)
+                .height(1.dp)
+                .background(Color.White)
             )
         }
         AnimatedBorderCard(
