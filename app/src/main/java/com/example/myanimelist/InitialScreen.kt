@@ -97,7 +97,6 @@ fun InitialScreen() {
             }
         }
     }
-
 }
 
 @Composable
