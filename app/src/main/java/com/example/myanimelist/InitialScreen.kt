@@ -69,6 +69,7 @@ fun InitialScreen() {
                 fontSize = 20.sp
             )
             Spacer(modifier = Modifier
+                .padding(top = 10.dp)
                 .width(250.dp)
                 .height(1.dp)
                 .background(Color.White)
