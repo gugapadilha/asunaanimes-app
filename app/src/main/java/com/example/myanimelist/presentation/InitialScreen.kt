@@ -1,4 +1,4 @@
-package com.example.myanimelist
+package com.example.myanimelist.presentation
 
 import android.graphics.Color.rgb
 import androidx.compose.animation.core.LinearEasing
@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,6 +39,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
+import com.example.myanimelist.R
 
 @Composable
 fun InitialScreen() {
