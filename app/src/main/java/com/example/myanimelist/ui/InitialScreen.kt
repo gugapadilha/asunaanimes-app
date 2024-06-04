@@ -1,4 +1,4 @@
-package com.example.myanimelist.presentation
+package com.example.myanimelist.ui
 
 import android.graphics.Color.rgb
 import androidx.compose.animation.core.LinearEasing

@@ -5,7 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.myanimelist.ui.HomeScreen
-import com.example.myanimelist.presentation.InitialScreen
+import com.example.myanimelist.ui.InitialScreen
 
 @Composable
 fun SetupNavGraph(
