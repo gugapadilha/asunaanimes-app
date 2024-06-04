@@ -71,11 +71,12 @@ fun InitialScreen(
                 fontFamily = FontFamily.Monospace,
                 fontSize = 20.sp
             )
-            Spacer(modifier = Modifier
-                .padding(top = 10.dp)
-                .width(250.dp)
-                .height(1.dp)
-                .background(Color.White)
+            Spacer(
+                modifier = Modifier
+                    .padding(top = 10.dp)
+                    .width(250.dp)
+                    .height(1.dp)
+                    .background(Color.White)
             )
         }
         AnimatedBorderCard(
@@ -94,6 +95,9 @@ fun InitialScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
+                    modifier = Modifier.clickable {
+                        navController.navigate(route = "home_screen")
+                    },
                     text = "Get started",
                     color = Color.White,
                 )
