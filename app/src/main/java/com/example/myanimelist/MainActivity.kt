@@ -7,7 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.myanimelist.nav.SetupNavGraph
 import com.example.myanimelist.presentation.InitialScreen
-import com.example.myanimelist.ui.theme.MyAnimeListTheme
+import com.example.myanimelist.presentation.theme.MyAnimeListTheme
 
 class MainActivity : ComponentActivity() {
     lateinit var navController: NavHostController
