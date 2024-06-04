@@ -38,11 +38,14 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.myanimelist.R
 
 @Composable
-fun InitialScreen() {
+fun InitialScreen(
+    navController: NavHostController
+) {
 
     val painter = rememberAsyncImagePainter(R.drawable.splashscreen)
     Box(
