@@ -47,8 +47,8 @@ fun HomeScreen(navController: NavController) {
     ) {
         AnimatedBorderCard(
             modifier = Modifier
-                .width(130.dp)
-                .height(90.dp)
+                .width(300.dp)
+                .height(110.dp)
                 .padding(bottom = 40.dp),
             shape = RoundedCornerShape(24.dp),
             borderWidth = 3.dp,
@@ -69,7 +69,7 @@ fun HomeScreen(navController: NavController) {
                     modifier = Modifier.clickable {
                         navController.navigate(route = "watched_screen")
                     },
-                    text = "Get started",
+                    text = "Watched Animes",
                     color = Color.White,
                 )
             }
