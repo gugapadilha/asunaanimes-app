@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.myanimelist.R
@@ -71,8 +72,10 @@ fun HomeScreen(navController: NavController) {
                     },
                     text = "Watched Animes",
                     color = Color.White,
+                    fontSize = 26.sp
                 )
             }
         }
     }
 }
+
