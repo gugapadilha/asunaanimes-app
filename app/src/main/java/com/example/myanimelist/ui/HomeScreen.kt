@@ -1,11 +1,14 @@
 package com.example.myanimelist.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -17,13 +20,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.myanimelist.R
-
 @Composable
 fun HomeScreen(navController: NavController) {
 
@@ -40,24 +43,31 @@ fun HomeScreen(navController: NavController) {
             contentScale = ContentScale.FillBounds
         )
     }
-    AnimeCard(navController = navController,"Watched Animes")
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
+    ) {
+        Spacer(modifier = Modifier.height(570.dp))
+        AnimeCard(navController = navController, "Watched Animes")
+        Spacer(modifier = Modifier.height(16.dp))
+        AnimeCard(navController = navController, "Favorite Animes")
+        Spacer(modifier = Modifier.height(16.dp))
+        AnimeCard(navController = navController, "Best Animes")
+    }
 }
 
 @Composable
 fun AnimeCard(navController: NavController, textUnit: String) {
 
-    Column(
+    Box(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(0.dp, 100.dp, 0.dp, 0.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .fillMaxWidth()
+            .height(70.dp)
     ) {
         AnimatedBorderCard(
-            modifier = Modifier
-                .width(300.dp)
-                .height(110.dp)
-                .padding(bottom = 40.dp),
+            modifier = Modifier.fillMaxSize(),
             shape = RoundedCornerShape(24.dp),
             borderWidth = 3.dp,
             gradient = Brush.linearGradient(
@@ -66,23 +76,17 @@ fun AnimeCard(navController: NavController, textUnit: String) {
                     Color.Gray
                 )
             ),
-            onCardClick = {}
+            onCardClick = { navController.navigate(route = "watched_screen") }
         ) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    modifier = Modifier.clickable {
-                        navController.navigate(route = "watched_screen")
-                    },
-                    text = textUnit,
-                    color = Color.White,
-                    fontSize = 26.sp
-                )
-            }
+            Text(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable { navController.navigate(route = "watched_screen") },
+                text = textUnit,
+                color = Color.White,
+                fontSize = 26.sp,
+                textAlign = TextAlign.Center
+            )
         }
     }
-
 }
