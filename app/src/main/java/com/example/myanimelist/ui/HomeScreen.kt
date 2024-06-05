@@ -50,16 +50,16 @@ fun HomeScreen(navController: NavController) {
             .padding(horizontal = 16.dp)
     ) {
         Spacer(modifier = Modifier.height(570.dp))
-        AnimeCard(navController = navController, "Watched Animes")
+        AnimeCard(navController = navController, "Watched Animes", route = "watched_screen")
         Spacer(modifier = Modifier.height(16.dp))
-        AnimeCard(navController = navController, "Favorite Animes")
+        AnimeCard(navController = navController, "Favorite Animes", route = "favorite_screen")
         Spacer(modifier = Modifier.height(16.dp))
-        AnimeCard(navController = navController, "Best Animes")
+        AnimeCard(navController = navController, "Best Animes", route = "best_screen")
     }
 }
 
 @Composable
-fun AnimeCard(navController: NavController, textUnit: String) {
+fun AnimeCard(navController: NavController, textUnit: String, route: String) {
 
     Box(
         modifier = Modifier
@@ -76,12 +76,13 @@ fun AnimeCard(navController: NavController, textUnit: String) {
                     Color.Gray
                 )
             ),
-            onCardClick = { navController.navigate(route = "watched_screen") }
+            onCardClick = { navController.navigate(route = route) }
         ) {
             Text(
                 modifier = Modifier
                     .fillMaxSize()
-                    .clickable { navController.navigate(route = "watched_screen") },
+                    .clickable { navController.navigate(route = route) }
+                    .padding(top = 13.dp),
                 text = textUnit,
                 color = Color.White,
                 fontSize = 26.sp,
