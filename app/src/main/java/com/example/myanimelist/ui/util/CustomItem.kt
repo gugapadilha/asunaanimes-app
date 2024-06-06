@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,7 +30,9 @@ fun CustomItem(anime: Anime) {
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Image(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .width(120.dp)
+                .height(120.dp),
             painter = rememberAsyncImagePainter(anime.photoUrl),
             contentDescription = "Anime Screen",
             contentScale = ContentScale.FillBounds
