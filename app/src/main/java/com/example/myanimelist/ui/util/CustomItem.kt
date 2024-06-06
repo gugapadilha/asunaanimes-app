@@ -13,13 +13,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
 import com.example.myanimelist.data.model.Anime
+import com.example.myanimelist.data.repository.AnimeRepository
 
 @Composable
+
 fun CustomItem() {
-
-    val painter = Anime()
-
+    val anime = Anime(name = "Nome do Anime", description = "Descrição do Anime", photoUrl = "url_da_foto")
 
     Row(
         modifier = Modifier
@@ -31,7 +32,7 @@ fun CustomItem() {
     ){
         Image(
             modifier = Modifier.fillMaxSize(),
-            painter = painter,
+            painter = rememberImagePainter(data = anime.photoUrl),
             contentDescription = "Anime Screen",
             contentScale = ContentScale.FillBounds
         )
