@@ -23,7 +23,7 @@ import com.example.myanimelist.data.model.Anime
 fun CustomItem(anime: Anime) {
     Row(
         modifier = Modifier
-            .background(Color.LightGray)
+            .background(Color.Transparent)
             .fillMaxWidth()
             .padding(24.dp),
         verticalAlignment = Alignment.CenterVertically,
