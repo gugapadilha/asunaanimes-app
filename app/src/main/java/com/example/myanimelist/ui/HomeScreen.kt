@@ -1,5 +1,6 @@
 package com.example.myanimelist.ui
 
+import android.graphics.Color.rgb
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -72,9 +73,9 @@ fun AnimeCard(navController: NavController, textUnit: String, route: String) {
             borderWidth = 3.dp,
             gradient = Brush.linearGradient(
                 listOf(
-                    Color(android.graphics.Color.rgb(117, 27, 16)),
-                    Color.Gray
-                )
+                    Color(rgb(117, 27, 16)),
+                    Color(rgb(219, 136, 81)
+                ))
             ),
             onCardClick = { navController.navigate(route = route) }
         ) {
