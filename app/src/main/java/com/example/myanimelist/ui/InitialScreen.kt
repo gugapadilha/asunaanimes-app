@@ -86,7 +86,7 @@ fun InitialScreen(
                 .padding(bottom = 40.dp),
             shape = RoundedCornerShape(24.dp),
             borderWidth = 3.dp,
-            gradient = Brush.linearGradient(listOf(Color(rgb(117, 27, 16)), Color.Gray)),
+            gradient = Brush.linearGradient(listOf(Color(rgb(117, 27, 16)), Color(rgb(219, 136, 81)))),
             onCardClick = {}
         ) {
             Column(
@@ -148,7 +148,7 @@ fun AnimatedBorderCard(
                     }
                     drawContent()
                 },
-            color = Color(rgb(217, 136, 78)),
+            color = Color(rgb(217, 136, 78)).copy(alpha = 0.0f),
             shape = shape
         ) {
             content()
