@@ -10,11 +10,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.myanimelist.R
+import com.example.myanimelist.data.repository.AnimeRepository
+import com.example.myanimelist.ui.util.CustomItem
 
 @Composable
 fun WatchedScreen(navController : NavHostController) {
 
     val painter = rememberAsyncImagePainter(R.drawable.watched_screen)
+
+    val animeRepository = AnimeRepository()
+    val animeList = animeRepository.getAllData()
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -26,6 +31,10 @@ fun WatchedScreen(navController : NavHostController) {
             contentDescription = "Anime Screen",
             contentScale = ContentScale.FillBounds
         )
+
+        animeList.forEach { anime ->
+            CustomItem(anime = anime)
+        }
     }
 
 }
