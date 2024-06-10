@@ -52,8 +52,6 @@ fun WatchedScreen(navController: NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CustomData()
-
-
             Row(
                 modifier = Modifier.horizontalScroll(rememberScrollState()),
                 verticalAlignment = Alignment.CenterVertically
@@ -62,8 +60,6 @@ fun WatchedScreen(navController: NavHostController) {
                     CustomItem(anime = anime)
                 }
             }
-
-
             Spacer(
                 modifier = Modifier
                     .padding(top = 10.dp)

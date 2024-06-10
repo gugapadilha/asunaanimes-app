@@ -50,13 +50,13 @@ fun CustomItem(anime: Anime) {
 
 @Composable
 fun CustomData() {
-
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
+            modifier = Modifier.padding(top = 12.dp),
             text = "2024",
             color = Color.White,
             fontSize = 28.sp,
