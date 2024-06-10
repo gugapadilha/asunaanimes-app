@@ -27,15 +27,15 @@ fun CustomItem(anime: Anime) {
         modifier = Modifier
             .background(Color.Transparent)
             .fillMaxWidth()
-            .padding(24.dp),
+            .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+        horizontalArrangement = Arrangement.spacedBy(6.dp)
     ) {
         Image(
             modifier = Modifier
                 .clip(RoundedCornerShape(16.dp))
-                .width(120.dp)
-                .height(120.dp),
+                .width(140.dp)
+                .height(100.dp),
             painter = rememberAsyncImagePainter(anime.photoUrl),
             contentDescription = "Anime Screen",
             contentScale = ContentScale.FillBounds,
