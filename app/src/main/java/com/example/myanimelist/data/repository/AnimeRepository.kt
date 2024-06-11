@@ -38,6 +38,9 @@ class AnimeRepository {
             ),
             Anime(
                 photoUrl = "https://bilder.fernsehserien.de/sendung/hr2/darling-in-the-franxx_226689.png"
+            ),
+            Anime(
+                photoUrl = "https://m.media-amazon.com/images/S/pv-target-images/7730382bf4459ad9f445f7a7fe5b814c7ff22bbac43cf91667e6ea30c718fb12.jpg"
             )
         )
     }
