@@ -41,7 +41,13 @@ class AnimeRepository {
             ),
             Anime(
                 photoUrl = "https://m.media-amazon.com/images/S/pv-target-images/7730382bf4459ad9f445f7a7fe5b814c7ff22bbac43cf91667e6ea30c718fb12.jpg"
-            )
+            ),
+            Anime(
+                photoUrl = "https://imgsrv.crunchyroll.com/cdn-cgi/image/fit=contain,format=auto,quality=85,width=1200,height=675/catalog/crunchyroll/4305090653ee4239dd0d797f1a4a6bdf.jpe"
+            ),
+            Anime(
+                photoUrl = "https://ovicio.com.br/wp-content/uploads/2024/02/20240208-haikyuu-final-img1-1024x576.jpg"
+            ),
         )
     }
 
