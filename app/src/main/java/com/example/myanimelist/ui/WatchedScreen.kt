@@ -66,7 +66,6 @@ fun WatchedScreen(navController: NavHostController) {
                     fontSize = 28.sp,
                     modifier = Modifier.padding(top = 12.dp)
                 )
-                val animeList = animeRepository.getAllData() // Obter lista de animes para o ano atual
                 Row(
                     modifier = Modifier.horizontalScroll(rememberScrollState()),
                     verticalAlignment = Alignment.CenterVertically
