@@ -78,7 +78,7 @@ fun WatchedScreen(navController: NavHostController) {
                 }
                 Spacer(
                     modifier = Modifier
-                        .padding(top = 10.dp)
+                        .padding(top = 20.dp)
                         .fillMaxWidth()
                         .height(1.dp)
                         .background(Color.White)
