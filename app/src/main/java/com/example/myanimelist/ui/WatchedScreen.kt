@@ -29,7 +29,6 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.myanimelist.R
 import com.example.myanimelist.data.repository.AnimeRepository
 import com.example.myanimelist.data.repository.YearRepository
-import com.example.myanimelist.ui.util.CustomData
 import com.example.myanimelist.ui.util.CustomItem
 
 @Composable
@@ -66,7 +65,7 @@ fun WatchedScreen(navController: NavHostController) {
                     color = Color.White,
                     fontFamily = FontFamily.SansSerif,
                     fontSize = 28.sp,
-                    modifier = Modifier.padding(top = 12.dp)
+                    modifier = Modifier.padding(top = 20.dp)
                 )
                 Row(
                     modifier = Modifier.horizontalScroll(rememberScrollState()),
@@ -80,8 +79,8 @@ fun WatchedScreen(navController: NavHostController) {
                     modifier = Modifier
                         .padding(top = 20.dp)
                         .fillMaxWidth()
-                        .height(1.dp)
-                        .background(Color.White)
+                        .height(2.dp)
+                        .background(Color.Gray)
                 )
             }
         }
