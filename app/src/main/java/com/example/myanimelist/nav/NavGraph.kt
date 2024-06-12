@@ -23,6 +23,9 @@ fun SetupNavGraph(
         composable(route = Screen.Watched.route){
             WatchedScreen(navController = navController)
         }
+        composable(route = Screen.Favorite.route){
+            WatchedScreen(navController = navController)
+        }
     }
     
 }
