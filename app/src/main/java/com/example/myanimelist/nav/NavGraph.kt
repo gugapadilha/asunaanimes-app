@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.myanimelist.ui.FavoriteScreen
 import com.example.myanimelist.ui.HomeScreen
 import com.example.myanimelist.ui.InitialScreen
 import com.example.myanimelist.ui.WatchedScreen
@@ -24,7 +25,7 @@ fun SetupNavGraph(
             WatchedScreen(navController = navController)
         }
         composable(route = Screen.Favorite.route){
-            WatchedScreen(navController = navController)
+            FavoriteScreen(navController = navController)
         }
     }
     
