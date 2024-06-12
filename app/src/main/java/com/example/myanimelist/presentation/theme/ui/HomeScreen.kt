@@ -1,4 +1,4 @@
-package com.example.myanimelist.ui
+package com.example.myanimelist.presentation.theme.ui
 
 import android.graphics.Color.rgb
 import androidx.compose.foundation.Image

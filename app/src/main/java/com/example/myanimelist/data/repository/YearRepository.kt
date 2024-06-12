@@ -1,6 +1,6 @@
 package com.example.myanimelist.data.repository
 
-import com.example.myanimelist.data.model.Year
+import com.example.myanimelist.domain.model.Year
 
 class YearRepository {
 

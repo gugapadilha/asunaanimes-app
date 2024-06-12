@@ -1,4 +1,4 @@
-package com.example.myanimelist.data.model
+package com.example.myanimelist.domain.model
 
 data class Anime(
     val name: String,

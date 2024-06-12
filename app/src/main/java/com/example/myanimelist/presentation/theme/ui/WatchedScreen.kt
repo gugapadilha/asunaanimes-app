@@ -1,4 +1,4 @@
-package com.example.myanimelist.ui
+package com.example.myanimelist.presentation.theme.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -28,7 +28,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.myanimelist.R
 import com.example.myanimelist.data.repository.AnimeRepository
 import com.example.myanimelist.data.repository.YearRepository
-import com.example.myanimelist.ui.util.CustomItem
+import com.example.myanimelist.presentation.theme.ui.util.CustomItem
 
 @Composable
 fun WatchedScreen(navController: NavHostController) {
