@@ -70,7 +70,7 @@ fun CustomFavorite(anime: Anime, position: Int) {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            modifier = Modifier.padding(bottom = 12.dp),
+            modifier = Modifier.padding(bottom = 4.dp),
             text = "${anime.order}°",
             color = textColor,
             fontSize = 26.sp,
