@@ -20,7 +20,6 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.myanimelist.domain.model.Anime
 
 @Composable
-
 fun CustomItem(anime: Anime) {
     Row(
         modifier = Modifier
@@ -40,4 +39,18 @@ fun CustomItem(anime: Anime) {
             contentScale = ContentScale.FillBounds,
         )
     }
+}
+
+@Composable
+fun CustomFavorite(anime: Anime, position: Int) {
+    val defaultColor = Color.White
+    val textColor = when (position) {
+        0 -> Color(0xFFFFD700)
+        1 -> Color(0xFFC0C0C0)
+        2 -> Color(0xFFCD7F32)
+        else -> defaultColor
+    }
+
+
+    
 }
