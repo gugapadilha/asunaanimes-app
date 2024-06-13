@@ -28,7 +28,7 @@ class AnimeRepository {
                 name = "Kimetsu no Yaiba",
                 desc = "A family is attacked by demons and only two members survive - Tanjiro and his sister Nezuko, who is turning into a demon slowly. Tanjiro sets out to become a demon slayer to avenge his family and cure his sister.",
                 order = 4,
-                photoUrl = "https://www.mangamag.fr/wp-content/uploads/2022/02/Liste-episodes-demon-slayer-1.png.jpg"
+                photoUrl = "https://static.wikia.nocookie.net/tsrd/images/a/a3/Kimetsu-no-yaiba-temporada-3-kanroji-kokushibo_zu3m.1200.webp/revision/latest?cb=20230607183216&path-prefix=pt-br"
             ),
             Anime(
                 name = "Cyberpunk Edgerunners",
@@ -76,7 +76,7 @@ class AnimeRepository {
                 name = "Mushoku Tensei",
                 desc = "An unnamed obese 34-year-old Japanese NEET is evicted from his home by his four siblings following his parents' deaths and skipping the funeral service. Upon some self-introspection, he concluded his life was ultimately pointless but still intercepts a speeding truck heading towards a group of teenagers in an attempt to do something meaningful for once in his life and manages to pull one of them out of harm's way before dying.",
                 order = 12,
-                photoUrl = "https://m.media-amazon.com/images/S/pv-target-images/7730382bf4459ad9f445f7a7fe5b814c7ff22bbac43cf91667e6ea30c718fb12.jpg"
+                photoUrl = "https://criticalhits.com.br/wp-content/uploads/2022/03/mushoku-8.webp"
             ),
             Anime(
                 name = "Solo Leveling",
