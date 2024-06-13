@@ -64,8 +64,7 @@ fun CustomFavorite(anime: Anime, position: Int) {
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(24.dp),
+            .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -90,13 +89,14 @@ fun CustomFavorite(anime: Anime, position: Int) {
             color = Color.White,
             fontSize = 24.sp,
             fontFamily = FontFamily.SansSerif,
-            modifier = Modifier.padding(bottom = 60.dp)
+            modifier = Modifier.padding(bottom = 40.dp)
         )
 
         Spacer(modifier = Modifier
+            .padding(bottom = 40.dp)
             .fillMaxWidth()
             .height(2.dp)
-            .background(Color.White)
+            .background(Color.Gray)
         )
     }
 
