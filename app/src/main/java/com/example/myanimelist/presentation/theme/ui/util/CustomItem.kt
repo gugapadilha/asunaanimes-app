@@ -21,8 +21,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.example.myanimelist.data.repository.AnimeRepository
@@ -68,8 +70,10 @@ fun CustomFavorite(anime: Anime, position: Int) {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
+            modifier = Modifier.padding(bottom = 12.dp),
             text = "${anime.order}°",
             color = textColor,
+            fontSize = 26.sp,
             fontWeight = FontWeight.Light
         )
         Image(
@@ -79,20 +83,19 @@ fun CustomFavorite(anime: Anime, position: Int) {
             modifier = Modifier
                 .height(200.dp)
                 .fillMaxWidth()
+                .padding(bottom = 12.dp)
         )
         Text(
             text = anime.name,
             color = Color.White,
-            fontWeight = FontWeight.Bold
+            fontSize = 24.sp,
+            fontFamily = FontFamily.SansSerif,
+            modifier = Modifier.padding(bottom = 60.dp)
         )
+
         Spacer(modifier = Modifier
             .fillMaxWidth()
-            .height(10.dp)
-            .background(Color.Black)
-        )
-        Spacer(modifier = Modifier
-            .fillMaxWidth()
-            .height(1.dp)
+            .height(2.dp)
             .background(Color.White)
         )
     }

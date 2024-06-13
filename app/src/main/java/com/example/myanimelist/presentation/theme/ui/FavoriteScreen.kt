@@ -13,11 +13,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import com.example.myanimelist.R
 import com.example.myanimelist.data.repository.AnimeRepository
 import com.example.myanimelist.presentation.theme.ui.util.CustomFavorite
@@ -27,7 +28,7 @@ fun FavoriteScreen(navController: NavHostController) {
     val animeRepository = AnimeRepository()
     val getAllAnimeData = animeRepository.getAllData()
 
-    val painter = rememberAsyncImagePainter(R.drawable.watched_screen)
+    val painter = rememberAsyncImagePainter(R.drawable.favorite_screen)
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -46,7 +47,8 @@ fun FavoriteScreen(navController: NavHostController) {
                 Text(
                     text = "Top 10 Anime List:",
                     color = Color.White,
-                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.SansSerif,
+                    fontSize = 28.sp,
                     modifier = Modifier.padding(16.dp)
                 )
             }
