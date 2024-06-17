@@ -238,6 +238,7 @@ fun CustomBest() {
     }
 }
 
+@SuppressLint("UnnecessaryComposedModifier")
 fun Modifier.clickableWithoutRipple(
     interactionSource: MutableInteractionSource,
     onClick: () -> Unit
