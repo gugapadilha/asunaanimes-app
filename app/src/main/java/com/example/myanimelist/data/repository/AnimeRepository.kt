@@ -52,7 +52,7 @@ class AnimeRepository {
                 name = "Konosuba",
                 desc = "Kazuma Satou, a high school student, gamer and shut-in, died on an average day walking home from school, performing the one heroic act of his life. He reawakens in the afterlife, greeted by a beautiful but rude girl named Aqua, who claims to be a goddess that guides the youth whose lives got cut short.",
                 order = 8,
-                photoUrl = "https://static0.gamerantimages.com/wordpress/wp-content/uploads/2024/03/konosuba-season-3-feature.jpg"
+                photoUrl = "https://image.api.playstation.com/vulcan/ap/rnd/202310/0513/90b39ae2768076228bd844bd7e18eb36ecaa18ecbfe17b73.jpg"
             ),
             Anime(
                 name = "Akame ga Kill",

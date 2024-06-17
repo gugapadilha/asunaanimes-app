@@ -45,10 +45,10 @@ fun FavoriteScreen(navController: NavHostController) {
         ) {
             item {
                 Text(
-                    text = "Top 10 Anime List:",
+                    text = "Top Favorite Animes:",
                     color = Color.White,
                     fontFamily = FontFamily.SansSerif,
-                    fontSize = 28.sp,
+                    fontSize = 26.sp,
                     modifier = Modifier.padding(16.dp)
                 )
             }
