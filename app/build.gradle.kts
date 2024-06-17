@@ -73,5 +73,7 @@ dependencies {
     //Navigation
     implementation("androidx.navigation:navigation-compose:2.7.7")
 
+    //Orbital
+    implementation("com.github.skydoves:orbital:0.3.2")
 
 }
