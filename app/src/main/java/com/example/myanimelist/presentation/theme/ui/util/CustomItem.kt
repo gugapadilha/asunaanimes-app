@@ -182,7 +182,7 @@ fun CustomBest() {
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Text(
                                     text = anime.desc,
-                                    color = Color.White,
+                                    color = Color.Gray,
                                     maxLines = if (expanded) 10 else 2,
                                     overflow = TextOverflow.Clip
                                 )
