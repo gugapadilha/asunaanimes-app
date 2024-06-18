@@ -138,7 +138,7 @@ fun CustomBest() {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surface)
+                .background(Color.Black)
         ) {
             items(
                 items = getAllAnimeData,
@@ -173,7 +173,7 @@ fun CustomBest() {
                             ) {
                                 Text(
                                     text = anime.name,
-                                    color = MaterialTheme.colorScheme.onSurface,
+                                    color = Color.White,
                                     fontSize = MaterialTheme.typography.titleLarge.fontSize,
                                     fontWeight = FontWeight.Medium,
                                     maxLines = if (expanded) 2 else 1,
@@ -182,7 +182,7 @@ fun CustomBest() {
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Text(
                                     text = anime.desc,
-                                    color = MaterialTheme.colorScheme.onSurface,
+                                    color = Color.White,
                                     maxLines = if (expanded) 10 else 2,
                                     overflow = TextOverflow.Clip
                                 )
@@ -215,11 +215,8 @@ fun CustomBest() {
                                 modifier = Modifier
                                     .padding(all = 10.dp)
                                     .clip(RoundedCornerShape(size = 10.dp))
-                                    .background(
-                                        MaterialTheme.colorScheme.surfaceColorAtElevation(
-                                            elevation = 10.dp
-                                        )
-                                    )
+                                    .background(Color.Black)
+                                    .padding(10.dp)
                             ) {
                                 image()
                                 text()
