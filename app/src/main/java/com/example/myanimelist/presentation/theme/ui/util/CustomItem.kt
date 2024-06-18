@@ -11,6 +11,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -52,6 +53,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import coil.request.ImageRequest
+import com.example.myanimelist.R
 import com.example.myanimelist.data.repository.AnimeRepository
 
 @Composable
@@ -134,106 +136,120 @@ fun CustomBest() {
     val animeRepository = AnimeRepository()
     val getAllAnimeData = animeRepository.getAllData()
 
-    Orbital {
-        LazyColumn(
+    val painter = rememberAsyncImagePainter(R.drawable.best_screen)
+
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .fillMaxWidth()) {
+        Image(
+            painter = painter,
+            contentDescription = "Anime",
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Black)
-        ) {
-            items(
-                items = getAllAnimeData,
-                key = { it.name }
-            ) { anime ->
-                var expanded by rememberSaveable { mutableStateOf(false) }
-                AnimatedVisibility(
-                    remember {
-                        MutableTransitionState(false)
-                    }
-                        .apply { targetState = true },
-                    enter = fadeIn(tween(durationMillis = 300)),
-                    exit = fadeOut(tween(durationMillis = 300))
-                ) {
-                    Orbital(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickableWithoutRipple(
-                                interactionSource = MutableInteractionSource(),
-                                onClick = { expanded = !expanded }
-                            )
+                .fillMaxWidth(),
+            contentScale = ContentScale.FillBounds
+
+        )
+        Orbital {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize(),
+            ) {
+                items(
+                    items = getAllAnimeData,
+                    key = { it.name },
+                ) { anime ->
+                    var expanded by rememberSaveable { mutableStateOf(false) }
+                    AnimatedVisibility(
+                        remember {
+                            MutableTransitionState(false)
+                        }
+                            .apply { targetState = true },
+                        enter = fadeIn(tween(durationMillis = 300)),
+                        exit = fadeOut(tween(durationMillis = 300))
                     ) {
-                        val text = rememberMovableContentOf {
-                            Column(
-                                modifier = Modifier
-                                    .padding(vertical = 10.dp)
-                                    .padding(horizontal = if (expanded) 20.dp else 10.dp)
-                                    .animateBounds(
-                                        sizeAnimationSpec = tween(durationMillis = 300),
-                                        positionAnimationSpec = tween(durationMillis = 300)
-                                    )
-                            ) {
-                                Text(
-                                    text = anime.name,
-                                    color = Color.White,
-                                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                                    fontWeight = FontWeight.Medium,
-                                    maxLines = if (expanded) 2 else 1,
-                                    overflow = TextOverflow.Ellipsis
+                        Orbital(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickableWithoutRipple(
+                                    interactionSource = MutableInteractionSource(),
+                                    onClick = { expanded = !expanded }
                                 )
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Text(
-                                    text = anime.desc,
-                                    color = Color.Gray,
-                                    maxLines = if (expanded) 10 else 2,
-                                    overflow = TextOverflow.Clip
+                        ) {
+                            val text = rememberMovableContentOf {
+                                Column(
+                                    modifier = Modifier
+                                        .padding(vertical = 10.dp)
+                                        .padding(horizontal = if (expanded) 20.dp else 10.dp)
+                                        .animateBounds(
+                                            sizeAnimationSpec = tween(durationMillis = 300),
+                                            positionAnimationSpec = tween(durationMillis = 300)
+                                        )
+                                ) {
+                                    Text(
+                                        text = anime.name,
+                                        color = Color.White,
+                                        fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                                        fontWeight = FontWeight.Medium,
+                                        maxLines = if (expanded) 2 else 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                    Text(
+                                        text = anime.desc,
+                                        color = Color.Gray,
+                                        maxLines = if (expanded) 10 else 2,
+                                        overflow = TextOverflow.Clip
+                                    )
+                                }
+                            }
+                            val image = rememberMovableContentOf {
+                                AsyncImage(
+                                    modifier = Modifier
+                                        .padding(all = 10.dp)
+                                        .animateBounds(
+                                            modifier = if (expanded) {
+                                                Modifier.fillMaxWidth()
+                                            } else {
+                                                Modifier.size(100.dp)
+                                            },
+                                            sizeAnimationSpec = tween(durationMillis = 300),
+                                            positionAnimationSpec = tween(durationMillis = 300),
+                                        )
+                                        .clip(RoundedCornerShape(10.dp)),
+                                    model = ImageRequest.Builder(LocalContext.current)
+                                        .data(anime.photoUrl)
+                                        .crossfade(true)
+                                        .build(),
+                                    contentDescription = "Mountain Image",
+                                    contentScale = ContentScale.Crop
                                 )
                             }
-                        }
-                        val image = rememberMovableContentOf {
-                            AsyncImage(
-                                modifier = Modifier
-                                    .padding(all = 10.dp)
-                                    .animateBounds(
-                                        modifier = if (expanded) {
-                                            Modifier.fillMaxWidth()
-                                        } else {
-                                            Modifier.size(100.dp)
-                                        },
-                                        sizeAnimationSpec = tween(durationMillis = 300),
-                                        positionAnimationSpec = tween(durationMillis = 300),
-                                    )
-                                    .clip(RoundedCornerShape(10.dp)),
-                                model = ImageRequest.Builder(LocalContext.current)
-                                    .data(anime.photoUrl)
-                                    .crossfade(true)
-                                    .build(),
-                                contentDescription = "Mountain Image",
-                                contentScale = ContentScale.Crop
-                            )
-                        }
-                        if (expanded) {
-                            Column(
-                                modifier = Modifier
-                                    .padding(all = 10.dp)
-                                    .clip(RoundedCornerShape(size = 10.dp))
-                                    .background(Color.Black)
-                                    .padding(10.dp)
-                            ) {
-                                image()
-                                text()
-                            }
-                        } else {
-                            Row {
-                                image()
-                                text()
+                            if (expanded) {
+                                Column(
+                                    modifier = Modifier
+                                        .padding(all = 10.dp)
+                                        .clip(RoundedCornerShape(size = 10.dp))
+                                        .padding(10.dp)
+                                ) {
+                                    image()
+                                    text()
+                                }
+                            } else {
+                                Row {
+                                    image()
+                                    text()
+                                }
                             }
                         }
                     }
                 }
             }
-        }
 
+        }
     }
 }
+
 
 @SuppressLint("UnnecessaryComposedModifier")
 fun Modifier.clickableWithoutRipple(
