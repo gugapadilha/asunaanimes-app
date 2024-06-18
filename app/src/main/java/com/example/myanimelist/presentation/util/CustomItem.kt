@@ -1,4 +1,4 @@
-package com.example.myanimelist.presentation.theme.ui.util
+package com.example.myanimelist.presentation.util
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility

@@ -4,11 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.myanimelist.presentation.theme.ui.BestScreen
-import com.example.myanimelist.presentation.theme.ui.FavoriteScreen
-import com.example.myanimelist.presentation.theme.ui.HomeScreen
-import com.example.myanimelist.presentation.theme.ui.InitialScreen
-import com.example.myanimelist.presentation.theme.ui.WatchedScreen
+import com.example.myanimelist.presentation.ui.BestScreen
+import com.example.myanimelist.presentation.ui.FavoriteScreen
+import com.example.myanimelist.presentation.ui.HomeScreen
+import com.example.myanimelist.presentation.ui.InitialScreen
+import com.example.myanimelist.presentation.ui.WatchedScreen
 
 @Composable
 fun SetupNavGraph(

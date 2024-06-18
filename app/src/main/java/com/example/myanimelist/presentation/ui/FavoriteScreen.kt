@@ -1,4 +1,4 @@
-package com.example.myanimelist.presentation.theme.ui
+package com.example.myanimelist.presentation.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -21,7 +21,7 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.myanimelist.R
 import com.example.myanimelist.data.repository.AnimeRepository
-import com.example.myanimelist.presentation.theme.ui.util.CustomFavorite
+import com.example.myanimelist.presentation.util.CustomFavorite
 
 @Composable
 fun FavoriteScreen(navController: NavHostController) {
