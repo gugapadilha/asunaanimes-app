@@ -29,6 +29,7 @@ import com.example.myanimelist.R
 import com.example.myanimelist.data.repository.AnimeRepository
 import com.example.myanimelist.data.repository.YearRepository
 import com.example.myanimelist.presentation.util.CustomItem
+import com.example.myanimelist.presentation.util.CustomWatched
 
 @Composable
 fun WatchedScreen(navController: NavHostController) {
@@ -71,7 +72,7 @@ fun WatchedScreen(navController: NavHostController) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     animeList.forEach { anime ->
-                        CustomItem(anime = anime)
+                        CustomWatched(anime = anime)
                     }
                 }
                 Spacer(
