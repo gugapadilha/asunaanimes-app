@@ -21,7 +21,4 @@
   
    ### Images Mobile Project:
   
-
-
-![image2](https://github.com/gugapadilha/animelist-app/assets/79876042/2b309810-0475-4a26-8061-7f04f05a565c)
-![image1](https://github.com/gugapadilha/animelist-app/assets/79876042/f0aea317-0a32-4e78-8cfd-88b590f3990f)
+![photo1](https://github.com/gugapadilha/animelist-app/assets/79876042/ffbe60d5-9484-4e47-bb70-7d4402ed38fe)
