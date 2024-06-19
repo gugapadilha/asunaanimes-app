@@ -21,8 +21,7 @@
   
    ### Images Mobile Project:
   
-![image](https://github.com/gugapadilha/supp4you-app/assets/79876042/912bc73f-03a1-4508-87eb-1bfcfdbf26de)
-![image](https://github.com/gugapadilha/supp4you-app/assets/79876042/400fd3ca-9db5-43da-9c3b-f7b006f48857)
-![image](https://github.com/gugapadilha/supp4you-app/assets/79876042/134d4681-6b88-4f3d-a37c-2a5158c8d3b5)
-![image](https://github.com/gugapadilha/supp4you-app/assets/79876042/c4eb288c-8283-4c33-a8a6-f9369b733ce4)
 
+
+![image2](https://github.com/gugapadilha/animelist-app/assets/79876042/2b309810-0475-4a26-8061-7f04f05a565c)
+![image1](https://github.com/gugapadilha/animelist-app/assets/79876042/f0aea317-0a32-4e78-8cfd-88b590f3990f)
