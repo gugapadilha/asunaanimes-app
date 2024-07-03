@@ -14,7 +14,7 @@ interface AnimeService {
     fun getSearchedAnime(@Query("q")queryString: String): Call<SearchedAnime>
 
     companion object  {
-        val BASE_URL = "https://docs.api.jikan.moe/"
+        const val BASE_URL = "https://docs.api.jikan.moe/"
 
         fun create(): AnimeService {
             val retrofit = Retrofit.Builder()
