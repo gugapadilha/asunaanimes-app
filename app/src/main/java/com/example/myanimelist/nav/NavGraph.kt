@@ -8,6 +8,7 @@ import com.example.myanimelist.presentation.ui.BestScreen
 import com.example.myanimelist.presentation.ui.FavoriteScreen
 import com.example.myanimelist.presentation.ui.HomeScreen
 import com.example.myanimelist.presentation.ui.InitialScreen
+import com.example.myanimelist.presentation.ui.SearchScreen
 import com.example.myanimelist.presentation.ui.WatchedScreen
 
 @Composable
@@ -22,6 +23,9 @@ fun SetupNavGraph(
         composable(route = Screen.Home.route){
             HomeScreen(navController = navController)
         }
+        composable(route = Screen.Search.route){
+            SearchScreen(navController = navController)
+        }
         composable(route = Screen.Watched.route){
             WatchedScreen(navController = navController)
         }
@@ -32,5 +36,4 @@ fun SetupNavGraph(
             BestScreen(navController = navController)
         }
     }
-    
 }

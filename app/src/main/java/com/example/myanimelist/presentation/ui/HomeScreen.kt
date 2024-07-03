@@ -47,7 +47,9 @@ fun HomeScreen(navController: NavController) {
             .fillMaxSize()
             .padding(horizontal = 16.dp)
     ) {
-        Spacer(modifier = Modifier.height(570.dp))
+        Spacer(modifier = Modifier.height(520.dp))
+        AnimeCard(navController = navController, "Search Animes", route = "search_screen")
+        Spacer(modifier = Modifier.height(16.dp))
         AnimeCard(navController = navController, "Watched Animes", route = "watched_screen")
         Spacer(modifier = Modifier.height(16.dp))
         AnimeCard(navController = navController, "Favorite Animes", route = "favorite_screen")
