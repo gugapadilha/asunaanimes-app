@@ -1,5 +1,6 @@
 package com.example.myanimelist.presentation.util
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,15 +23,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
+import com.example.myanimelist.data.repository.AnimeRepository
+import com.example.myanimelist.domain.model.Anime
 import com.example.myanimelist.presentation.ui.AnimatedBorderCard
 
 @Composable
-fun CustomSearch() {
+fun CustomSearch(anime: Anime) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -52,6 +56,23 @@ fun CustomSearch() {
             AnimeCard()
         }
 
+        Image(
+            painter = rememberImagePainter(data = anime.photoUrl, builder = {
+            }),
+            contentDescription = "Anime picture",
+            modifier = Modifier
+                .height(200.dp)
+                .fillMaxWidth()
+                .padding(bottom = 12.dp)
+        )
+        Text(
+            text = anime.name,
+            color = Color.White,
+            fontSize = 24.sp,
+            fontFamily = FontFamily.SansSerif,
+            modifier = Modifier.padding(bottom = 40.dp)
+        )
+
 
     }
 }
@@ -59,7 +80,6 @@ fun CustomSearch() {
 
 @Composable
 fun AnimeCard() {
-
     Box(
         modifier = Modifier
             .height(50.dp)
@@ -92,6 +112,10 @@ fun AnimeCard() {
 
 @Preview
 @Composable
-fun CustomSearchPreview() {
-    CustomSearch()
+fun PreviewCustomSearch() {
+    val animeRepository = AnimeRepository()
+    val getAllAnimeData = animeRepository.getAllData()
+
+    CustomSearch(anime = getAllAnimeData.first())
+
 }

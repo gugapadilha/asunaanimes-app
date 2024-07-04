@@ -6,10 +6,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
+import com.example.myanimelist.data.repository.AnimeRepository
 import com.example.myanimelist.presentation.util.CustomSearch
 
 @Composable
 fun SearchScreen(navController : NavHostController) {
+    val animeRepository = AnimeRepository()
+    val getAllAnimeData = animeRepository.getAllData()
 
-    CustomSearch()
+    CustomSearch(anime = getAllAnimeData.first())
 }
