@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,19 +27,22 @@ fun CustomSearch() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 30.dp),
+                .padding(top = 30.dp, start = 10.dp),
             horizontalAlignment = Alignment.Start,
         ) {
-            var text by remember { mutableStateOf("eg: Fate Zero")}
-            TextField(value = text, onValueChange = {
-                text = it
-            } )
+            var text by remember { mutableStateOf("") }
+
+            TextField(value = text,
+                placeholder = { Text(text = "eg: Fate Zero") },
+                singleLine = true,
+                maxLines = 1,
+                onValueChange = { text = it })
         }
     }
 }
 
 @Preview
 @Composable
-fun CustomSearchPreview () {
+fun CustomSearchPreview() {
     CustomSearch()
 }
