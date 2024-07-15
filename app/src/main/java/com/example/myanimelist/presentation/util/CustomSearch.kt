@@ -1,6 +1,7 @@
 package com.example.myanimelist.presentation.util
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -63,7 +64,7 @@ fun SearchBox() {
 
 @Composable
 fun AnimeItem(anime: Anime) {
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 30.dp, vertical = 12.dp)
@@ -76,14 +77,21 @@ fun AnimeItem(anime: Anime) {
                 .fillMaxWidth()
         )
 
-        Text(
-            text = anime.name,
-            color = Color.White,
-            fontSize = 18.sp,
-            fontFamily = FontFamily.SansSerif,
-            modifier = Modifier.padding(bottom = 10.dp),
-            textAlign = TextAlign.Center
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 160.dp)
+                .background(Color.Black.copy(alpha = 0.7f))
+                .padding(8.dp),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            Text(
+                text = anime.name,
+                color = Color.White,
+                fontSize = 18.sp,
+                fontFamily = FontFamily.SansSerif,
+            )
+        }
     }
 }
 
