@@ -1,7 +1,6 @@
 package com.example.myanimelist.presentation.util
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -35,9 +33,12 @@ import com.example.myanimelist.domain.model.Anime
 import com.example.myanimelist.presentation.ui.AnimatedBorderCard
 
 @Composable
-fun CustomSearch(anime: Anime) {
+fun SearchBox() {
+    var text by remember { mutableStateOf("") }
+
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxWidth(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -46,9 +47,7 @@ fun CustomSearch(anime: Anime) {
                 .fillMaxWidth()
                 .padding(top = 30.dp, start = 10.dp, end = 10.dp),
 
-        ) {
-            var text by remember { mutableStateOf("") }
-
+            ) {
             TextField(
                 value = text,
                 onValueChange = { text = it },
@@ -59,8 +58,16 @@ fun CustomSearch(anime: Anime) {
             AnimeCard()
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+    }
+}
 
+@Composable
+fun AnimeItem(anime: Anime) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp)
+    ) {
         Image(
             painter = rememberImagePainter(data = anime.photoUrl),
             contentDescription = "Anime picture",
@@ -112,12 +119,13 @@ fun AnimeCard() {
     }
 }
 
+
 @Preview
 @Composable
 fun PreviewCustomSearch() {
     val animeRepository = AnimeRepository()
     val getAllAnimeData = animeRepository.getAllData()
 
-    CustomSearch(anime = getAllAnimeData.first())
-
+    SearchBox()
+    AnimeItem(anime = getAllAnimeData.first())
 }
