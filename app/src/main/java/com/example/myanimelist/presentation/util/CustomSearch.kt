@@ -80,9 +80,10 @@ fun AnimeItem(anime: Anime) {
         Text(
             text = anime.name,
             color = Color.White,
-            fontSize = 24.sp,
+            fontSize = 18.sp,
             fontFamily = FontFamily.SansSerif,
-            modifier = Modifier.padding(bottom = 40.dp)
+            modifier = Modifier.padding(bottom = 40.dp),
+            textAlign = TextAlign.Center
         )
     }
 }
