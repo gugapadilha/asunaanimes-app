@@ -66,7 +66,7 @@ fun AnimeItem(anime: Anime) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 12.dp)
+            .padding(horizontal = 30.dp, vertical = 12.dp)
     ) {
         Image(
             painter = rememberImagePainter(data = anime.photoUrl),
@@ -74,7 +74,6 @@ fun AnimeItem(anime: Anime) {
             modifier = Modifier
                 .height(200.dp)
                 .fillMaxWidth()
-                .padding(vertical = 12.dp)
         )
 
         Text(
