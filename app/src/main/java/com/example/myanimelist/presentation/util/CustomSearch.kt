@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -36,35 +37,39 @@ import com.example.myanimelist.presentation.ui.AnimatedBorderCard
 @Composable
 fun CustomSearch(anime: Anime) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 30.dp, start = 10.dp),
+                .fillMaxWidth()
+                .padding(top = 30.dp, start = 10.dp, end = 10.dp),
+
         ) {
             var text by remember { mutableStateOf("") }
 
-            TextField(value = text,
+            TextField(
+                value = text,
+                onValueChange = { text = it },
                 placeholder = { Text(text = "eg: Fate Zero") },
                 singleLine = true,
-                maxLines = 1,
-                onValueChange = { text = it })
+            )
 
             AnimeCard()
         }
 
+        Spacer(modifier = Modifier.height(16.dp))
+
         Image(
-            painter = rememberImagePainter(data = anime.photoUrl, builder = {
-            }),
+            painter = rememberImagePainter(data = anime.photoUrl),
             contentDescription = "Anime picture",
             modifier = Modifier
                 .height(200.dp)
                 .fillMaxWidth()
-                .padding(bottom = 12.dp)
+                .padding(vertical = 12.dp)
         )
+
         Text(
             text = anime.name,
             color = Color.White,
@@ -72,11 +77,8 @@ fun CustomSearch(anime: Anime) {
             fontFamily = FontFamily.SansSerif,
             modifier = Modifier.padding(bottom = 40.dp)
         )
-
-
     }
 }
-
 
 @Composable
 fun AnimeCard() {
