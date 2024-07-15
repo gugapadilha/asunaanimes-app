@@ -21,7 +21,7 @@ import com.example.myanimelist.presentation.util.SearchBox
 fun SearchScreen(navController : NavHostController) {
     val animeRepository = AnimeRepository()
     val getAllAnimeData = animeRepository.getAllData()
-    val painter = rememberAsyncImagePainter(R.drawable.favorite_screen)
+    val painter = rememberAsyncImagePainter(R.drawable.search_screen)
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
