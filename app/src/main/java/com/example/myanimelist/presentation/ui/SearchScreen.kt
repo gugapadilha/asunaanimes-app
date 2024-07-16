@@ -13,6 +13,7 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.myanimelist.R
 import com.example.myanimelist.data.repository.AnimeRepository
+import com.example.myanimelist.data.service.AnimeService
 import com.example.myanimelist.presentation.util.AnimeItem
 import com.example.myanimelist.presentation.util.SearchBox
 
@@ -21,7 +22,11 @@ import com.example.myanimelist.presentation.util.SearchBox
 fun SearchScreen(navController : NavHostController) {
     val animeRepository = AnimeRepository()
     val getAllAnimeData = animeRepository.getAllData()
+
     val painter = rememberAsyncImagePainter(R.drawable.search_screen)
+
+    val animeService = AnimeService.create()
+    val call = animeService.getTopAnime()
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
