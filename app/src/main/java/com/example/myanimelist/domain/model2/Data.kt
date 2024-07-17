@@ -43,9 +43,9 @@ data class Data(
     @SerializedName("rating")
     val rating: String,
     @SerializedName("score")
-    val score: Int,
+    val score: Float,
     @SerializedName("scored_by")
-    val scoredBy: Int,
+    val scoredBy: Float,
     @SerializedName("season")
     val season: String,
     @SerializedName("source")

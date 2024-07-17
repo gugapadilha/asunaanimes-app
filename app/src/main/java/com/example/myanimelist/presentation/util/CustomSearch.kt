@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.example.myanimelist.data.repository.AnimeRepository
-import com.example.myanimelist.domain.model.Anime
+import com.example.myanimelist.domain.model2.Data
 import com.example.myanimelist.presentation.ui.AnimatedBorderCard
 
 @Composable
@@ -63,14 +62,14 @@ fun SearchBox() {
 }
 
 @Composable
-fun AnimeItem(anime: Anime) {
+fun AnimeItem(anime: Data) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 30.dp, vertical = 12.dp)
     ) {
         Image(
-            painter = rememberImagePainter(data = anime.photoUrl),
+            painter = rememberImagePainter(data = anime.images.jpg.imageUrl),
             contentDescription = "Anime picture",
             modifier = Modifier
                 .height(200.dp)
@@ -86,7 +85,7 @@ fun AnimeItem(anime: Anime) {
             contentAlignment = Alignment.BottomCenter
         ) {
             Text(
-                text = anime.name,
+                text = anime.title,
                 color = Color.White,
                 fontSize = 18.sp,
                 fontFamily = FontFamily.SansSerif,
@@ -135,5 +134,4 @@ fun PreviewCustomSearch() {
     val getAllAnimeData = animeRepository.getAllData()
 
     SearchBox()
-    AnimeItem(anime = getAllAnimeData.first())
 }
