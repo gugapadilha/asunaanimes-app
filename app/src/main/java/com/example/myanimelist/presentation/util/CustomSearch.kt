@@ -125,7 +125,6 @@ fun AnimeCard() {
         }
     }
 }
-
 @Preview
 @Composable
 fun PreviewCustomSearch() {
