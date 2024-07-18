@@ -89,7 +89,7 @@ fun AnimeItem(anime: Data) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color.Black.copy(alpha = 0.7f))
-                    .padding(8.dp)
+                    .padding(4.dp)
                     .align(Alignment.BottomStart)
             ) {
                 Text(
