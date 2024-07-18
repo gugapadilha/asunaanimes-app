@@ -87,7 +87,7 @@ fun InitialScreen(
             shape = RoundedCornerShape(24.dp),
             borderWidth = 3.dp,
             gradient = Brush.linearGradient(listOf(Color(rgb(117, 27, 16)), Color(rgb(219, 136, 81)))),
-            onCardClick = {}
+            onCardClick = { navController.navigate(route = "home_screen") }
         ) {
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -95,9 +95,6 @@ fun InitialScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    modifier = Modifier.clickable {
-                        navController.navigate(route = "home_screen")
-                    },
                     text = "Get started",
                     color = Color.White,
                 )
