@@ -114,7 +114,7 @@ fun AnimeCard() {
             .height(50.dp)
     ) {
         AnimatedBorderCard(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().padding(start = 10.dp),
             shape = RoundedCornerShape(24.dp),
             borderWidth = 3.dp,
             gradient = Brush.linearGradient(
