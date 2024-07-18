@@ -23,8 +23,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -68,31 +70,43 @@ fun AnimeItem(anime: Data) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 140.dp, vertical = 12.dp)
+            .padding(8.dp)
     ) {
-        Image(
-            painter = rememberImagePainter(data = anime.images.jpg.imageUrl),
-            contentDescription = "Anime picture",
-            modifier = Modifier
-                .height(200.dp)
-                .fillMaxWidth()
-        )
         Box(
             modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.7f))
-                .padding(8.dp),
-            contentAlignment = Alignment.BottomCenter
+                .fillMaxWidth()
+                .clip(shape = RoundedCornerShape(8.dp))
         ) {
-            Text(
-                text = anime.title,
-                color = Color.White,
-                fontSize = 18.sp,
-                fontFamily = FontFamily.SansSerif,
+            Image(
+                painter = rememberImagePainter(data = anime.images.jpg.imageUrl),
+                contentDescription = "Anime picture",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .height(200.dp)
+                    .fillMaxWidth()
             )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.Black.copy(alpha = 0.7f))
+                    .padding(8.dp)
+                    .align(Alignment.BottomStart)
+            ) {
+                Text(
+                    text = anime.title,
+                    color = Color.White,
+                    fontSize = 14.sp,
+                    fontFamily = FontFamily.SansSerif,
+                    textAlign = TextAlign.Start,
+                )
+            }
         }
     }
 }
+
+
+
 
 @Composable
 fun AnimeCard() {
