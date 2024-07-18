@@ -63,7 +63,6 @@ fun SearchBox() {
 
     }
 }
-
 @Composable
 fun AnimeItem(anime: Data) {
     Box(
