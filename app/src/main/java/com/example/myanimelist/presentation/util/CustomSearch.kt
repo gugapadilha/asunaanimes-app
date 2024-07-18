@@ -10,6 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -66,7 +69,7 @@ fun AnimeItem(anime: Data) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 30.dp, vertical = 12.dp)
+            .padding(horizontal = 140.dp, vertical = 12.dp)
     ) {
         Image(
             painter = rememberImagePainter(data = anime.images.jpg.imageUrl),
@@ -75,11 +78,9 @@ fun AnimeItem(anime: Data) {
                 .height(200.dp)
                 .fillMaxWidth()
         )
-
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 160.dp)
                 .background(Color.Black.copy(alpha = 0.7f))
                 .padding(8.dp),
             contentAlignment = Alignment.BottomCenter
@@ -124,13 +125,4 @@ fun AnimeCard() {
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun PreviewCustomSearch() {
-    val animeRepository = AnimeRepository()
-    val getAllAnimeData = animeRepository.getAllData()
-
-    SearchBox()
 }
