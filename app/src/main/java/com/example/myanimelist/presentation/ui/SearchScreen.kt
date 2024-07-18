@@ -79,7 +79,7 @@ fun SearchScreen(navController: NavHostController) {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 8.dp)
+                    .padding(horizontal = 4.dp)
             ) {
                 items(animeList.chunked(3)) { rowItems ->
                     Row(modifier = Modifier.fillMaxWidth()) {

@@ -70,7 +70,7 @@ fun AnimeItem(anime: Data) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(4.dp)
     ) {
         Box(
             modifier = Modifier
