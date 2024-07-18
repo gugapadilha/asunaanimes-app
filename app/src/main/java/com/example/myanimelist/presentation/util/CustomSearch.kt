@@ -85,7 +85,6 @@ fun AnimeItem(anime: Data) {
                     .height(200.dp)
                     .fillMaxWidth()
             )
-
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
