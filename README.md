@@ -10,7 +10,8 @@
   + Images;
   + Photos;
   + Lists;
-  + Groups;
+  + Cards;
+  + Animation;
   + Details;
   + Navigation.
   
