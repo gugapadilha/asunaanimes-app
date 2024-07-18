@@ -46,6 +46,9 @@ fun SearchScreen(navController: NavHostController) {
                     val topAnime = response.body()
                     val animeListFromApi = topAnime?.data ?: emptyList()
                     setAnimeList(animeListFromApi)
+
+                    Log.d("SearchScreen", "Animes Received: ${animeListFromApi.size}")
+
                 } else {
                     Log.e("SearchScreen", "Error to obtain top anime ${response.code()}")
                 }
