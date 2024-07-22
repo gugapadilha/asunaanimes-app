@@ -40,7 +40,7 @@ fun SearchScreen(navController: NavHostController) {
     suspend fun loadPage(page: Int) {
         try {
             val topAnime = withContext(Dispatchers.IO) { animeService.getTopAnime(page) }
-            val animeListFromApi = topAnime.data ?: emptyList()
+            val animeListFromApi = topAnime.data
             animeList.addAll(animeListFromApi)
             Log.d("SearchScreen", "Animes Received: ${animeListFromApi.size}")
         } catch (e: Exception) {
