@@ -12,12 +12,12 @@ import retrofit2.http.Query
 interface AnimeService {
 
     @GET("top/anime")
-    fun getTopAnime(@Query("page") page: Int): Call<TopAnime>
+    suspend fun getTopAnime(@Query("page") page: Int): TopAnime
 
     @GET("anime")
-    fun getSearchedAnime(@Query("q")queryString: String): Call<SearchedAnime>
+    suspend fun getSearchedAnime(@Query("q") queryString: String): SearchedAnime
 
-    companion object  {
+    companion object {
         private const val BASE_URL = "https://api.jikan.moe/v4/"
 
         fun create(): AnimeService {

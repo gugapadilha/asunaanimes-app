@@ -10,11 +10,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -24,12 +23,11 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.myanimelist.R
 import com.example.myanimelist.data.service.AnimeService
 import com.example.myanimelist.domain.model2.Data
-import com.example.myanimelist.domain.model2.TopAnime
 import com.example.myanimelist.presentation.util.AnimeItem
 import com.example.myanimelist.presentation.util.SearchBox
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun SearchScreen(navController: NavHostController) {
@@ -37,41 +35,31 @@ fun SearchScreen(navController: NavHostController) {
     val painter = rememberAsyncImagePainter(R.drawable.search_screen)
     val animeService = AnimeService.create()
     val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
 
-    fun loadPage(page: Int, onComplete: (() -> Unit)? = null) {
-        val call = animeService.getTopAnime(page)
-        call.enqueue(object : Callback<TopAnime> {
-            override fun onResponse(call: Call<TopAnime>, response: Response<TopAnime>) {
-                if (response.isSuccessful) {
-                    val topAnime = response.body()
-                    val animeListFromApi = topAnime?.data ?: emptyList()
-                    animeList.addAll(animeListFromApi)
-                    Log.d("SearchScreen", "Animes Received: ${animeListFromApi.size}")
-                    onComplete?.invoke()
-                } else {
-                    Log.e("SearchScreen", "Error to obtain top anime ${response.code()}")
-                }
-            }
-
-            override fun onFailure(call: Call<TopAnime>, t: Throwable) {
-                Log.e("SearchScreen", "Requisition Failed: ${t.message}")
-            }
-        })
+    suspend fun loadPage(page: Int) {
+        try {
+            val topAnime = withContext(Dispatchers.IO) { animeService.getTopAnime(page) }
+            val animeListFromApi = topAnime.data ?: emptyList()
+            animeList.addAll(animeListFromApi)
+            Log.d("SearchScreen", "Animes Received: ${animeListFromApi.size}")
+        } catch (e: Exception) {
+            Log.e("SearchScreen", "Error to obtain top anime: ${e.message}")
+        }
     }
 
-    DisposableEffect(Unit) {
-        loadPage(1) {
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
+            loadPage(1)
             loadPage(2)
-        }
-
-        onDispose {
-            Log.d("SearchScreen", "OnDispose called")
         }
     }
 
     fun loadMoreAnimes() {
         val nextPage = animeList.size / 25 + 1
-        loadPage(nextPage)
+        coroutineScope.launch {
+            loadPage(nextPage)
+        }
     }
 
     LaunchedEffect(listState) {
