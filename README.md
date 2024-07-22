@@ -2,7 +2,7 @@
 
   > Status: Finished ✔️
   
-  ### The application shows a couple of examples that what kind of screens we can do with Jetpakc Compose, using animations e beatufiul fade effects as well. Clean Architecture did a great job here to maintain the system really smooth and optimal.
+  ### The application shows a couple of examples that what kind of screens we can do with Jetpack Compose, using animations e beatufiul fade effects as well. Clean Architecture did a great job here to maintain the system really smooth and optimal.
   
   <br>
   
@@ -10,7 +10,8 @@
   + Images;
   + Photos;
   + Lists;
-  + Groups;
+  + Cards;
+  + Animation;
   + Details;
   + Navigation.
   
