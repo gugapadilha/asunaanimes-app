@@ -12,7 +12,7 @@ import retrofit2.http.Query
 interface AnimeService {
 
     @GET("top/anime")
-    fun getTopAnime(): Call<TopAnime>
+    fun getTopAnime(@Query("page") page: Int): Call<TopAnime>
 
     @GET("anime")
     fun getSearchedAnime(@Query("q")queryString: String): Call<SearchedAnime>

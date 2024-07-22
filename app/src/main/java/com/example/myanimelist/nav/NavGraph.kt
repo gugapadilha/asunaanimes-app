@@ -1,5 +1,6 @@
 package com.example.myanimelist.nav
 
+import SearchScreen
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -8,7 +9,6 @@ import com.example.myanimelist.presentation.ui.BestScreen
 import com.example.myanimelist.presentation.ui.FavoriteScreen
 import com.example.myanimelist.presentation.ui.HomeScreen
 import com.example.myanimelist.presentation.ui.InitialScreen
-import com.example.myanimelist.presentation.ui.SearchScreen
 import com.example.myanimelist.presentation.ui.WatchedScreen
 
 @Composable

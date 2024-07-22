@@ -1,5 +1,3 @@
-package com.example.myanimelist.presentation.ui
-
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -10,10 +8,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
@@ -29,26 +31,22 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 @Composable
 fun SearchScreen(navController: NavHostController) {
-    val (animeList, setAnimeList) = remember { mutableStateOf(emptyList<Data>()) }
-
+    val animeList = remember { mutableStateListOf<Data>() }
     val painter = rememberAsyncImagePainter(R.drawable.search_screen)
-
     val animeService = AnimeService.create()
-    val call = animeService.getTopAnime()
+    val listState = rememberLazyListState()
 
-    DisposableEffect(Unit) {
-        val callback = object : Callback<TopAnime> {
+    fun loadPage(page: Int) {
+        val call = animeService.getTopAnime(page)
+        call.enqueue(object : Callback<TopAnime> {
             override fun onResponse(call: Call<TopAnime>, response: Response<TopAnime>) {
                 if (response.isSuccessful) {
                     val topAnime = response.body()
                     val animeListFromApi = topAnime?.data ?: emptyList()
-                    setAnimeList(animeListFromApi)
-
+                    animeList.addAll(animeListFromApi)
                     Log.d("SearchScreen", "Animes Received: ${animeListFromApi.size}")
-
                 } else {
                     Log.e("SearchScreen", "Error to obtain top anime ${response.code()}")
                 }
@@ -57,12 +55,33 @@ fun SearchScreen(navController: NavHostController) {
             override fun onFailure(call: Call<TopAnime>, t: Throwable) {
                 Log.e("SearchScreen", "Requisition Failed: ${t.message}")
             }
-        }
-        call.enqueue(callback)
+        })
+    }
+
+    DisposableEffect(Unit) {
+        // Load the first two pages (50 animes)
+        loadPage(1)
+        loadPage(2)
 
         onDispose {
-            call.cancel()
+            Log.d("SearchScreen", "OnDispose called")
         }
+    }
+
+    // Function to load more animes when user scrolls to the end
+    fun loadMoreAnimes() {
+        val nextPage = animeList.size / 25 + 1
+        loadPage(nextPage)
+    }
+
+    LaunchedEffect(listState) {
+        snapshotFlow { listState.layoutInfo.visibleItemsInfo }
+            .collect { visibleItems ->
+                val lastVisibleItemIndex = visibleItems.lastOrNull()?.index ?: 0
+                if (lastVisibleItemIndex == animeList.size - 1) {
+                    loadMoreAnimes()
+                }
+            }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -79,7 +98,8 @@ fun SearchScreen(navController: NavHostController) {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 4.dp)
+                    .padding(horizontal = 4.dp),
+                state = listState
             ) {
                 items(animeList.chunked(3)) { rowItems ->
                     Row(modifier = Modifier.fillMaxWidth()) {
