@@ -38,7 +38,7 @@ fun SearchScreen(navController: NavHostController) {
     val animeService = AnimeService.create()
     val listState = rememberLazyListState()
 
-    fun loadPage(page: Int) {
+    fun loadPage(page: Int, onComplete: (() -> Unit)? = null) {
         val call = animeService.getTopAnime(page)
         call.enqueue(object : Callback<TopAnime> {
             override fun onResponse(call: Call<TopAnime>, response: Response<TopAnime>) {
@@ -47,6 +47,7 @@ fun SearchScreen(navController: NavHostController) {
                     val animeListFromApi = topAnime?.data ?: emptyList()
                     animeList.addAll(animeListFromApi)
                     Log.d("SearchScreen", "Animes Received: ${animeListFromApi.size}")
+                    onComplete?.invoke()
                 } else {
                     Log.e("SearchScreen", "Error to obtain top anime ${response.code()}")
                 }
@@ -59,9 +60,10 @@ fun SearchScreen(navController: NavHostController) {
     }
 
     DisposableEffect(Unit) {
-        // Load the first two pages (50 animes)
-        loadPage(1)
-        loadPage(2)
+        // Load the first page and then the second page after the first page is loaded
+        loadPage(1) {
+            loadPage(2)
+        }
 
         onDispose {
             Log.d("SearchScreen", "OnDispose called")
