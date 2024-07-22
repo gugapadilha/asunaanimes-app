@@ -60,7 +60,6 @@ fun SearchScreen(navController: NavHostController) {
     }
 
     DisposableEffect(Unit) {
-        // Load the first page and then the second page after the first page is loaded
         loadPage(1) {
             loadPage(2)
         }
@@ -70,7 +69,6 @@ fun SearchScreen(navController: NavHostController) {
         }
     }
 
-    // Function to load more animes when user scrolls to the end
     fun loadMoreAnimes() {
         val nextPage = animeList.size / 25 + 1
         loadPage(nextPage)
