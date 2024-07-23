@@ -2,6 +2,7 @@ package com.example.myanimelist.presentation.util
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,7 +39,7 @@ import com.example.myanimelist.domain.model2.Data
 import com.example.myanimelist.presentation.ui.AnimatedBorderCard
 
 @Composable
-fun SearchBox() {
+fun SearchBox(onSearch: (String) -> Unit) {
     var text by remember { mutableStateOf("") }
 
     Column(
@@ -108,10 +109,11 @@ fun AnimeItem(anime: Data) {
 
 
 @Composable
-fun AnimeCard() {
+fun AnimeCard(onSearchClick: () -> Unit) {
     Box(
         modifier = Modifier
             .height(50.dp)
+            .clickable { onSearchClick }
     ) {
         AnimatedBorderCard(
             modifier = Modifier.fillMaxSize().padding(start = 10.dp),
