@@ -1,5 +1,6 @@
 package com.example.myanimelist.presentation.util
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -113,10 +114,9 @@ fun AnimeCard(onSearchClick: () -> Unit) {
     Box(
         modifier = Modifier
             .height(50.dp)
-            .clickable { onSearchClick }
     ) {
         AnimatedBorderCard(
-            modifier = Modifier.fillMaxSize().padding(start = 10.dp),
+            modifier = Modifier.fillMaxSize(),
             shape = RoundedCornerShape(24.dp),
             borderWidth = 3.dp,
             gradient = Brush.linearGradient(
@@ -124,9 +124,9 @@ fun AnimeCard(onSearchClick: () -> Unit) {
                     Color(android.graphics.Color.rgb(117, 27, 16)),
                     Color(
                         android.graphics.Color.rgb(219, 136, 81)
-                    )
-                )
+                    ))
             ),
+            onCardClick = { onSearchClick() }
         ) {
             Text(
                 modifier = Modifier

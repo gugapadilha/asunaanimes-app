@@ -28,7 +28,6 @@ import com.example.myanimelist.presentation.util.SearchBox
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import retrofit2.http.Query
 
 @Composable
 fun SearchScreen(navController: NavHostController) {
@@ -49,9 +48,14 @@ fun SearchScreen(navController: NavHostController) {
         }
     }
 
-    suspend fun loadAnime(query: Query){
+    suspend fun searchAnime(query: String) {
         try {
-            val searchedAnime = withContext(Dispatchers.IO) {animeService.getSearchedAnime(query)}
+            val searchedAnime = withContext(Dispatchers.IO) { animeService.getSearchedAnime(query) }
+            animeList.clear()
+            animeList.addAll(searchedAnime.data)
+            Log.d("SearchScreen", "Search Animes Received: ${searchedAnime.data.size}")
+        } catch (e: Exception) {
+            Log.e("SearchScreen", "Error to search anime: ${e.message}")
         }
     }
 
@@ -88,7 +92,11 @@ fun SearchScreen(navController: NavHostController) {
         )
 
         Column(modifier = Modifier.fillMaxSize()) {
-            SearchBox()
+            SearchBox { query ->
+                coroutineScope.launch {
+                    searchAnime(query)
+                }
+            }
 
             LazyColumn(
                 modifier = Modifier
