@@ -28,6 +28,7 @@ import com.example.myanimelist.presentation.util.SearchBox
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.http.Query
 
 @Composable
 fun SearchScreen(navController: NavHostController) {
@@ -45,6 +46,12 @@ fun SearchScreen(navController: NavHostController) {
             Log.d("SearchScreen", "Animes Received: ${animeListFromApi.size}")
         } catch (e: Exception) {
             Log.e("SearchScreen", "Error to obtain top anime: ${e.message}")
+        }
+    }
+
+    suspend fun loadAnime(query: Query){
+        try {
+            val searchedAnime = withContext(Dispatchers.IO) {animeService.getSearchedAnime(query)}
         }
     }
 
