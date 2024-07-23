@@ -61,7 +61,7 @@ fun SearchBox(onSearch: (String) -> Unit) {
                 singleLine = true,
             )
 
-            AnimeCard()
+            AnimeCard(onSearchClick = {onSearch(text)})
         }
 
     }
