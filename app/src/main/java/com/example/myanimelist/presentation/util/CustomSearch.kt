@@ -114,6 +114,7 @@ fun AnimeCard(onSearchClick: () -> Unit) {
     Box(
         modifier = Modifier
             .height(50.dp)
+            .padding(start = 10.dp)
     ) {
         AnimatedBorderCard(
             modifier = Modifier.fillMaxSize(),
