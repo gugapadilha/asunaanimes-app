@@ -80,6 +80,13 @@ fun AnimeDetailsBottomSheet(anime: Data) {
                 fontFamily = FontFamily.SansSerif,
                 textAlign = TextAlign.Start,
             )
+            Text(
+                text = "${formatDate(anime.aired.from)}- ${formatDate(anime.aired.to)}",
+                color = Color.White,
+                fontSize = 14.sp,
+                fontFamily = FontFamily.SansSerif,
+                textAlign = TextAlign.Start,
+            )
         }
     }
 }
