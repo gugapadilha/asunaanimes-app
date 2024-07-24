@@ -81,7 +81,18 @@ fun AnimeDetailsBottomSheet(anime: Data) {
                 textAlign = TextAlign.Start,
             )
             Text(
-                text = "${formatDate(anime.aired.from)}- ${formatDate(anime.aired.to)}",
+                text = anime.url,
+                color = Color.White,
+                fontSize = 14.sp,
+                fontFamily = FontFamily.SansSerif,
+                textAlign = TextAlign.Start,
+            )
+            Text(
+                text = if (anime.aired.to.isEmpty()) {
+                    "${formatDate(anime.aired.from)} - ongoing"
+                } else {
+                    "${formatDate(anime.aired.from)} - ${formatDate(anime.aired.to)}"
+                },
                 color = Color.White,
                 fontSize = 14.sp,
                 fontFamily = FontFamily.SansSerif,
@@ -92,7 +103,7 @@ fun AnimeDetailsBottomSheet(anime: Data) {
 }
 
 private fun formatDate(date: String): String {
-    return if (date.contains("-")){
+    return if (date.contains("-")) {
         val newDate = date.substring(0, date.lastIndexOf("-"))
         val _date = SimpleDateFormat("yyyy-MM").parse(newDate)
         SimpleDateFormat("MMM-yyyy").format(_date)
