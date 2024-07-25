@@ -82,7 +82,7 @@ fun AnimeDetailsBottomSheet(anime: Data) {
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                     Text(
-                        text = if (anime.aired.to.isEmpty()) {
+                        text = if (anime.aired?.to.isNullOrEmpty()) {
                             "${formatDate(anime.aired.from)} - ongoing"
                         } else {
                             "${formatDate(anime.aired.from)} - ${formatDate(anime.aired.to)}"
