@@ -1,6 +1,7 @@
 package com.example.myanimelist.presentation.ui.bottomsheet
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -22,6 +23,7 @@ fun AnimeDetailsBottomSheet(anime: Data) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .background(Color.Black)
             .padding(16.dp)
     ) {
         Image(
