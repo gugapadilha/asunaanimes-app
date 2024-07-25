@@ -76,12 +76,11 @@ fun SearchBox(onSearch: (String) -> Unit) {
 
                 )
             )
-
             AnimeCard(onSearchClick = {onSearch(text)})
         }
-
     }
 }
+
 @Composable
 fun AnimeItem(anime: Data) {
     Box(
@@ -120,9 +119,6 @@ fun AnimeItem(anime: Data) {
         }
     }
 }
-
-
-
 
 @Composable
 fun AnimeCard(onSearchClick: () -> Unit) {
