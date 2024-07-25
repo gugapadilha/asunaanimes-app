@@ -101,6 +101,10 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
-    // Bottomsheet
+    // Bottom sheet
     implementation("androidx.compose.material:material:1.6.8")
+
+    //Browser
+    implementation("androidx.browser:browser:1.8.0")
+
 }
