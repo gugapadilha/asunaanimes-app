@@ -23,7 +23,7 @@ import java.text.SimpleDateFormat
 @Composable
 fun AnimeDetailsBottomSheet(anime: Data) {
 
-    val painter = rememberAsyncImagePainter(R.drawable.search_screen)
+    val painter = rememberAsyncImagePainter(R.drawable.bottomsheet_screen)
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
