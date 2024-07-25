@@ -14,94 +14,106 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
+import com.example.myanimelist.R
 import com.example.myanimelist.domain.model2.Data
 import java.text.SimpleDateFormat
 
 @Composable
 fun AnimeDetailsBottomSheet(anime: Data) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.Black)
-            .padding(16.dp)
-    ) {
+
+    val painter = rememberAsyncImagePainter(R.drawable.search_screen)
+
+    Box(modifier = Modifier.fillMaxSize()) {
         Image(
-            painter = rememberImagePainter(data = anime.images.jpg.imageUrl),
-            contentDescription = "Anime picture",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .height(200.dp)
-                .width(130.dp)
-                .clip(shape = RoundedCornerShape(8.dp))
+            modifier = Modifier.fillMaxSize(),
+            painter = painter,
+            contentDescription = "Background Image",
+            contentScale = ContentScale.FillBounds
         )
-
-        Spacer(modifier = Modifier.width(16.dp))
-
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp)
+                .padding(16.dp)
         ) {
-            Text(
-                text = anime.title,
-                color = Color.White,
-                fontSize = 18.sp,
-                fontFamily = FontFamily.SansSerif,
-                textAlign = TextAlign.Start,
-                modifier = Modifier.padding(bottom = 8.dp)
+            Image(
+                painter = rememberImagePainter(data = anime.images.jpg.imageUrl),
+                contentDescription = "Anime picture",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .height(200.dp)
+                    .width(130.dp)
+                    .clip(shape = RoundedCornerShape(8.dp))
             )
-            Text(
-                text = "Score: ${anime.score}",
-                color = Color.White,
-                fontSize = 14.sp,
-                fontFamily = FontFamily.SansSerif,
-                textAlign = TextAlign.Start,
-                modifier = Modifier.padding(bottom = 4.dp)
-            )
-            Text(
-                text = "Rating: ${anime.rating}",
-                color = Color.White,
-                fontSize = 14.sp,
-                fontFamily = FontFamily.SansSerif,
-                textAlign = TextAlign.Start,
-                modifier = Modifier.padding(bottom = 4.dp)
-            )
-            Text(
-                text = "${anime.episodes} episodes",
-                color = Color.White,
-                fontSize = 14.sp,
-                fontFamily = FontFamily.SansSerif,
-                textAlign = TextAlign.Start,
-                modifier = Modifier.padding(bottom = 4.dp)
-            )
-            Text(
-                text = anime.synopsis,
-                color = Color.White,
-                fontSize = 14.sp,
-                fontFamily = FontFamily.SansSerif,
-                textAlign = TextAlign.Start,
-                modifier = Modifier.padding(bottom = 4.dp)
-            )
-            Text(
-                text = anime.url,
-                color = Color.White,
-                fontSize = 14.sp,
-                fontFamily = FontFamily.SansSerif,
-                textAlign = TextAlign.Start,
-                modifier = Modifier.padding(bottom = 4.dp)
-            )
-            Text(
-                text = if (anime.aired.to.isEmpty()) {
-                    "${formatDate(anime.aired.from)} - ongoing"
-                } else {
-                    "${formatDate(anime.aired.from)} - ${formatDate(anime.aired.to)}"
-                },
-                color = Color.White,
-                fontSize = 14.sp,
-                fontFamily = FontFamily.SansSerif,
-                textAlign = TextAlign.Start
-            )
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                Text(
+                    text = anime.title,
+                    color = Color.White,
+                    fontSize = 18.sp,
+                    fontFamily = FontFamily.SansSerif,
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+                Text(
+                    text = "Score: ${anime.score}",
+                    color = Color.White,
+                    fontSize = 14.sp,
+                    fontFamily = FontFamily.SansSerif,
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+                Text(
+                    text = "Rating: ${anime.rating}",
+                    color = Color.White,
+                    fontSize = 14.sp,
+                    fontFamily = FontFamily.SansSerif,
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+                Text(
+                    text = "${anime.episodes} episodes",
+                    color = Color.White,
+                    fontSize = 14.sp,
+                    fontFamily = FontFamily.SansSerif,
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+                Text(
+                    text = anime.synopsis,
+                    color = Color.White,
+                    fontSize = 14.sp,
+                    fontFamily = FontFamily.SansSerif,
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+                Text(
+                    text = anime.url,
+                    color = Color.White,
+                    fontSize = 14.sp,
+                    fontFamily = FontFamily.SansSerif,
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+                Text(
+                    text = if (anime.aired.to.isEmpty()) {
+                        "${formatDate(anime.aired.from)} - ongoing"
+                    } else {
+                        "${formatDate(anime.aired.from)} - ${formatDate(anime.aired.to)}"
+                    },
+                    color = Color.White,
+                    fontSize = 14.sp,
+                    fontFamily = FontFamily.SansSerif,
+                    textAlign = TextAlign.Start
+                )
+            }
         }
     }
 }
