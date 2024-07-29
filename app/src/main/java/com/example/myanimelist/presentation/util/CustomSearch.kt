@@ -16,7 +16,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.material.icons.Icons
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -40,6 +43,7 @@ import coil.compose.rememberImagePainter
 import com.example.myanimelist.domain.model2.Data
 import com.example.myanimelist.presentation.ui.AnimatedBorderCard
 
+
 @Composable
 fun SearchBox(
     onSearch: (String) -> Unit,
@@ -59,8 +63,7 @@ fun SearchBox(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 25.dp, start = 10.dp, end = 10.dp, bottom = 10.dp),
-
-            ) {
+        ) {
             TextField(
                 value = text,
                 onValueChange = {
@@ -81,7 +84,6 @@ fun SearchBox(
                         text = ""
                         suggestions = emptyList()
                     }
-
                 )
             )
             AnimeCard(onSearchClick = {
@@ -93,23 +95,35 @@ fun SearchBox(
         }
 
         // Display suggestions
-        LazyColumn {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp)
+        ) {
             items(suggestions) { suggestion ->
-                Text(
-                    text = suggestion,
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 16.dp)
+                        .padding(vertical = 4.dp)
                         .clickable {
                             text = suggestion
                             onSearch(suggestion)
                             keyboardController?.hide()
                             suggestions = emptyList()
                         }
-                        .padding(8.dp),
-                    color = Color.White,
-                    fontSize = 16.sp
-                )
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = "Previous search",
+                        tint = Color.White,
+                        modifier = Modifier.padding(end = 8.dp)
+                    )
+                    Text(
+                        text = suggestion,
+                        color = Color.White,
+                        fontSize = 16.sp
+                    )
+                }
             }
         }
     }
