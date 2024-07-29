@@ -70,7 +70,7 @@ fun SearchScreen(navController: NavHostController) {
             loadPage(2)
             loadPage(3)
             loadPage(4)
-            previousSearches = loadPreviousSearches(context) // Carregar pesquisas anteriores
+            previousSearches = loadPreviousSearches(context) // show previous searches
         }
     }
 
