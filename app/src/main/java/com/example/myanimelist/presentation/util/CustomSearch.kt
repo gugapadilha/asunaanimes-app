@@ -146,6 +146,7 @@ fun loadPreviousSearches(context: Context): List<String> {
     val savedQueries = sharedPref.getStringSet("queries", mutableSetOf()) ?: mutableSetOf()
     return savedQueries.toList()
 }
+
 @Composable
 fun AnimeItem(anime: Data) {
     Box(
