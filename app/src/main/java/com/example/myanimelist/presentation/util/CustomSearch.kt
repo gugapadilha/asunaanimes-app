@@ -42,8 +42,6 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.example.myanimelist.domain.model2.Data
 import com.example.myanimelist.presentation.ui.AnimatedBorderCard
-
-
 @Composable
 fun SearchBox(
     onSearch: (String) -> Unit,

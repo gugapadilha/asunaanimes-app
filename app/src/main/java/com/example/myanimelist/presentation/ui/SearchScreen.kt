@@ -119,8 +119,8 @@ fun SearchScreen(navController: NavHostController) {
                                 val searchResults = searchAnime(query)
                                 animeList.clear()
                                 animeList.addAll(searchResults)
-                                saveSearchQuery(query, context) // Salvar a pesquisa atual
-                                previousSearches = loadPreviousSearches(context) // Atualizar pesquisas anteriores
+                                saveSearchQuery(query, context) // save last search
+                                previousSearches = loadPreviousSearches(context) // update latest searches
                             }
                         }
                     },
