@@ -71,12 +71,12 @@ fun AnimeDetailsBottomSheet(anime: Data) {
                         fontFamily = FontFamily.SansSerif,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Start,
-                        modifier = Modifier.padding(bottom = 12.dp)
+                        modifier = Modifier.padding(bottom = 14.dp)
                     )
                     Text(
                         text = "Score: ${anime.score}",
                         color = Color.White,
-                        fontSize = 14.sp,
+                        fontSize = 15.sp,
                         fontFamily = FontFamily.SansSerif,
                         textAlign = TextAlign.Start,
                         modifier = Modifier.padding(bottom = 8.dp)
@@ -88,7 +88,7 @@ fun AnimeDetailsBottomSheet(anime: Data) {
                             "${formatDate(anime.aired.from)} - ${formatDate(anime.aired.to)}"
                         },
                         color = Color.White,
-                        fontSize = 14.sp,
+                        fontSize = 15.sp,
                         fontFamily = FontFamily.SansSerif,
                         textAlign = TextAlign.Start,
                         modifier = Modifier.padding(bottom = 8.dp)
@@ -96,7 +96,7 @@ fun AnimeDetailsBottomSheet(anime: Data) {
                     Text(
                         text = "${anime.episodes} episodes",
                         color = Color.White,
-                        fontSize = 14.sp,
+                        fontSize = 15.sp,
                         fontFamily = FontFamily.SansSerif,
                         textAlign = TextAlign.Start,
                         modifier = Modifier.padding(bottom = 8.dp)
@@ -104,7 +104,7 @@ fun AnimeDetailsBottomSheet(anime: Data) {
                     Text(
                         text = "Rating: ${anime.rating}",
                         color = Color.White,
-                        fontSize = 14.sp,
+                        fontSize = 15.sp,
                         fontFamily = FontFamily.SansSerif,
                         textAlign = TextAlign.Start,
                         modifier = Modifier.padding(bottom = 8.dp)
@@ -114,7 +114,7 @@ fun AnimeDetailsBottomSheet(anime: Data) {
                     Text(
                         text = "Know more",
                         color = Color.Cyan,
-                        fontSize = 14.sp,
+                        fontSize = 15.sp,
                         fontFamily = FontFamily.SansSerif,
                         textAlign = TextAlign.Start,
                         textDecoration = TextDecoration.Underline,
