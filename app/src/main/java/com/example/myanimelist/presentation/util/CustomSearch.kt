@@ -1,7 +1,9 @@
 package com.example.myanimelist.presentation.util
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -37,9 +41,13 @@ import com.example.myanimelist.domain.model2.Data
 import com.example.myanimelist.presentation.ui.AnimatedBorderCard
 
 @Composable
-fun SearchBox(onSearch: (String) -> Unit) {
+fun SearchBox(
+    onSearch: (String) -> Unit,
+    previousSearches: List<String>
+) {
     var text by remember { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
+    var suggestions by remember { mutableStateOf(listOf<String>()) }
 
     Column(
         modifier = Modifier
@@ -55,7 +63,12 @@ fun SearchBox(onSearch: (String) -> Unit) {
             ) {
             TextField(
                 value = text,
-                onValueChange = { text = it },
+                onValueChange = {
+                    text = it
+                    suggestions = previousSearches.filter { search ->
+                        search.startsWith(text, ignoreCase = true)
+                    }
+                },
                 placeholder = { Text(text = "eg: Fate Zero") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions.Default.copy(
@@ -65,16 +78,60 @@ fun SearchBox(onSearch: (String) -> Unit) {
                     onDone = {
                         onSearch(text)
                         keyboardController?.hide()
+                        text = ""
+                        suggestions = emptyList()
                     }
 
                 )
             )
-            AnimeCard(onSearchClick = {onSearch(text)
-            keyboardController?.hide()})
+            AnimeCard(onSearchClick = {
+                onSearch(text)
+                keyboardController?.hide()
+                text = ""
+                suggestions = emptyList()
+            })
+        }
+
+        // Display suggestions
+        LazyColumn {
+            items(suggestions) { suggestion ->
+                Text(
+                    text = suggestion,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp)
+                        .clickable {
+                            text = suggestion
+                            onSearch(suggestion)
+                            keyboardController?.hide()
+                            suggestions = emptyList()
+                        }
+                        .padding(8.dp),
+                    color = Color.White,
+                    fontSize = 16.sp
+                )
+            }
         }
     }
 }
 
+// Helper functions to save and load search queries
+fun saveSearchQuery(query: String, context: Context) {
+    // Aqui você pode salvar a pesquisa em SharedPreferences, uma base de dados local, etc.
+    // Exemplo simples usando SharedPreferences:
+    val sharedPref = context.getSharedPreferences("search_prefs", Context.MODE_PRIVATE)
+    val savedQueries = sharedPref.getStringSet("queries", mutableSetOf()) ?: mutableSetOf()
+    savedQueries.add(query)
+    sharedPref.edit().putStringSet("queries", savedQueries).apply()
+}
+
+fun loadPreviousSearches(context: Context): List<String> {
+    // Carregar pesquisas anteriores de SharedPreferences, uma base de dados local, etc.
+    // Exemplo simples usando SharedPreferences:
+    val sharedPref = context.getSharedPreferences("search_prefs", Context.MODE_PRIVATE)
+    val savedQueries = sharedPref.getStringSet("queries", mutableSetOf()) ?: mutableSetOf()
+    return savedQueries.toList()
+}
 @Composable
 fun AnimeItem(anime: Data) {
     Box(

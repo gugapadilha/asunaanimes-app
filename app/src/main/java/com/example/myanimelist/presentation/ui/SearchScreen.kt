@@ -14,6 +14,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
@@ -23,6 +24,8 @@ import com.example.myanimelist.domain.model2.Data
 import com.example.myanimelist.presentation.ui.bottomsheet.AnimeDetailsBottomSheet
 import com.example.myanimelist.presentation.util.AnimeItem
 import com.example.myanimelist.presentation.util.SearchBox
+import com.example.myanimelist.presentation.util.loadPreviousSearches
+import com.example.myanimelist.presentation.util.saveSearchQuery
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -37,6 +40,8 @@ fun SearchScreen(navController: NavHostController) {
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     var selectedAnime by remember { mutableStateOf<Data?>(null) }
+    var previousSearches by remember { mutableStateOf<List<String>>(listOf()) }
+    val context = LocalContext.current
 
     suspend fun loadPage(page: Int) {
         try {
@@ -65,10 +70,7 @@ fun SearchScreen(navController: NavHostController) {
             loadPage(2)
             loadPage(3)
             loadPage(4)
-            loadPage(5)
-            loadPage(6)
-            loadPage(7)
-            loadPage(8)
+            previousSearches = loadPreviousSearches(context) // Carregar pesquisas anteriores
         }
     }
 
@@ -104,25 +106,26 @@ fun SearchScreen(navController: NavHostController) {
             )
 
             Column(modifier = Modifier.fillMaxSize()) {
-                SearchBox { query ->
-                    coroutineScope.launch {
-                        if (query.isBlank()) {
-                            animeList.clear()
-                            loadPage(1)
-                            loadPage(2)
-                            loadPage(3)
-                            loadPage(4)
-                            loadPage(5)
-                            loadPage(6)
-                            loadPage(7)
-                            loadPage(8)
-                        } else {
-                            val searchResults = searchAnime(query)
-                            animeList.clear()
-                            animeList.addAll(searchResults)
+                SearchBox(
+                    onSearch = { query ->
+                        coroutineScope.launch {
+                            if (query.isBlank()) {
+                                animeList.clear()
+                                loadPage(1)
+                                loadPage(2)
+                                loadPage(3)
+                                loadPage(4)
+                            } else {
+                                val searchResults = searchAnime(query)
+                                animeList.clear()
+                                animeList.addAll(searchResults)
+                                saveSearchQuery(query, context) // Salvar a pesquisa atual
+                                previousSearches = loadPreviousSearches(context) // Atualizar pesquisas anteriores
+                            }
                         }
-                    }
-                }
+                    },
+                    previousSearches = previousSearches
+                )
 
                 LazyColumn(
                     modifier = Modifier
