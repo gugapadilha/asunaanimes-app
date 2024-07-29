@@ -75,7 +75,7 @@ fun AnimeDetailsBottomSheet(anime: Data) {
                     )
                     Text(
                         text = "Score: ${anime.score}",
-                        color = Color.White,
+                        color = Color.Yellow,
                         fontSize = 15.sp,
                         fontFamily = FontFamily.SansSerif,
                         textAlign = TextAlign.Start,
@@ -133,7 +133,7 @@ fun AnimeDetailsBottomSheet(anime: Data) {
             Text(
                 text = anime.synopsis,
                 color = Color.White,
-                fontSize = 14.sp,
+                fontSize = 15.sp,
                 fontFamily = FontFamily.SansSerif,
                 textAlign = TextAlign.Start,
                 modifier = Modifier
