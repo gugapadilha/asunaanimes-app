@@ -104,7 +104,7 @@ fun SearchBox(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 4.dp)
+                        .padding(vertical = 6.dp)
                         .clickable {
                             text = suggestion
                             onSearch(suggestion)
@@ -116,7 +116,7 @@ fun SearchBox(
                         imageVector = Icons.Default.Search,
                         contentDescription = "Previous search",
                         tint = Color.White,
-                        modifier = Modifier.padding(end = 8.dp)
+                        modifier = Modifier.padding(start = 4.dp)
                     )
                     Text(
                         text = suggestion,
