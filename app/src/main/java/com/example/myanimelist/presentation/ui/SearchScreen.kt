@@ -63,6 +63,12 @@ fun SearchScreen(navController: NavHostController) {
         coroutineScope.launch {
             loadPage(1)
             loadPage(2)
+            loadPage(3)
+            loadPage(4)
+            loadPage(5)
+            loadPage(6)
+            loadPage(7)
+            loadPage(8)
         }
     }
 
@@ -104,6 +110,12 @@ fun SearchScreen(navController: NavHostController) {
                             animeList.clear()
                             loadPage(1)
                             loadPage(2)
+                            loadPage(3)
+                            loadPage(4)
+                            loadPage(5)
+                            loadPage(6)
+                            loadPage(7)
+                            loadPage(8)
                         } else {
                             val searchResults = searchAnime(query)
                             animeList.clear()

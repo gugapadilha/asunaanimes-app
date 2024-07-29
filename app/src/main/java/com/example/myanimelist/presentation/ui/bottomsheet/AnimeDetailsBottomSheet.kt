@@ -29,8 +29,8 @@ import java.text.SimpleDateFormat
 
 @Composable
 fun AnimeDetailsBottomSheet(anime: Data) {
-
     val painter = rememberAsyncImagePainter(R.drawable.bottomsheet_screen)
+    val context = LocalContext.current
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -48,13 +48,14 @@ fun AnimeDetailsBottomSheet(anime: Data) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Image(
-                    painter = rememberImagePainter(data = anime.images.jpg.imageUrl),
+                    painter = rememberImagePainter(data = anime.images.jpg.imageUrl ?: ""),
                     contentDescription = "Anime picture",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .height(200.dp)
                         .width(130.dp)
                         .clip(shape = RoundedCornerShape(8.dp))
+                        .background(Color.Gray)
                 )
 
                 Spacer(modifier = Modifier.width(16.dp))
@@ -65,7 +66,7 @@ fun AnimeDetailsBottomSheet(anime: Data) {
                         .padding(8.dp)
                 ) {
                     Text(
-                        text = anime.title,
+                        text = anime.title ?: "Title not available",
                         color = Color.White,
                         fontSize = 20.sp,
                         fontFamily = FontFamily.SansSerif,
@@ -74,7 +75,7 @@ fun AnimeDetailsBottomSheet(anime: Data) {
                         modifier = Modifier.padding(bottom = 14.dp)
                     )
                     Text(
-                        text = "Score: ${anime.score}",
+                        text = "Score: ${anime.score ?: "N/A"}",
                         color = Color.Yellow,
                         fontSize = 15.sp,
                         fontFamily = FontFamily.SansSerif,
@@ -83,9 +84,9 @@ fun AnimeDetailsBottomSheet(anime: Data) {
                     )
                     Text(
                         text = if (anime.aired?.to.isNullOrEmpty()) {
-                            "${formatDate(anime.aired.from)} - ongoing"
+                            "${anime.aired?.from?.let { formatDate(it) } ?: "Unknown start date"} - ongoing"
                         } else {
-                            "${formatDate(anime.aired.from)} - ${formatDate(anime.aired.to)}"
+                            "${anime.aired.from?.let { formatDate(it) } ?: "Unknown start date"} - ${anime.aired.to?.let { formatDate(it) } ?: "Unknown end date"}"
                         },
                         color = Color.White,
                         fontSize = 15.sp,
@@ -94,7 +95,7 @@ fun AnimeDetailsBottomSheet(anime: Data) {
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                     Text(
-                        text = "${anime.episodes} episodes",
+                        text = "${anime.episodes ?: "Unknown"} episodes",
                         color = Color.White,
                         fontSize = 15.sp,
                         fontFamily = FontFamily.SansSerif,
@@ -102,7 +103,7 @@ fun AnimeDetailsBottomSheet(anime: Data) {
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                     Text(
-                        text = "Rating: ${anime.rating}",
+                        text = "Rating: ${anime.rating ?: "N/A"}",
                         color = Color.White,
                         fontSize = 15.sp,
                         fontFamily = FontFamily.SansSerif,
@@ -110,7 +111,6 @@ fun AnimeDetailsBottomSheet(anime: Data) {
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
 
-                    val context = LocalContext.current
                     Text(
                         text = "Know more",
                         color = Color.Cyan,
@@ -121,7 +121,8 @@ fun AnimeDetailsBottomSheet(anime: Data) {
                         modifier = Modifier
                             .padding(bottom = 4.dp)
                             .clickable {
-                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(anime.url))
+                                val url = anime.url ?: "https://myanimelist.net/"
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                                 context.startActivity(intent)
                             }
                     )
@@ -131,7 +132,7 @@ fun AnimeDetailsBottomSheet(anime: Data) {
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = anime.synopsis,
+                text = anime.synopsis ?: "Synopsis not available.",
                 color = Color.White,
                 fontSize = 15.sp,
                 fontFamily = FontFamily.SansSerif,
@@ -145,11 +146,15 @@ fun AnimeDetailsBottomSheet(anime: Data) {
 }
 
 private fun formatDate(date: String): String {
-    return if (date.contains("-")) {
-        val newDate = date.substring(0, date.lastIndexOf("-"))
-        val _date = SimpleDateFormat("yyyy-MM").parse(newDate)
-        SimpleDateFormat("MMM-yyyy").format(_date)
-    } else {
-        date
+    return try {
+        if (date.contains("-")) {
+            val newDate = date.substring(0, date.lastIndexOf("-"))
+            val _date = SimpleDateFormat("yyyy-MM").parse(newDate)
+            SimpleDateFormat("MMM-yyyy").format(_date)
+        } else {
+            date
+        }
+    } catch (e: Exception) {
+        "Unknown date"
     }
 }
