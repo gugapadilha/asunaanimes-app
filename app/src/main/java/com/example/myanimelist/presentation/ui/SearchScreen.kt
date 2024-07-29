@@ -49,14 +49,13 @@ fun SearchScreen(navController: NavHostController) {
         }
     }
 
-    suspend fun searchAnime(query: String) {
-        try {
+    suspend fun searchAnime(query: String): List<Data> {
+        return try {
             val searchedAnime = withContext(Dispatchers.IO) { animeService.getSearchedAnime(query) }
-            animeList.clear()
-            animeList.addAll(searchedAnime.data)
-            Log.d("SearchScreen", "Search Animes Received: ${searchedAnime.data.size}")
+            searchedAnime.data
         } catch (e: Exception) {
             Log.e("SearchScreen", "Error to search anime: ${e.message}")
+            emptyList()
         }
     }
 
@@ -101,7 +100,15 @@ fun SearchScreen(navController: NavHostController) {
             Column(modifier = Modifier.fillMaxSize()) {
                 SearchBox { query ->
                     coroutineScope.launch {
-                        searchAnime(query)
+                        if (query.isBlank()) {
+                            animeList.clear()
+                            loadPage(1)
+                            loadPage(2)
+                        } else {
+                            val searchResults = searchAnime(query)
+                            animeList.clear()
+                            animeList.addAll(searchResults)
+                        }
                     }
                 }
 
