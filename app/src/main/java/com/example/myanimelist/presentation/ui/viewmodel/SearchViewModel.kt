@@ -25,7 +25,7 @@ class SearchViewModel : ViewModel() {
             } catch (e: Exception) {
                 // Handle error
             }
-        }
+    }
     }
 
     fun searchAnime(query: String) {
@@ -40,4 +40,29 @@ class SearchViewModel : ViewModel() {
         }
     }
 
+    fun loadPreviousSearches(context: Context) {
+        viewModelScope.launch {
+            previousSearches.value = loadPreviousSearchesFromStorage(context)
+        }
+    }
+
+    fun saveSearchQuery(query: String, context: Context) {
+        viewModelScope.launch {
+            saveSearchQueryToStorage(query, context)
+            previousSearches.value = loadPreviousSearchesFromStorage(context)
+        }
+    }
+
+    private fun loadPreviousSearchesFromStorage(context: Context): List<String> {
+        val sharedPref = context.getSharedPreferences("search_prefs", Context.MODE_PRIVATE)
+        val savedQueries = sharedPref.getStringSet("queries", mutableSetOf()) ?: mutableSetOf()
+        return savedQueries.toList()
+    }
+
+    private fun saveSearchQueryToStorage(query: String, context: Context) {
+        val sharedPref = context.getSharedPreferences("search_prefs", Context.MODE_PRIVATE)
+        val savedQueries = sharedPref.getStringSet("queries", mutableSetOf()) ?: mutableSetOf()
+        savedQueries.add(query)
+        sharedPref.edit().putStringSet("queries", savedQueries).apply()
+    }
 }
