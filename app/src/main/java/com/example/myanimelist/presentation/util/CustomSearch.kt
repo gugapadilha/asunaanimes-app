@@ -128,6 +128,40 @@ fun SearchBox(
 }
 
 @Composable
+fun AnimeCard(onSearchClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .height(50.dp)
+            .padding(start = 10.dp)
+    ) {
+        AnimatedBorderCard(
+            modifier = Modifier.fillMaxSize(),
+            shape = RoundedCornerShape(24.dp),
+            borderWidth = 3.dp,
+            gradient = Brush.linearGradient(
+                listOf(
+                    Color(android.graphics.Color.rgb(117, 27, 16)),
+                    Color(
+                        android.graphics.Color.rgb(219, 136, 81)
+                    ))
+            ),
+            onCardClick = { onSearchClick() }
+        ) {
+            Text(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 10.dp),
+                text = "Search",
+                color = Color.White,
+                fontSize = 16.sp,
+                textAlign = TextAlign.Center
+            )
+        }
+    }
+}
+
+
+@Composable
 fun AnimeItem(anime: Data) {
     Box(
         modifier = Modifier
@@ -162,39 +196,6 @@ fun AnimeItem(anime: Data) {
                     textAlign = TextAlign.Start,
                 )
             }
-        }
-    }
-}
-
-@Composable
-fun AnimeCard(onSearchClick: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .height(50.dp)
-            .padding(start = 10.dp)
-    ) {
-        AnimatedBorderCard(
-            modifier = Modifier.fillMaxSize(),
-            shape = RoundedCornerShape(24.dp),
-            borderWidth = 3.dp,
-            gradient = Brush.linearGradient(
-                listOf(
-                    Color(android.graphics.Color.rgb(117, 27, 16)),
-                    Color(
-                        android.graphics.Color.rgb(219, 136, 81)
-                    ))
-            ),
-            onCardClick = { onSearchClick() }
-        ) {
-            Text(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 10.dp),
-                text = "Search",
-                color = Color.White,
-                fontSize = 16.sp,
-                textAlign = TextAlign.Center
-            )
         }
     }
 }

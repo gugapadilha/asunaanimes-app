@@ -26,8 +26,6 @@ import com.example.myanimelist.presentation.ui.bottomsheet.AnimeDetailsBottomShe
 import com.example.myanimelist.presentation.ui.viewmodel.SearchViewModel
 import com.example.myanimelist.presentation.util.AnimeItem
 import com.example.myanimelist.presentation.util.SearchBox
-import com.example.myanimelist.presentation.util.loadPreviousSearches
-import com.example.myanimelist.presentation.util.saveSearchQuery
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
