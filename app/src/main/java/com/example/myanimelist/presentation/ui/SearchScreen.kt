@@ -16,12 +16,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.myanimelist.R
 import com.example.myanimelist.data.service.AnimeService
 import com.example.myanimelist.domain.model2.Data
 import com.example.myanimelist.presentation.ui.bottomsheet.AnimeDetailsBottomSheet
+import com.example.myanimelist.presentation.ui.viewmodel.SearchViewModel
 import com.example.myanimelist.presentation.util.AnimeItem
 import com.example.myanimelist.presentation.util.SearchBox
 import com.example.myanimelist.presentation.util.loadPreviousSearches
@@ -42,6 +44,9 @@ fun SearchScreen(navController: NavHostController) {
     var selectedAnime by remember { mutableStateOf<Data?>(null) }
     var previousSearches by remember { mutableStateOf<List<String>>(listOf()) }
     val context = LocalContext.current
+
+    // Obtenha a instância da ViewModel
+    val searchViewModel: SearchViewModel = viewModel()
 
     suspend fun loadPage(page: Int) {
         try {
@@ -70,7 +75,7 @@ fun SearchScreen(navController: NavHostController) {
             loadPage(2)
             loadPage(3)
             loadPage(4)
-            previousSearches = loadPreviousSearches(context) // show previous searches
+            previousSearches = searchViewModel.loadPreviousSearchesFromStorage(context) // show previous searches
         }
     }
 
@@ -119,8 +124,8 @@ fun SearchScreen(navController: NavHostController) {
                                 val searchResults = searchAnime(query)
                                 animeList.clear()
                                 animeList.addAll(searchResults)
-                                saveSearchQuery(query, context) // save last search
-                                previousSearches = loadPreviousSearches(context) // update latest searches
+                                searchViewModel.saveSearchQueryToStorage(query, context) // save last search
+                                previousSearches = searchViewModel.loadPreviousSearchesFromStorage(context) // update latest searches
                             }
                         }
                     },
