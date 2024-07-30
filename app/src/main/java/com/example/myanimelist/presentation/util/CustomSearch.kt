@@ -127,24 +127,6 @@ fun SearchBox(
     }
 }
 
-// Helper functions to save and load search queries
-fun saveSearchQuery(query: String, context: Context) {
-    // Aqui você pode salvar a pesquisa em SharedPreferences, uma base de dados local, etc.
-    // Exemplo simples usando SharedPreferences:
-    val sharedPref = context.getSharedPreferences("search_prefs", Context.MODE_PRIVATE)
-    val savedQueries = sharedPref.getStringSet("queries", mutableSetOf()) ?: mutableSetOf()
-    savedQueries.add(query)
-    sharedPref.edit().putStringSet("queries", savedQueries).apply()
-}
-
-fun loadPreviousSearches(context: Context): List<String> {
-    // Carregar pesquisas anteriores de SharedPreferences, uma base de dados local, etc.
-    // Exemplo simples usando SharedPreferences:
-    val sharedPref = context.getSharedPreferences("search_prefs", Context.MODE_PRIVATE)
-    val savedQueries = sharedPref.getStringSet("queries", mutableSetOf()) ?: mutableSetOf()
-    return savedQueries.toList()
-}
-
 @Composable
 fun AnimeItem(anime: Data) {
     Box(
