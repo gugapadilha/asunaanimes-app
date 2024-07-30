@@ -42,8 +42,6 @@ fun SearchScreen(navController: NavHostController) {
     var selectedAnime by remember { mutableStateOf<Data?>(null) }
     var previousSearches by remember { mutableStateOf<List<String>>(listOf()) }
     val context = LocalContext.current
-
-    // Obtenha a instância da ViewModel
     val searchViewModel: SearchViewModel = viewModel()
 
     suspend fun loadPage(page: Int) {
@@ -74,6 +72,7 @@ fun SearchScreen(navController: NavHostController) {
             loadPage(3)
             loadPage(4)
             previousSearches = searchViewModel.loadPreviousSearchesFromStorage(context) // show previous searches
+            Log.d("SearchScreen", "Previous searches after loading: $previousSearches")
         }
     }
 
