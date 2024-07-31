@@ -9,7 +9,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
@@ -22,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.example.myanimelist.R
@@ -33,6 +38,8 @@ import java.text.SimpleDateFormat
 fun AnimeDetailsBottomSheet(anime: Data) {
     val painter = rememberAsyncImagePainter(R.drawable.bottomsheet_screen)
     val context = LocalContext.current
+    var showDialog by remember { mutableStateOf(false) }
+
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -128,7 +135,14 @@ fun AnimeDetailsBottomSheet(anime: Data) {
                                 context.startActivity(intent)
                             }
                     )
-                    AnimeCard(onSearchClick = {})
+                    AnimeCard(onSearchClick = { showDialog = true })
+                    if (showDialog) {
+                        AnimeOptionsDialog(
+                            onDismiss = { showDialog = false },
+                            onFavoriteClick = { /* Implementar ação para "Favorite Animes" */ },
+                            onWatchedClick = { /* Implementar ação para "Watched Animes" */ }
+                        )
+                    }
                 }
             }
 
@@ -191,6 +205,58 @@ private fun AnimeCard(onSearchClick: () -> Unit) {
                 fontSize = 16.sp,
                 textAlign = TextAlign.Center
             )
+        }
+    }
+}
+
+@Composable
+fun AnimeOptionsDialog(onDismiss: () -> Unit, onFavoriteClick: () -> Unit, onWatchedClick: () -> Unit) {
+    Dialog(onDismissRequest = { onDismiss() }) {
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(24.dp))
+                .background(
+                    Brush.linearGradient(
+                        listOf(
+                            Color(android.graphics.Color.rgb(117, 27, 16)),
+                            Color(android.graphics.Color.rgb(219, 136, 81))
+                        )
+                    )
+                )
+                .padding(16.dp)
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Favorite Animes",
+                    color = Color.White,
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            onFavoriteClick()
+                            onDismiss()
+                        }
+                        .padding(vertical = 8.dp)
+                )
+                Text(
+                    text = "Watched Animes",
+                    color = Color.White,
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            onWatchedClick()
+                            onDismiss()
+                        }
+                        .padding(vertical = 8.dp)
+                )
+            }
         }
     }
 }
