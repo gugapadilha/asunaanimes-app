@@ -166,8 +166,8 @@ private fun formatDate(date: String): String {
 private fun AnimeCard(onSearchClick: () -> Unit) {
     Box(
         modifier = Modifier
-            .height(40.dp)
-            .padding(start = 10.dp, top = 5.dp)
+            .height(45.dp)
+            .padding(top = 10.dp)
     ) {
         AnimatedBorderCard(
             modifier = Modifier.fillMaxSize(),
@@ -185,7 +185,7 @@ private fun AnimeCard(onSearchClick: () -> Unit) {
             androidx.compose.material3.Text(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 10.dp),
+                    .padding(top = 2.dp),
                 text = "Add to your list: ",
                 color = Color.White,
                 fontSize = 16.sp,
