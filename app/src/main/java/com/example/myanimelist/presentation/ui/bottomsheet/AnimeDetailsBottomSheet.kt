@@ -244,7 +244,7 @@ fun AnimeOptionsDialog(onDismiss: () -> Unit, onFavoriteClick: () -> Unit, onWat
                             onFavoriteClick()
                             onDismiss()
                         }
-                        .padding(vertical = 8.dp, horizontal = 16.dp)
+                        .padding(vertical = 12.dp, horizontal = 16.dp)
                 )
                 Spacer(modifier = Modifier.height(14.dp))
                 Text(
@@ -259,7 +259,7 @@ fun AnimeOptionsDialog(onDismiss: () -> Unit, onFavoriteClick: () -> Unit, onWat
                             onWatchedClick()
                             onDismiss()
                         }
-                        .padding(vertical = 8.dp, horizontal = 16.dp)
+                        .padding(vertical = 12.dp, horizontal = 16.dp)
                 )
             }
         }
