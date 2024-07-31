@@ -186,7 +186,7 @@ private fun AnimeCard(onSearchClick: () -> Unit) {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = 2.dp),
-                text = "Add to your list: ",
+                text = "Add to your list",
                 color = Color.White,
                 fontSize = 16.sp,
                 textAlign = TextAlign.Center
