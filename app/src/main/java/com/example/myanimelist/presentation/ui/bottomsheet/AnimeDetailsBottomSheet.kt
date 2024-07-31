@@ -2,8 +2,10 @@ package com.example.myanimelist.presentation.ui.bottomsheet
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -223,7 +225,7 @@ fun AnimeOptionsDialog(onDismiss: () -> Unit, onFavoriteClick: () -> Unit, onWat
                         )
                     )
                 )
-                .padding(16.dp)
+                .padding(22.dp)
         ) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
@@ -233,28 +235,31 @@ fun AnimeOptionsDialog(onDismiss: () -> Unit, onFavoriteClick: () -> Unit, onWat
                 Text(
                     text = "Favorite Animes",
                     color = Color.White,
-                    fontSize = 16.sp,
+                    fontSize = 20.sp,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .fillMaxWidth()
+                        .border(BorderStroke(1.dp, Color.White), RoundedCornerShape(12.dp))
                         .clickable {
                             onFavoriteClick()
                             onDismiss()
                         }
-                        .padding(vertical = 8.dp)
+                        .padding(vertical = 8.dp, horizontal = 16.dp)
                 )
+                Spacer(modifier = Modifier.height(14.dp))
                 Text(
                     text = "Watched Animes",
                     color = Color.White,
-                    fontSize = 16.sp,
+                    fontSize = 20.sp,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .fillMaxWidth()
+                        .border(BorderStroke(1.dp, Color.White), RoundedCornerShape(12.dp))
                         .clickable {
                             onWatchedClick()
                             onDismiss()
                         }
-                        .padding(vertical = 8.dp)
+                        .padding(vertical = 8.dp, horizontal = 16.dp)
                 )
             }
         }
