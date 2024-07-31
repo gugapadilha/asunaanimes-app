@@ -128,7 +128,7 @@ fun SearchBox(
 }
 
 @Composable
-fun AnimeCard(onSearchClick: () -> Unit) {
+private fun AnimeCard(onSearchClick: () -> Unit) {
     Box(
         modifier = Modifier
             .height(50.dp)

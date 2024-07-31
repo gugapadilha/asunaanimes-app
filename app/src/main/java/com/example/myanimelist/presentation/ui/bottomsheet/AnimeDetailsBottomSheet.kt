@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -25,6 +26,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.example.myanimelist.R
 import com.example.myanimelist.domain.model2.Data
+import com.example.myanimelist.presentation.ui.AnimatedBorderCard
 import java.text.SimpleDateFormat
 
 @Composable
@@ -126,6 +128,7 @@ fun AnimeDetailsBottomSheet(anime: Data) {
                                 context.startActivity(intent)
                             }
                     )
+                    AnimeCard(onSearchClick = {})
                 }
             }
 
@@ -156,5 +159,38 @@ private fun formatDate(date: String): String {
         }
     } catch (e: Exception) {
         "Unknown date"
+    }
+}
+
+@Composable
+private fun AnimeCard(onSearchClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .height(40.dp)
+            .padding(start = 10.dp, top = 5.dp)
+    ) {
+        AnimatedBorderCard(
+            modifier = Modifier.fillMaxSize(),
+            shape = RoundedCornerShape(24.dp),
+            borderWidth = 3.dp,
+            gradient = Brush.linearGradient(
+                listOf(
+                    Color(android.graphics.Color.rgb(117, 27, 16)),
+                    Color(
+                        android.graphics.Color.rgb(219, 136, 81)
+                    ))
+            ),
+            onCardClick = { onSearchClick() }
+        ) {
+            androidx.compose.material3.Text(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 10.dp),
+                text = "Add to your list: ",
+                color = Color.White,
+                fontSize = 16.sp,
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }
