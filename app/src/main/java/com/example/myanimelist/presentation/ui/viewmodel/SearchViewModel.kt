@@ -8,6 +8,8 @@ import com.example.myanimelist.data.service.AnimeService
 import com.example.myanimelist.domain.model2.Data
 
 import android.util.Log
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class SearchViewModel : ViewModel() {
     val animeList = mutableStateListOf<Data>()
@@ -26,13 +28,11 @@ class SearchViewModel : ViewModel() {
         }
     }
 
-
     fun loadPreviousSearchesFromStorage(context: Context): List<String> {
         val sharedPref = context.getSharedPreferences("search_prefs", Context.MODE_PRIVATE)
         val savedQueries = sharedPref.getStringSet("queries", mutableSetOf())?.toList() ?: listOf()
         Log.d("SearchViewModel", "Loaded queries: $savedQueries")
         return savedQueries
     }
-
 
 }
