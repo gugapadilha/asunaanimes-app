@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +22,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontFamily
@@ -54,13 +56,18 @@ fun WatchedScreen(navController: NavHostController) {
             contentDescription = "Background Image",
             contentScale = ContentScale.FillBounds
         )
-        Row(
+        AnimatedBorderCard(
             modifier = Modifier
                 .height(80.dp)
-                .fillMaxWidth()
-                .background(Color.Black),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(0.dp),
+            borderWidth = 3.dp,
+            gradient = Brush.linearGradient(
+                listOf(
+                    Color(android.graphics.Color.rgb(117, 27, 16)),
+                    Color(android.graphics.Color.rgb(219, 136, 81))
+                )
+            )
         )
         {
             Text(
