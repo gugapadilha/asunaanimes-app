@@ -42,8 +42,7 @@ import com.example.myanimelist.presentation.util.CustomWatched
 @Composable
 fun WatchedScreen(navController: NavHostController) {
     val painter = rememberAsyncImagePainter(R.drawable.watched_screen)
-    val animeList = remember { mutableStateListOf<Data>() }
-    val animeService = AnimeService.create()
+    val animeList = WatchedAnimeStore.watchedAnimeList
     val listState = rememberLazyListState()
 
     Box(
@@ -69,8 +68,7 @@ fun WatchedScreen(navController: NavHostController) {
                     Color(android.graphics.Color.rgb(219, 136, 81))
                 )
             )
-        )
-        {
+        ) {
             Text(
                 modifier = Modifier.padding(top = 15.dp),
                 text = "Here you can see all your animes watched",
@@ -100,6 +98,18 @@ fun WatchedScreen(navController: NavHostController) {
                     .height(2.dp)
                     .background(Color.Gray)
             )
+        }
+    }
+}
+
+
+object WatchedAnimeStore {
+    private val _watchedAnimeList = mutableStateListOf<Data>()
+    val watchedAnimeList: List<Data> = _watchedAnimeList
+
+    fun addAnime(anime: Data) {
+        if (!_watchedAnimeList.contains(anime)) {
+            _watchedAnimeList.add(anime)
         }
     }
 }

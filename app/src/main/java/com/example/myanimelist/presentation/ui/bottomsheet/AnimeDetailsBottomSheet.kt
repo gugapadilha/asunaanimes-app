@@ -34,6 +34,7 @@ import coil.compose.rememberImagePainter
 import com.example.myanimelist.R
 import com.example.myanimelist.domain.model2.Data
 import com.example.myanimelist.presentation.ui.AnimatedBorderCard
+import com.example.myanimelist.presentation.ui.WatchedAnimeStore
 import java.text.SimpleDateFormat
 
 @Composable
@@ -141,8 +142,7 @@ fun AnimeDetailsBottomSheet(anime: Data) {
                     if (showDialog) {
                         AnimeOptionsDialog(
                             onDismiss = { showDialog = false },
-                            onFavoriteClick = { /* Implementar ação para "Favorite Animes" */ },
-                            onWatchedClick = { /* Implementar ação para "Watched Animes" */ }
+                            anime = anime
                         )
                     }
                 }
@@ -212,7 +212,7 @@ private fun AnimeCard(onSearchClick: () -> Unit) {
 }
 
 @Composable
-fun AnimeOptionsDialog(onDismiss: () -> Unit, onFavoriteClick: () -> Unit, onWatchedClick: () -> Unit) {
+fun AnimeOptionsDialog(onDismiss: () -> Unit, anime: Data) {
     Dialog(onDismissRequest = { onDismiss() }) {
         Box(
             modifier = Modifier
@@ -241,7 +241,7 @@ fun AnimeOptionsDialog(onDismiss: () -> Unit, onFavoriteClick: () -> Unit, onWat
                         .fillMaxWidth()
                         .border(BorderStroke(1.dp, Color.White), RoundedCornerShape(12.dp))
                         .clickable {
-                            onFavoriteClick()
+                            // Implementar ação para "Favorite Animes"
                             onDismiss()
                         }
                         .padding(vertical = 12.dp, horizontal = 16.dp)
@@ -256,7 +256,7 @@ fun AnimeOptionsDialog(onDismiss: () -> Unit, onFavoriteClick: () -> Unit, onWat
                         .fillMaxWidth()
                         .border(BorderStroke(1.dp, Color.White), RoundedCornerShape(12.dp))
                         .clickable {
-                            onWatchedClick()
+                            WatchedAnimeStore.addAnime(anime)
                             onDismiss()
                         }
                         .padding(vertical = 12.dp, horizontal = 16.dp)
