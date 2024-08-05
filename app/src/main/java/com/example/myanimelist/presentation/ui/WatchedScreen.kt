@@ -56,17 +56,19 @@ fun WatchedScreen(navController: NavHostController) {
         )
         Row(
             modifier = Modifier
-                .height(100.dp)
+                .height(80.dp)
                 .fillMaxWidth()
-                .background(Color.Red),
+                .background(Color.Black),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
         )
         {
             Text(
+                modifier = Modifier.padding(top = 20.dp),
                 text = "Here you can see all watched animes",
                 textAlign = TextAlign.Center,
-                color = Color.White
+                color = Color.White,
+                fontSize = 16.sp
             )
         }
         Column(
