@@ -36,3 +36,14 @@ class SearchViewModel : ViewModel() {
     }
 
 }
+
+object WatchedAnimeStore {
+    private val _watchedAnimeList = mutableStateListOf<Data>()
+    val watchedAnimeList: List<Data> = _watchedAnimeList
+
+    fun addAnime(anime: Data) {
+        if (!_watchedAnimeList.contains(anime)) {
+            _watchedAnimeList.add(anime)
+        }
+    }
+}
