@@ -59,8 +59,9 @@ fun WatchedScreen(navController: NavHostController) {
         AnimatedBorderCard(
             modifier = Modifier
                 .height(80.dp)
-                .fillMaxWidth(),
-            shape = RoundedCornerShape(0.dp),
+                .fillMaxWidth()
+                .padding(top = 20.dp),
+            shape = RoundedCornerShape(4.dp),
             borderWidth = 3.dp,
             gradient = Brush.linearGradient(
                 listOf(
@@ -71,11 +72,11 @@ fun WatchedScreen(navController: NavHostController) {
         )
         {
             Text(
-                modifier = Modifier.padding(top = 20.dp),
-                text = "Here you can see all watched animes",
+                modifier = Modifier.padding(top = 15.dp),
+                text = "Here you can see all your animes watched",
                 textAlign = TextAlign.Center,
                 color = Color.White,
-                fontSize = 16.sp
+                fontSize = 18.sp
             )
         }
         Column(
