@@ -34,7 +34,7 @@ import coil.compose.rememberImagePainter
 import com.example.myanimelist.R
 import com.example.myanimelist.domain.model2.Data
 import com.example.myanimelist.presentation.ui.AnimatedBorderCard
-import com.example.myanimelist.presentation.ui.WatchedAnimeStore
+import com.example.myanimelist.presentation.ui.viewmodel.WatchedAnimeStore
 import java.text.SimpleDateFormat
 
 @Composable
