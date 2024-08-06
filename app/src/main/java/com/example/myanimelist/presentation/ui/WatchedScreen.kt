@@ -44,6 +44,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.myanimelist.R
 import com.example.myanimelist.domain.model2.Data
 import com.example.myanimelist.presentation.ui.bottomsheet.AnimeDetailsBottomSheet
+import com.example.myanimelist.presentation.ui.bottomsheet.RemoveAnimeBottomSheet
 import com.example.myanimelist.presentation.ui.viewmodel.WatchedAnimeStore
 import com.example.myanimelist.presentation.util.AnimeItem
 import kotlinx.coroutines.coroutineScope
@@ -130,47 +131,8 @@ fun WatchedScreen(navController: NavHostController) {
         ModalBottomSheetLayout(
             sheetState = bottomSheetState,
             sheetContent = {
-                AnimeDetailsBottomSheet(anime = it)
+                RemoveAnimeBottomSheet(anime = it)
             }
         ) {}
-    }
-}
-@Composable
-fun RemoveAnimeDialog(onDismiss: () -> Unit, anime: Data) {
-    Dialog(onDismissRequest = { onDismiss() }) {
-        Box(
-            modifier = Modifier
-                .clip(RoundedCornerShape(24.dp))
-                .background(
-                    Brush.linearGradient(
-                        listOf(
-                            Color(android.graphics.Color.rgb(117, 27, 16)),
-                            Color(android.graphics.Color.rgb(219, 136, 81))
-                        )
-                    )
-                )
-                .padding(22.dp)
-        ) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Remove Anime",
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .border(BorderStroke(1.dp, Color.White), RoundedCornerShape(12.dp))
-                        .clickable {
-                            WatchedAnimeStore.removeAnime(anime)
-                            onDismiss()
-                        }
-                        .padding(vertical = 12.dp, horizontal = 16.dp)
-                )
-            }
-        }
     }
 }
