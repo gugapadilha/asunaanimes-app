@@ -11,10 +11,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,20 +25,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.example.myanimelist.R
 import com.example.myanimelist.domain.model2.Data
 import com.example.myanimelist.presentation.ui.AnimatedBorderCard
 import com.example.myanimelist.presentation.ui.viewmodel.WatchedAnimeStore
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 
 @Composable
 fun RemoveAnimeBottomSheet(anime: Data) {
     val painter = rememberAsyncImagePainter(R.drawable.bottomsheet_screen)
     val context = LocalContext.current
-    var showDialog by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
 
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -138,13 +135,11 @@ fun RemoveAnimeBottomSheet(anime: Data) {
                                 context.startActivity(intent)
                             }
                     )
-                    AnimeCard(onSearchClick = { showDialog = true })
-                    if (showDialog) {
-                        RemoveAnimeDialog(
-                            onDismiss = { showDialog = false },
-                            anime = anime
-                        )
-                    }
+                    AnimeCard(onRemoveClick = {
+                        coroutineScope.launch {
+                            WatchedAnimeStore.removeAnime(anime)
+                        }
+                    })
                 }
             }
 
@@ -177,9 +172,8 @@ private fun formatDate(date: String): String {
         "Unknown date"
     }
 }
-
 @Composable
-private fun AnimeCard(onSearchClick: () -> Unit) {
+private fun AnimeCard(onRemoveClick: () -> Unit) {
     Box(
         modifier = Modifier
             .height(45.dp)
@@ -196,57 +190,17 @@ private fun AnimeCard(onSearchClick: () -> Unit) {
                         android.graphics.Color.rgb(219, 136, 81)
                     ))
             ),
-            onCardClick = { onSearchClick() }
+            onCardClick = { onRemoveClick() }
         ) {
             androidx.compose.material3.Text(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = 2.dp),
-                text = "Add to your list",
+                text = "Remove Anime",
                 color = Color.White,
                 fontSize = 16.sp,
                 textAlign = TextAlign.Center
             )
-        }
-    }
-}
-
-@Composable
-fun RemoveAnimeDialog(onDismiss: () -> Unit, anime: Data) {
-    Dialog(onDismissRequest = { onDismiss() }) {
-        Box(
-            modifier = Modifier
-                .clip(RoundedCornerShape(24.dp))
-                .background(
-                    Brush.linearGradient(
-                        listOf(
-                            Color(android.graphics.Color.rgb(117, 27, 16)),
-                            Color(android.graphics.Color.rgb(219, 136, 81))
-                        )
-                    )
-                )
-                .padding(22.dp)
-        ) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                androidx.compose.material3.Text(
-                    text = "Remove Anime",
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .border(BorderStroke(1.dp, Color.White), RoundedCornerShape(12.dp))
-                        .clickable {
-                            WatchedAnimeStore.removeAnime(anime)
-                            onDismiss()
-                        }
-                        .padding(vertical = 12.dp, horizontal = 16.dp)
-                )
-            }
         }
     }
 }
