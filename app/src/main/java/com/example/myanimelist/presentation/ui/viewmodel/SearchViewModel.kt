@@ -47,3 +47,15 @@ object WatchedAnimeStore {
         }
     }
 }
+
+object FavoriteAnimeStore {
+    private val _favoriteAnimeList = mutableStateListOf<Data>()
+    val favoriteAnimeList: List<Data> = _favoriteAnimeList
+
+    fun addAnime(anime: Data) {
+        if (!_favoriteAnimeList.contains(anime)) {
+            _favoriteAnimeList.add(anime)
+        }
+    }
+}
+
