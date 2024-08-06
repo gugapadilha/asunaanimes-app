@@ -127,11 +127,16 @@ fun WatchedScreen(navController: NavHostController) {
         }
     }
 
-    selectedAnime?.let {
+    selectedAnime?.let { anime ->
         ModalBottomSheetLayout(
             sheetState = bottomSheetState,
             sheetContent = {
-                RemoveAnimeBottomSheet(anime = it, onDismiss = { selectedAnime = null })
+                RemoveAnimeBottomSheet(anime = anime, onDismiss = {
+                    coroutineScope.launch {
+                        bottomSheetState.hide()
+                        selectedAnime = null
+                    }
+                })
             }
         ) {}
     }
