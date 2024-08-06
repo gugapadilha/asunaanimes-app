@@ -46,6 +46,10 @@ object WatchedAnimeStore {
             _watchedAnimeList.add(anime)
         }
     }
+
+    fun removeAnime(anime: Data) {
+        _watchedAnimeList.remove(anime)
+    }
 }
 
 object FavoriteAnimeStore {
@@ -56,6 +60,10 @@ object FavoriteAnimeStore {
         if (!_favoriteAnimeList.contains(anime)) {
             _favoriteAnimeList.add(anime)
         }
+    }
+
+    fun removeAnime(anime: Data) {
+        _favoriteAnimeList.remove(anime)
     }
 }
 
