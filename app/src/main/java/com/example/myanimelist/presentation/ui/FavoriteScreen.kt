@@ -42,7 +42,6 @@ fun FavoriteScreen(navController: NavHostController) {
     val listState = rememberLazyListState()
     val painter = rememberAsyncImagePainter(R.drawable.favorite_screen)
 
-
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.TopCenter
