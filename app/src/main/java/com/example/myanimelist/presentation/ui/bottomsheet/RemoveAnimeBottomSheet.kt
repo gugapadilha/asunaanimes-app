@@ -27,16 +27,20 @@ import coil.compose.rememberImagePainter
 import com.example.myanimelist.R
 import com.example.myanimelist.domain.model2.Data
 import com.example.myanimelist.presentation.ui.AnimatedBorderCard
+import com.example.myanimelist.presentation.ui.viewmodel.FavoriteAnimeStore
 import com.example.myanimelist.presentation.ui.viewmodel.WatchedAnimeStore
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 
 @Composable
-fun RemoveAnimeBottomSheet(anime: Data, onDismiss: () -> Unit) {
+fun RemoveAnimeBottomSheet(
+    anime: Data,
+    onDismiss: () -> Unit,
+    removeFromFavorite: Boolean // Adicione este parâmetro
+) {
     val painter = rememberAsyncImagePainter(R.drawable.bottomsheet_screen)
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -134,9 +138,12 @@ fun RemoveAnimeBottomSheet(anime: Data, onDismiss: () -> Unit) {
                     )
                     AnimeCard(onRemoveClick = {
                         coroutineScope.launch {
-                            WatchedAnimeStore.removeAnime(anime)
-                            onDismiss() // Fecha a BottomSheet após remover o anime
-
+                            if (removeFromFavorite) {
+                                FavoriteAnimeStore.removeAnime(anime)
+                            } else {
+                                WatchedAnimeStore.removeAnime(anime)
+                            }
+                            onDismiss()
                         }
                     })
                 }
