@@ -34,6 +34,7 @@ import coil.compose.rememberImagePainter
 import com.example.myanimelist.R
 import com.example.myanimelist.domain.model2.Data
 import com.example.myanimelist.presentation.ui.AnimatedBorderCard
+import com.example.myanimelist.presentation.ui.viewmodel.FavoriteAnimeStore
 import com.example.myanimelist.presentation.ui.viewmodel.WatchedAnimeStore
 import java.text.SimpleDateFormat
 
@@ -241,7 +242,7 @@ fun AnimeOptionsDialog(onDismiss: () -> Unit, anime: Data) {
                         .fillMaxWidth()
                         .border(BorderStroke(1.dp, Color.White), RoundedCornerShape(12.dp))
                         .clickable {
-                            // Implementar ação para "Favorite Animes"
+                            FavoriteAnimeStore.addAnime(anime)
                             onDismiss()
                         }
                         .padding(vertical = 12.dp, horizontal = 16.dp)
