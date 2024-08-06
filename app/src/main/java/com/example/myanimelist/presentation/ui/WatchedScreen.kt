@@ -1,6 +1,11 @@
 package com.example.myanimelist.presentation.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,27 +18,46 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.myanimelist.R
+import com.example.myanimelist.domain.model2.Data
+import com.example.myanimelist.presentation.ui.bottomsheet.AnimeDetailsBottomSheet
 import com.example.myanimelist.presentation.ui.viewmodel.WatchedAnimeStore
 import com.example.myanimelist.presentation.util.AnimeItem
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun WatchedScreen(navController: NavHostController) {
     val painter = rememberAsyncImagePainter(R.drawable.watched_screen)
     val animeList = WatchedAnimeStore.watchedAnimeList
     val listState = rememberLazyListState()
+    var selectedAnime by remember { mutableStateOf<Data?>(null) }
+    val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+    val coroutineScope = rememberCoroutineScope()
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -86,12 +110,66 @@ fun WatchedScreen(navController: NavHostController) {
                                 modifier = Modifier
                                     .weight(1f)
                                     .padding(4.dp)
+                                    .clickable {
+                                        selectedAnime = anime
+                                        coroutineScope.launch {
+                                            bottomSheetState.show()
+                                        }
+                                    }
                             ) {
                                 AnimeItem(anime = anime)
                             }
                         }
                     }
                 }
+            }
+        }
+    }
+
+    selectedAnime?.let {
+        ModalBottomSheetLayout(
+            sheetState = bottomSheetState,
+            sheetContent = {
+                AnimeDetailsBottomSheet(anime = it)
+            }
+        ) {}
+    }
+}
+@Composable
+fun RemoveAnimeDialog(onDismiss: () -> Unit, anime: Data) {
+    Dialog(onDismissRequest = { onDismiss() }) {
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(24.dp))
+                .background(
+                    Brush.linearGradient(
+                        listOf(
+                            Color(android.graphics.Color.rgb(117, 27, 16)),
+                            Color(android.graphics.Color.rgb(219, 136, 81))
+                        )
+                    )
+                )
+                .padding(22.dp)
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Remove Anime",
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .border(BorderStroke(1.dp, Color.White), RoundedCornerShape(12.dp))
+                        .clickable {
+                            WatchedAnimeStore.removeAnime(anime)
+                            onDismiss()
+                        }
+                        .padding(vertical = 12.dp, horizontal = 16.dp)
+                )
             }
         }
     }
