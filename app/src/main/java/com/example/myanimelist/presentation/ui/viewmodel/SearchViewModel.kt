@@ -60,19 +60,23 @@ object WatchedAnimeStore {
     }
 }
 
-
 object FavoriteAnimeStore {
     private val _favoriteAnimeList = mutableStateListOf<Data>()
-    val favoriteAnimeList: List<Data> = _favoriteAnimeList
+    val favoriteAnimeList: SnapshotStateList<Data> = _favoriteAnimeList
 
-    fun addAnime(anime: Data) {
-        if (!_favoriteAnimeList.contains(anime)) {
-            _favoriteAnimeList.add(anime)
-        }
+    fun addAnime(anime: Data, context: Context) {
+        _favoriteAnimeList.add(anime)
+        SharedPreferencesHelper.saveFavoriteAnimes(context, _favoriteAnimeList.toList())
     }
 
-    fun removeAnime(anime: Data) {
+    fun removeAnime(anime: Data, context: Context) {
         _favoriteAnimeList.remove(anime)
+        SharedPreferencesHelper.saveFavoriteAnimes(context, _favoriteAnimeList.toList())
+    }
+
+    fun loadFavoriteAnimes(context: Context) {
+        val animes = SharedPreferencesHelper.getFavoriteAnimes(context)
+        _favoriteAnimeList.clear()
+        _favoriteAnimeList.addAll(animes)
     }
 }
-

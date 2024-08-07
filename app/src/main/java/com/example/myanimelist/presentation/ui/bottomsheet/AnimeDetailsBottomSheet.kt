@@ -240,7 +240,7 @@ fun AnimeOptionsDialog(onDismiss: () -> Unit, anime: Data) {
                         .fillMaxWidth()
                         .border(BorderStroke(1.dp, Color.White), RoundedCornerShape(12.dp))
                         .clickable {
-                            FavoriteAnimeStore.addAnime(anime)
+                            FavoriteAnimeStore.addAnime(anime, context)
                             onDismiss()
                         }
                         .padding(vertical = 12.dp, horizontal = 16.dp)

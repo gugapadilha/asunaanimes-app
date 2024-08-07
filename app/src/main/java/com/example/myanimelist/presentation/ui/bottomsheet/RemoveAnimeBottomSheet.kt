@@ -139,7 +139,7 @@ fun RemoveAnimeBottomSheet(
                     AnimeCard(onRemoveClick = {
                         coroutineScope.launch {
                             if (removeFromFavorite) {
-                                FavoriteAnimeStore.removeAnime(anime)
+                                FavoriteAnimeStore.removeAnime(anime, context)
                             } else {
                                 WatchedAnimeStore.removeAnime(anime, context)
                             }

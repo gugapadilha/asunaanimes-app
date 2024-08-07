@@ -22,6 +22,7 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,6 +43,7 @@ import com.example.myanimelist.R
 import com.example.myanimelist.domain.model2.Data
 import com.example.myanimelist.presentation.ui.bottomsheet.RemoveAnimeBottomSheet
 import com.example.myanimelist.presentation.ui.viewmodel.FavoriteAnimeStore
+import com.example.myanimelist.presentation.ui.viewmodel.WatchedAnimeStore
 import com.example.myanimelist.presentation.util.AnimeItem
 import kotlinx.coroutines.launch
 
@@ -53,6 +56,11 @@ fun FavoriteScreen(navController: NavHostController) {
     var selectedAnime by remember { mutableStateOf<Data?>(null) }
     val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        FavoriteAnimeStore.loadFavoriteAnimes(context)
+    }
 
     Box(
         modifier = Modifier.fillMaxSize(),
