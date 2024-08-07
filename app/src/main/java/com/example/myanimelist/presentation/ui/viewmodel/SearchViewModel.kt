@@ -36,25 +36,3 @@ class SearchViewModel : ViewModel() {
     }
 
 }
-
-object WatchedAnimeStore {
-    private val _watchedAnimeList = mutableStateListOf<Data>()
-    val watchedAnimeList: SnapshotStateList<Data> = _watchedAnimeList
-
-    fun addAnime(anime: Data, context: Context) {
-        _watchedAnimeList.add(anime)
-        SharedPreferencesHelper.saveWatchedAnimes(context, _watchedAnimeList.toList())
-    }
-
-    fun removeAnime(anime: Data, context: Context) {
-        _watchedAnimeList.remove(anime)
-        SharedPreferencesHelper.saveWatchedAnimes(context, _watchedAnimeList.toList())
-    }
-
-    fun loadWatchedAnimes(context: Context) {
-        val animes = SharedPreferencesHelper.getWatchedAnimes(context)
-        _watchedAnimeList.clear()
-        _watchedAnimeList.addAll(animes)
-    }
-}
-

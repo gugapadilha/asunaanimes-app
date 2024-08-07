@@ -9,8 +9,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -32,8 +30,8 @@ import coil.compose.rememberImagePainter
 import com.example.myanimelist.R
 import com.example.myanimelist.domain.model2.Data
 import com.example.myanimelist.presentation.ui.AnimatedBorderCard
-import com.example.myanimelist.presentation.ui.viewmodel.WatchedAnimeStore
 import com.example.myanimelist.presentation.util.preferences.FavoriteAnimeStore
+import com.example.myanimelist.presentation.util.preferences.WatchedAnimeStore
 import java.text.SimpleDateFormat
 
 @Composable
