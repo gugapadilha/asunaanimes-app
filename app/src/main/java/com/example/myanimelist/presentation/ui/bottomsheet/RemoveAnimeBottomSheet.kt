@@ -27,8 +27,8 @@ import coil.compose.rememberImagePainter
 import com.example.myanimelist.R
 import com.example.myanimelist.domain.model2.Data
 import com.example.myanimelist.presentation.ui.AnimatedBorderCard
-import com.example.myanimelist.presentation.ui.viewmodel.FavoriteAnimeStore
 import com.example.myanimelist.presentation.ui.viewmodel.WatchedAnimeStore
+import com.example.myanimelist.presentation.util.preferences.FavoriteAnimeStore
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 

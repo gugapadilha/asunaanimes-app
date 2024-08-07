@@ -2,7 +2,6 @@ package com.example.myanimelist.presentation.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
@@ -42,9 +40,8 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.myanimelist.R
 import com.example.myanimelist.domain.model2.Data
 import com.example.myanimelist.presentation.ui.bottomsheet.RemoveAnimeBottomSheet
-import com.example.myanimelist.presentation.ui.viewmodel.FavoriteAnimeStore
-import com.example.myanimelist.presentation.ui.viewmodel.WatchedAnimeStore
 import com.example.myanimelist.presentation.util.AnimeItem
+import com.example.myanimelist.presentation.util.preferences.FavoriteAnimeStore
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
