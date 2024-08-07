@@ -9,9 +9,7 @@ import com.example.myanimelist.domain.model2.Data
 
 import android.util.Log
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import com.example.myanimelist.presentation.util.SharedPreferencesHelper
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import com.example.myanimelist.presentation.util.preferences.SharedPreferencesHelper
 
 class SearchViewModel : ViewModel() {
     val animeList = mutableStateListOf<Data>()

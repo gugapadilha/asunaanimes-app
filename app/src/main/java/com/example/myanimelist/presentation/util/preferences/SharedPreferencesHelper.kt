@@ -1,4 +1,4 @@
-package com.example.myanimelist.presentation.util
+package com.example.myanimelist.presentation.util.preferences
 
 import android.content.Context
 import android.content.SharedPreferences
