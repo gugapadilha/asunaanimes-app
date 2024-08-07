@@ -8,6 +8,8 @@ import com.example.myanimelist.data.service.AnimeService
 import com.example.myanimelist.domain.model2.Data
 
 import android.util.Log
+import androidx.compose.runtime.snapshots.SnapshotStateList
+import com.example.myanimelist.presentation.util.SharedPreferencesHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -39,18 +41,25 @@ class SearchViewModel : ViewModel() {
 
 object WatchedAnimeStore {
     private val _watchedAnimeList = mutableStateListOf<Data>()
-    val watchedAnimeList: List<Data> = _watchedAnimeList
+    val watchedAnimeList: SnapshotStateList<Data> = _watchedAnimeList
 
-    fun addAnime(anime: Data) {
-        if (!_watchedAnimeList.contains(anime)) {
-            _watchedAnimeList.add(anime)
-        }
+    fun addAnime(anime: Data, context: Context) {
+        _watchedAnimeList.add(anime)
+        SharedPreferencesHelper.saveWatchedAnimes(context, _watchedAnimeList.toList())
     }
 
-    fun removeAnime(anime: Data) {
+    fun removeAnime(anime: Data, context: Context) {
         _watchedAnimeList.remove(anime)
+        SharedPreferencesHelper.saveWatchedAnimes(context, _watchedAnimeList.toList())
+    }
+
+    fun loadWatchedAnimes(context: Context) {
+        val animes = SharedPreferencesHelper.getWatchedAnimes(context)
+        _watchedAnimeList.clear()
+        _watchedAnimeList.addAll(animes)
     }
 }
+
 
 object FavoriteAnimeStore {
     private val _favoriteAnimeList = mutableStateListOf<Data>()

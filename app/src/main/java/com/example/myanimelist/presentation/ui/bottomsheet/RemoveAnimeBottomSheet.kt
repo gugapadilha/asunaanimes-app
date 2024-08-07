@@ -141,7 +141,7 @@ fun RemoveAnimeBottomSheet(
                             if (removeFromFavorite) {
                                 FavoriteAnimeStore.removeAnime(anime)
                             } else {
-                                WatchedAnimeStore.removeAnime(anime)
+                                WatchedAnimeStore.removeAnime(anime, context)
                             }
                             onDismiss()
                         }

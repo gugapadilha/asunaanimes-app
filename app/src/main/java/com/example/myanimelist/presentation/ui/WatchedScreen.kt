@@ -24,6 +24,7 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,6 +36,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -53,12 +55,17 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun WatchedScreen(navController: NavHostController) {
+    val context = LocalContext.current
     val painter = rememberAsyncImagePainter(R.drawable.watched_screen)
     val animeList = WatchedAnimeStore.watchedAnimeList
     val listState = rememberLazyListState()
     var selectedAnime by remember { mutableStateOf<Data?>(null) }
     val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        WatchedAnimeStore.loadWatchedAnimes(context)
+    }
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -135,5 +142,4 @@ fun WatchedScreen(navController: NavHostController) {
             }
         ) {}
     }
-
 }

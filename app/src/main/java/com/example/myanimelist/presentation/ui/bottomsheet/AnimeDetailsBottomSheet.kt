@@ -9,12 +9,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,7 +41,6 @@ fun AnimeDetailsBottomSheet(anime: Data) {
     val painter = rememberAsyncImagePainter(R.drawable.bottomsheet_screen)
     val context = LocalContext.current
     var showDialog by remember { mutableStateOf(false) }
-
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -214,6 +211,7 @@ private fun AnimeCard(onSearchClick: () -> Unit) {
 
 @Composable
 fun AnimeOptionsDialog(onDismiss: () -> Unit, anime: Data) {
+    val context = LocalContext.current
     Dialog(onDismissRequest = { onDismiss() }) {
         Box(
             modifier = Modifier
@@ -257,7 +255,7 @@ fun AnimeOptionsDialog(onDismiss: () -> Unit, anime: Data) {
                         .fillMaxWidth()
                         .border(BorderStroke(1.dp, Color.White), RoundedCornerShape(12.dp))
                         .clickable {
-                            WatchedAnimeStore.addAnime(anime)
+                            WatchedAnimeStore.addAnime(anime, context)
                             onDismiss()
                         }
                         .padding(vertical = 12.dp, horizontal = 16.dp)
