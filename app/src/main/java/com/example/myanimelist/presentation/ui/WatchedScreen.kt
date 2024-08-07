@@ -125,7 +125,6 @@ fun WatchedScreen(navController: NavHostController) {
             }
         }
     }
-
     selectedAnime?.let {
         ModalBottomSheetLayout(
             sheetState = bottomSheetState,

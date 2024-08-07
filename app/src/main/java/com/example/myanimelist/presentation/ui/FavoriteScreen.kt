@@ -133,5 +133,4 @@ fun FavoriteScreen(navController: NavHostController) {
             }
         ) {}
     }
-
 }
