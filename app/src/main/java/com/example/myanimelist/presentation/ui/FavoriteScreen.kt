@@ -98,7 +98,7 @@ fun FavoriteScreen(navController: NavHostController) {
                 modifier = Modifier
                     .height(80.dp)
                     .fillMaxWidth()
-                    .padding(top = 25.dp),
+                    .padding(top = 25.dp, start = 10.dp, end = 10.dp),
                 shape = RoundedCornerShape(4.dp),
                 borderWidth = 3.dp,
                 gradient = Brush.linearGradient(
