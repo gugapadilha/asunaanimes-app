@@ -117,8 +117,6 @@ fun FavoriteScreen(navController: NavHostController) {
                 )
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
-
             SearchBox(
                 onSearch = { query ->
                     performSearch(query)
@@ -127,8 +125,6 @@ fun FavoriteScreen(navController: NavHostController) {
                 },
                 previousSearches = previousSearches
             )
-
-            Spacer(modifier = Modifier.height(20.dp))
 
             LazyColumn(
                 modifier = Modifier
