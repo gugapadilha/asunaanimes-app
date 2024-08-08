@@ -1,5 +1,6 @@
 package com.example.myanimelist.presentation.ui
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -22,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -35,28 +37,50 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.myanimelist.R
 import com.example.myanimelist.domain.model2.Data
 import com.example.myanimelist.presentation.ui.bottomsheet.RemoveAnimeBottomSheet
+import com.example.myanimelist.presentation.ui.viewmodel.SearchViewModel
 import com.example.myanimelist.presentation.util.AnimeItem
+import com.example.myanimelist.presentation.util.SearchBox
 import com.example.myanimelist.presentation.util.preferences.WatchedAnimeStore
 import kotlinx.coroutines.launch
 
+@SuppressLint("RememberReturnType")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun WatchedScreen(navController: NavHostController) {
     val context = LocalContext.current
     val painter = rememberAsyncImagePainter(R.drawable.watched_screen)
-    val animeList = WatchedAnimeStore.watchedAnimeList
+    val animeList = remember { mutableStateListOf<Data>() }
     val listState = rememberLazyListState()
     var selectedAnime by remember { mutableStateOf<Data?>(null) }
     val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
+    var previousSearches by remember { mutableStateOf<List<String>>(listOf()) }
+    val searchViewModel: SearchViewModel = viewModel()
 
     LaunchedEffect(Unit) {
         WatchedAnimeStore.loadWatchedAnimes(context)
+        animeList.addAll(WatchedAnimeStore.watchedAnimeList)
+        previousSearches = searchViewModel.loadPreviousSearchesFromStorage(context)
+    }
+
+    fun performSearch(query: String) {
+        if (query.isBlank()) {
+            animeList.clear()
+            animeList.addAll(WatchedAnimeStore.watchedAnimeList)
+        } else {
+            animeList.clear()
+            animeList.addAll(
+                WatchedAnimeStore.watchedAnimeList.filter {
+                    it.title.contains(query, ignoreCase = true)
+                }
+            )
+        }
     }
 
     Box(
@@ -72,28 +96,14 @@ fun WatchedScreen(navController: NavHostController) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            AnimatedBorderCard(
-                modifier = Modifier
-                    .height(80.dp)
-                    .fillMaxWidth()
-                    .padding(top = 25.dp),
-                shape = RoundedCornerShape(4.dp),
-                borderWidth = 3.dp,
-                gradient = Brush.linearGradient(
-                    listOf(
-                        Color(android.graphics.Color.rgb(117, 27, 16)),
-                        Color(android.graphics.Color.rgb(219, 136, 81))
-                    )
-                )
-            ) {
-                Text(
-                    modifier = Modifier.padding(top = 10.dp),
-                    text = "Here you can see all your animes watched",
-                    textAlign = TextAlign.Center,
-                    color = Color.White,
-                    fontSize = 18.sp
-                )
-            }
+            SearchBox(
+                onSearch = { query ->
+                    performSearch(query)
+                    searchViewModel.saveSearchQueryToStorage(query, context) // salva a pesquisa
+                    previousSearches = searchViewModel.loadPreviousSearchesFromStorage(context) // atualiza as pesquisas
+                },
+                previousSearches = previousSearches
+            )
 
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -125,6 +135,7 @@ fun WatchedScreen(navController: NavHostController) {
             }
         }
     }
+
     selectedAnime?.let {
         ModalBottomSheetLayout(
             sheetState = bottomSheetState,
