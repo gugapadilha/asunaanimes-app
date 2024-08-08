@@ -60,7 +60,7 @@ fun SearchBox(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 25.dp, start = 10.dp, end = 10.dp, bottom = 10.dp),
+                .padding(top = 15.dp, start = 10.dp, end = 10.dp, bottom = 10.dp),
         ) {
             TextField(
                 value = text,

@@ -107,7 +107,10 @@ fun SearchScreen(navController: NavHostController) {
                 contentScale = ContentScale.FillBounds
             )
 
+
             Column(modifier = Modifier.fillMaxSize()) {
+                Spacer(modifier = Modifier.padding(top = 15.dp))
+
                 SearchBox(
                     onSearch = { query ->
                         coroutineScope.launch {
