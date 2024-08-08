@@ -96,6 +96,29 @@ fun WatchedScreen(navController: NavHostController) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
+            AnimatedBorderCard(
+                modifier = Modifier
+                    .height(80.dp)
+                    .fillMaxWidth()
+                    .padding(top = 25.dp),
+                shape = RoundedCornerShape(4.dp),
+                borderWidth = 3.dp,
+                gradient = Brush.linearGradient(
+                    listOf(
+                        Color(android.graphics.Color.rgb(117, 27, 16)),
+                        Color(android.graphics.Color.rgb(219, 136, 81))
+                    )
+                )
+            ) {
+                Text(
+                    modifier = Modifier.padding(top = 10.dp),
+                    text = "Here you can see all your animes watched",
+                    textAlign = TextAlign.Center,
+                    color = Color.White,
+                    fontSize = 18.sp
+                )
+            }
+
             SearchBox(
                 onSearch = { query ->
                     performSearch(query)
@@ -105,7 +128,6 @@ fun WatchedScreen(navController: NavHostController) {
                 previousSearches = previousSearches
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
 
             LazyColumn(
                 modifier = Modifier
