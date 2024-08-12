@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,6 +31,7 @@ import com.example.myanimelist.domain.model2.Data
 import com.example.myanimelist.presentation.ui.AnimatedBorderCard
 import com.example.myanimelist.presentation.util.preferences.FavoriteAnimeStore
 import com.example.myanimelist.presentation.util.preferences.WatchedAnimeStore
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 
@@ -37,11 +39,26 @@ import java.text.SimpleDateFormat
 fun RemoveAnimeBottomSheet(
     anime: Data,
     onDismiss: () -> Unit,
-    removeFromFavorite: Boolean // Adicione este parâmetro
+    removeFromFavorite: Boolean,
+    animeList: MutableList<Data>? = null // Passa a lista de animes se disponível
 ) {
     val painter = rememberAsyncImagePainter(R.drawable.bottomsheet_screen)
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+
+    fun removeAnime() {
+        coroutineScope.launch {
+            if (removeFromFavorite) {
+                FavoriteAnimeStore.removeAnime(anime, context)
+                Toast.makeText(context, "Anime Removed from Favorites!", Toast.LENGTH_SHORT).show()
+            } else {
+                WatchedAnimeStore.removeAnime(anime, context)
+                Toast.makeText(context, "Anime Removed from Watched!", Toast.LENGTH_SHORT).show()
+                animeList?.remove(anime) // Remova o anime da lista imediatamente
+            }
+            onDismiss()
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -137,18 +154,7 @@ fun RemoveAnimeBottomSheet(
                                 context.startActivity(intent)
                             }
                     )
-                    AnimeCard(onRemoveClick = {
-                        coroutineScope.launch {
-                            if (removeFromFavorite) {
-                                FavoriteAnimeStore.removeAnime(anime, context)
-                                Toast.makeText(context, "Anime Removed!", Toast.LENGTH_SHORT).show()
-                            } else {
-                                WatchedAnimeStore.removeAnime(anime, context)
-                                Toast.makeText(context, "Anime Removed!", Toast.LENGTH_SHORT).show()
-                            }
-                            onDismiss()
-                        }
-                    })
+                    AnimeCard(onRemoveClick = { removeAnime() })
                 }
             }
 
@@ -181,6 +187,7 @@ private fun formatDate(date: String): String {
         "Unknown date"
     }
 }
+
 @Composable
 private fun AnimeCard(onRemoveClick: () -> Unit) {
     Box(
@@ -195,9 +202,8 @@ private fun AnimeCard(onRemoveClick: () -> Unit) {
             gradient = Brush.linearGradient(
                 listOf(
                     Color(android.graphics.Color.rgb(117, 27, 16)),
-                    Color(
-                        android.graphics.Color.rgb(219, 136, 81)
-                    ))
+                    Color(android.graphics.Color.rgb(219, 136, 81))
+                )
             ),
             onCardClick = { onRemoveClick() }
         ) {

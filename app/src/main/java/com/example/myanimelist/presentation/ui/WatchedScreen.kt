@@ -162,7 +162,8 @@ fun WatchedScreen(navController: NavHostController) {
         ModalBottomSheetLayout(
             sheetState = bottomSheetState,
             sheetContent = {
-                RemoveAnimeBottomSheet(anime = it, onDismiss = { selectedAnime = null }, removeFromFavorite = false)
+                RemoveAnimeBottomSheet(anime = it, onDismiss = { selectedAnime = null }, removeFromFavorite = false, animeList = animeList
+                )
             }
         ) {}
     }
