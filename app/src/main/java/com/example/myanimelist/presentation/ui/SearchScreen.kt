@@ -43,7 +43,6 @@ fun SearchScreen(navController: NavHostController) {
     val context = LocalContext.current
     val searchViewModel: SearchViewModel = viewModel()
 
-    // Função para carregar mais animes
     suspend fun loadPage(page: Int) {
         try {
             val topAnime = withContext(Dispatchers.IO) { animeService.getTopAnime(page) }
@@ -55,7 +54,6 @@ fun SearchScreen(navController: NavHostController) {
         }
     }
 
-    // Função para buscar animes
     suspend fun searchAnime(query: String): List<Data> {
         return try {
             val searchedAnime = withContext(Dispatchers.IO) { animeService.getSearchedAnime(query) }
@@ -66,18 +64,16 @@ fun SearchScreen(navController: NavHostController) {
         }
     }
 
-    // Carregar a lista inicial de animes e as pesquisas anteriores ao iniciar a tela
     LaunchedEffect(Unit) {
         coroutineScope.launch {
             loadPage(1)
             loadPage(2)
             loadPage(3)
             loadPage(4)
-            searchViewModel.loadPreviousSearchesFromStorage(context) // Atualiza as pesquisas anteriores
+            searchViewModel.loadPreviousSearchesFromStorage(context)
         }
     }
 
-    // Carregar mais animes conforme o usuário rola a lista
     LaunchedEffect(listState) {
         snapshotFlow { listState.layoutInfo.visibleItemsInfo }
             .collect { visibleItems ->
@@ -89,7 +85,6 @@ fun SearchScreen(navController: NavHostController) {
             }
     }
 
-    // Layout da tela de pesquisa
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
         sheetContent = {
@@ -120,11 +115,11 @@ fun SearchScreen(navController: NavHostController) {
                                 val searchResults = searchAnime(query)
                                 animeList.clear()
                                 animeList.addAll(searchResults)
-                                searchViewModel.saveSearchQueryToStorage(query, context) // Salva a nova pesquisa
+                                searchViewModel.saveSearchQueryToStorage(query, context)
                             }
                         }
                     },
-                    previousSearches = searchViewModel.previousSearches.value // Exibe as últimas 5 pesquisas
+                    previousSearches = searchViewModel.previousSearches.value
                 )
 
                 LazyColumn(
