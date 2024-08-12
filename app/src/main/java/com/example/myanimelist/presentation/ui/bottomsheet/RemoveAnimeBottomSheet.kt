@@ -2,6 +2,7 @@ package com.example.myanimelist.presentation.ui.bottomsheet
 
 import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -140,8 +141,10 @@ fun RemoveAnimeBottomSheet(
                         coroutineScope.launch {
                             if (removeFromFavorite) {
                                 FavoriteAnimeStore.removeAnime(anime, context)
+                                Toast.makeText(context, "Anime Removed!", Toast.LENGTH_SHORT).show()
                             } else {
                                 WatchedAnimeStore.removeAnime(anime, context)
+                                Toast.makeText(context, "Anime Removed!", Toast.LENGTH_SHORT).show()
                             }
                             onDismiss()
                         }
