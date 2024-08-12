@@ -40,10 +40,10 @@ fun SearchScreen(navController: NavHostController) {
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     var selectedAnime by remember { mutableStateOf<Data?>(null) }
-    var previousSearches by remember { mutableStateOf<List<String>>(listOf()) }
     val context = LocalContext.current
     val searchViewModel: SearchViewModel = viewModel()
 
+    // Função para carregar mais animes
     suspend fun loadPage(page: Int) {
         try {
             val topAnime = withContext(Dispatchers.IO) { animeService.getTopAnime(page) }
@@ -55,6 +55,7 @@ fun SearchScreen(navController: NavHostController) {
         }
     }
 
+    // Função para buscar animes
     suspend fun searchAnime(query: String): List<Data> {
         return try {
             val searchedAnime = withContext(Dispatchers.IO) { animeService.getSearchedAnime(query) }
@@ -65,34 +66,30 @@ fun SearchScreen(navController: NavHostController) {
         }
     }
 
+    // Carregar a lista inicial de animes e as pesquisas anteriores ao iniciar a tela
     LaunchedEffect(Unit) {
         coroutineScope.launch {
             loadPage(1)
             loadPage(2)
             loadPage(3)
             loadPage(4)
-            previousSearches = searchViewModel.loadPreviousSearchesFromStorage(context) // show previous searches
-            Log.d("SearchScreen", "Previous searches after loading: $previousSearches")
+            searchViewModel.loadPreviousSearchesFromStorage(context) // Atualiza as pesquisas anteriores
         }
     }
 
-    fun loadMoreAnimes() {
-        val nextPage = animeList.size / 25 + 1
-        coroutineScope.launch {
-            loadPage(nextPage)
-        }
-    }
-
+    // Carregar mais animes conforme o usuário rola a lista
     LaunchedEffect(listState) {
         snapshotFlow { listState.layoutInfo.visibleItemsInfo }
             .collect { visibleItems ->
                 val lastVisibleItemIndex = visibleItems.lastOrNull()?.index ?: 0
                 if (lastVisibleItemIndex == animeList.size - 1) {
-                    loadMoreAnimes()
+                    val nextPage = animeList.size / 25 + 1
+                    loadPage(nextPage)
                 }
             }
     }
 
+    // Layout da tela de pesquisa
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
         sheetContent = {
@@ -106,7 +103,6 @@ fun SearchScreen(navController: NavHostController) {
                 contentDescription = "Background Image",
                 contentScale = ContentScale.FillBounds
             )
-
 
             Column(modifier = Modifier.fillMaxSize()) {
                 Spacer(modifier = Modifier.padding(top = 15.dp))
@@ -124,12 +120,11 @@ fun SearchScreen(navController: NavHostController) {
                                 val searchResults = searchAnime(query)
                                 animeList.clear()
                                 animeList.addAll(searchResults)
-                                searchViewModel.saveSearchQueryToStorage(query, context) // save last search
-                                previousSearches = searchViewModel.loadPreviousSearchesFromStorage(context) // update latest searches
+                                searchViewModel.saveSearchQueryToStorage(query, context) // Salva a nova pesquisa
                             }
                         }
                     },
-                    previousSearches = previousSearches
+                    previousSearches = searchViewModel.previousSearches.value // Exibe as últimas 5 pesquisas
                 )
 
                 LazyColumn(
