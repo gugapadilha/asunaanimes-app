@@ -25,7 +25,7 @@ object FavoriteAnimeStore {
         _favoriteAnimeList.addAll(animes)
     }
 
-    fun isAnimeInList(anime: Data): Boolean {
+    fun isAnimeInList(anime: Data, context: Context): Boolean {
         return _favoriteAnimeList.any { it.title == anime.title }
     }
 

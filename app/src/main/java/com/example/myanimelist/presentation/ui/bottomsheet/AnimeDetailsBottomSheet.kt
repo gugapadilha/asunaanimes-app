@@ -2,6 +2,7 @@ package com.example.myanimelist.presentation.ui.bottomsheet
 
 import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -241,13 +242,13 @@ fun AnimeOptionsDialog(onDismiss: () -> Unit, anime: Data) {
                         .fillMaxWidth()
                         .border(BorderStroke(1.dp, Color.White), RoundedCornerShape(12.dp))
                         .clickable {
-                            if (FavoriteAnimeStore.isAnimeInList(anime)) {
-                                dialogMessage = "You already added this anime to your favorites."
+                            val message = if (FavoriteAnimeStore.isAnimeInList(anime, context)) {
+                                "You already added this anime to your favorites."
                             } else {
                                 FavoriteAnimeStore.addAnime(anime, context)
-                                dialogMessage = "Anime added to your favorites!"
+                                "Anime added to your favorites!"
                             }
-                            showDialog = true
+                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                         }
                         .padding(vertical = 12.dp, horizontal = 16.dp)
                 )
@@ -261,13 +262,13 @@ fun AnimeOptionsDialog(onDismiss: () -> Unit, anime: Data) {
                         .fillMaxWidth()
                         .border(BorderStroke(1.dp, Color.White), RoundedCornerShape(12.dp))
                         .clickable {
-                            if (WatchedAnimeStore.isAnimeInList(anime)) {
-                                dialogMessage = "You already added this anime to your watched list."
+                            val message = if (WatchedAnimeStore.isAnimeInList(anime, context)) {
+                                "You already added this anime to your watched list."
                             } else {
                                 WatchedAnimeStore.addAnime(anime, context)
-                                dialogMessage = "Anime added to your watched list!"
+                                "Anime added to your watched list!"
                             }
-                            showDialog = true
+                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                         }
                         .padding(vertical = 12.dp, horizontal = 16.dp)
                 )

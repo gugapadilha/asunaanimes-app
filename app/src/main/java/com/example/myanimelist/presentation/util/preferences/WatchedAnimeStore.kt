@@ -25,7 +25,7 @@ object WatchedAnimeStore {
         _watchedAnimeList.addAll(animes)
     }
 
-    fun isAnimeInList(anime: Data): Boolean {
+    fun isAnimeInList(anime: Data, context: Context): Boolean {
         return _watchedAnimeList.any { it.title == anime.title }
     }
 }
