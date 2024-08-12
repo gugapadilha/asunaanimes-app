@@ -25,9 +25,7 @@ object WatchedAnimeStore {
         _watchedAnimeList.addAll(animes)
     }
 
-    fun isAnimeInList(anime: Data, context: Context): Boolean {
-        val sharedPreferences = context.getSharedPreferences("anime_prefs", Context.MODE_PRIVATE)
-        val savedAnimes = sharedPreferences.getStringSet("watched_animes", mutableSetOf()) ?: mutableSetOf()
-        return savedAnimes.contains(anime.title)
+    fun isAnimeInList(anime: Data): Boolean {
+        return _watchedAnimeList.any { it.title == anime.title }
     }
 }

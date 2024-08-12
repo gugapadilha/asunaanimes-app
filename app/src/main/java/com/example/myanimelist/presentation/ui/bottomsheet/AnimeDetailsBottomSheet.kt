@@ -210,6 +210,9 @@ private fun AnimeCard(onSearchClick: () -> Unit) {
 @Composable
 fun AnimeOptionsDialog(onDismiss: () -> Unit, anime: Data) {
     val context = LocalContext.current
+    var showDialog by remember { mutableStateOf(false) }
+    var dialogMessage by remember { mutableStateOf("") }
+
     Dialog(onDismissRequest = { onDismiss() }) {
         Box(
             modifier = Modifier
@@ -238,8 +241,13 @@ fun AnimeOptionsDialog(onDismiss: () -> Unit, anime: Data) {
                         .fillMaxWidth()
                         .border(BorderStroke(1.dp, Color.White), RoundedCornerShape(12.dp))
                         .clickable {
-                            FavoriteAnimeStore.addAnime(anime, context)
-                            onDismiss()
+                            if (FavoriteAnimeStore.isAnimeInList(anime)) {
+                                dialogMessage = "You already added this anime to your favorites."
+                            } else {
+                                FavoriteAnimeStore.addAnime(anime, context)
+                                dialogMessage = "Anime added to your favorites!"
+                            }
+                            showDialog = true
                         }
                         .padding(vertical = 12.dp, horizontal = 16.dp)
                 )
@@ -253,10 +261,34 @@ fun AnimeOptionsDialog(onDismiss: () -> Unit, anime: Data) {
                         .fillMaxWidth()
                         .border(BorderStroke(1.dp, Color.White), RoundedCornerShape(12.dp))
                         .clickable {
-                            WatchedAnimeStore.addAnime(anime, context)
-                            onDismiss()
+                            if (WatchedAnimeStore.isAnimeInList(anime)) {
+                                dialogMessage = "You already added this anime to your watched list."
+                            } else {
+                                WatchedAnimeStore.addAnime(anime, context)
+                                dialogMessage = "Anime added to your watched list!"
+                            }
+                            showDialog = true
                         }
                         .padding(vertical = 12.dp, horizontal = 16.dp)
+                )
+            }
+        }
+    }
+
+    if (showDialog) {
+        Dialog(onDismissRequest = { showDialog = false }) {
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(Color.White)
+                    .padding(16.dp)
+            ) {
+                Text(
+                    text = dialogMessage,
+                    color = Color.Black,
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }
