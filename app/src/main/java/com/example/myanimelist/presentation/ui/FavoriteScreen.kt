@@ -2,6 +2,7 @@ package com.example.myanimelist.presentation.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -133,8 +134,11 @@ fun FavoriteScreen(navController: NavHostController) {
                 state = listState
             ) {
                 items(animeList.chunked(3)) { rowItems ->
-                    Row(modifier = Modifier.fillMaxWidth()) {
-                        for (anime in rowItems) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        rowItems.forEach { anime ->
                             Box(
                                 modifier = Modifier
                                     .weight(1f)
@@ -148,6 +152,9 @@ fun FavoriteScreen(navController: NavHostController) {
                             ) {
                                 AnimeItem(anime = anime)
                             }
+                        }
+                        repeat(3 - rowItems.size) {
+                            Spacer(modifier = Modifier.weight(1f).padding(4.dp))
                         }
                     }
                 }
