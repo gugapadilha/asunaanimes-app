@@ -66,7 +66,7 @@ fun InitialScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "MY ANIME LIST",
+                text = "ASUNA ANIMES",
                 color = Color.White,
                 fontFamily = FontFamily.Monospace,
                 fontSize = 20.sp
