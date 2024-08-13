@@ -70,7 +70,7 @@ fun SearchBox(
                         search.startsWith(text, ignoreCase = true)
                     }
                 },
-                placeholder = { Text(text = "eg: Fate Zero") },
+                placeholder = { Text(text = "eg: Sword Art Online") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Done
