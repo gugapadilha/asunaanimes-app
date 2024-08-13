@@ -128,9 +128,14 @@ fun SearchScreen(navController: NavHostController) {
                         .padding(horizontal = 4.dp),
                     state = listState
                 ) {
+                    // Itera pela lista de animes chunked em grupos de 3
                     items(animeList.chunked(3)) { rowItems ->
-                        Row(modifier = Modifier.fillMaxWidth()) {
-                            for (anime in rowItems) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween // Espaça igualmente entre os animes
+                        ) {
+                            // Itera sobre cada anime na linha
+                            rowItems.forEach { anime ->
                                 Box(
                                     modifier = Modifier
                                         .weight(1f)
@@ -144,6 +149,10 @@ fun SearchScreen(navController: NavHostController) {
                                 ) {
                                     AnimeItem(anime = anime)
                                 }
+                            }
+                            // Adiciona espaços vazios para preencher a linha, caso a linha tenha menos de 3 animes
+                            repeat(3 - rowItems.size) {
+                                Spacer(modifier = Modifier.weight(1f).padding(4.dp))
                             }
                         }
                     }
