@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -42,6 +43,7 @@ fun SearchScreen(navController: NavHostController) {
     var selectedAnime by remember { mutableStateOf<Data?>(null) }
     val context = LocalContext.current
     val searchViewModel: SearchViewModel = viewModel()
+    var isLoading by remember { mutableStateOf(true) }
 
     suspend fun loadPage(page: Int) {
         try {
@@ -51,6 +53,8 @@ fun SearchScreen(navController: NavHostController) {
             Log.d("SearchScreen", "Animes Received: ${animeListFromApi.size}")
         } catch (e: Exception) {
             Log.e("SearchScreen", "Error to obtain top anime: ${e.message}")
+        } finally {
+            isLoading = false
         }
     }
 
@@ -107,6 +111,7 @@ fun SearchScreen(navController: NavHostController) {
                         coroutineScope.launch {
                             if (query.isBlank()) {
                                 animeList.clear()
+                                isLoading = true
                                 loadPage(1)
                                 loadPage(2)
                                 loadPage(3)
@@ -116,40 +121,51 @@ fun SearchScreen(navController: NavHostController) {
                                 animeList.clear()
                                 animeList.addAll(searchResults)
                                 searchViewModel.saveSearchQueryToStorage(query, context)
+                                isLoading = false
                             }
                         }
                     },
                     previousSearches = searchViewModel.previousSearches.value
                 )
 
-                LazyColumn(
+                Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 4.dp),
-                    state = listState
+                        .padding(horizontal = 4.dp)
                 ) {
-                    items(animeList.chunked(3)) { rowItems ->
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                    if (isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            state = listState
                         ) {
-                            rowItems.forEach { anime ->
-                                Box(
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .padding(4.dp)
-                                        .clickable {
-                                            selectedAnime = anime
-                                            coroutineScope.launch {
-                                                bottomSheetState.show()
-                                            }
-                                        }
+                            items(animeList.chunked(3)) { rowItems ->
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
-                                    AnimeItem(anime = anime)
+                                    rowItems.forEach { anime ->
+                                        Box(
+                                            modifier = Modifier
+                                                .weight(1f)
+                                                .padding(4.dp)
+                                                .clickable {
+                                                    selectedAnime = anime
+                                                    coroutineScope.launch {
+                                                        bottomSheetState.show()
+                                                    }
+                                                }
+                                        ) {
+                                            AnimeItem(anime = anime)
+                                        }
+                                    }
+                                    repeat(3 - rowItems.size) {
+                                        Spacer(modifier = Modifier.weight(1f).padding(4.dp))
+                                    }
                                 }
-                            }
-                            repeat(3 - rowItems.size) {
-                                Spacer(modifier = Modifier.weight(1f).padding(4.dp))
                             }
                         }
                     }
