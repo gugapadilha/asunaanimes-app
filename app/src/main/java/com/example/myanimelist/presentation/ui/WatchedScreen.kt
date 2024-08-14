@@ -131,8 +131,8 @@ fun WatchedScreen(navController: NavHostController) {
             SearchBox(
                 onSearch = { query ->
                     performSearch(query)
-                    searchViewModel.saveSearchQueryToStorage(query, context) // salva a pesquisa
-                    previousSearches = searchViewModel.loadPreviousSearchesFromStorage(context) // atualiza as pesquisas
+                    searchViewModel.saveSearchQueryToStorage(query, context)
+                    previousSearches = searchViewModel.loadPreviousSearchesFromStorage(context)
                 },
                 previousSearches = previousSearches
             )
