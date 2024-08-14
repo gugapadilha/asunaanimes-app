@@ -40,7 +40,7 @@ fun RemoveAnimeBottomSheet(
     anime: Data,
     onDismiss: () -> Unit,
     removeFromFavorite: Boolean,
-    animeList: MutableList<Data>? = null // Passa a lista de animes se disponível
+    animeList: MutableList<Data>? = null
 ) {
     val painter = rememberAsyncImagePainter(R.drawable.bottomsheet_screen)
     val context = LocalContext.current
@@ -51,10 +51,11 @@ fun RemoveAnimeBottomSheet(
             if (removeFromFavorite) {
                 FavoriteAnimeStore.removeAnime(anime, context)
                 Toast.makeText(context, "Anime Removed from Favorites!", Toast.LENGTH_SHORT).show()
+                animeList?.remove(anime)
             } else {
                 WatchedAnimeStore.removeAnime(anime, context)
                 Toast.makeText(context, "Anime Removed from Watched!", Toast.LENGTH_SHORT).show()
-                animeList?.remove(anime) // Remova o anime da lista imediatamente
+                animeList?.remove(anime)
             }
             onDismiss()
         }
