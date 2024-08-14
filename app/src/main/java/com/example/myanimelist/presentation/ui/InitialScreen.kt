@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -66,7 +67,7 @@ fun InitialScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "ASUNA ANIMES",
+                text = stringResource(R.string.asuna_animes),
                 color = Color.White,
                 fontFamily = FontFamily.Monospace,
                 fontSize = 20.sp
