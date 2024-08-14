@@ -82,6 +82,14 @@ fun FavoriteScreen(navController: NavHostController) {
         }
     }
 
+    LaunchedEffect(selectedAnime) {
+        if (selectedAnime != null) {
+            coroutineScope.launch {
+                bottomSheetState.show()
+            }
+        }
+    }
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.TopCenter
@@ -145,9 +153,6 @@ fun FavoriteScreen(navController: NavHostController) {
                                     .padding(4.dp)
                                     .clickable {
                                         selectedAnime = anime
-                                        coroutineScope.launch {
-                                            bottomSheetState.show()
-                                        }
                                     }
                             ) {
                                 AnimeItem(anime = anime)
@@ -168,7 +173,10 @@ fun FavoriteScreen(navController: NavHostController) {
             sheetContent = {
                 RemoveAnimeBottomSheet(
                     anime = it,
-                    onDismiss = { selectedAnime = null },
+                    onDismiss = {
+                        selectedAnime = null
+                        coroutineScope.launch { bottomSheetState.hide() }
+                    },
                     removeFromFavorite = true,
                     animeList = animeList
                 )
