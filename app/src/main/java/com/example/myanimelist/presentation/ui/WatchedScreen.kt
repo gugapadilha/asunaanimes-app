@@ -84,6 +84,14 @@ fun WatchedScreen(navController: NavHostController) {
         }
     }
 
+    LaunchedEffect(selectedAnime) {
+        if (selectedAnime != null) {
+            coroutineScope.launch {
+                bottomSheetState.show()
+            }
+        }
+    }
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.TopCenter
@@ -147,9 +155,6 @@ fun WatchedScreen(navController: NavHostController) {
                                     .padding(4.dp)
                                     .clickable {
                                         selectedAnime = anime
-                                        coroutineScope.launch {
-                                            bottomSheetState.show()
-                                        }
                                     }
                             ) {
                                 AnimeItem(anime = anime)
@@ -168,8 +173,10 @@ fun WatchedScreen(navController: NavHostController) {
         ModalBottomSheetLayout(
             sheetState = bottomSheetState,
             sheetContent = {
-                RemoveAnimeBottomSheet(anime = it, onDismiss = { selectedAnime = null }, removeFromFavorite = false, animeList = animeList
-                )
+                RemoveAnimeBottomSheet(anime = it, onDismiss = {
+                    selectedAnime = null
+                    coroutineScope.launch { bottomSheetState.hide() }
+                }, removeFromFavorite = false, animeList = animeList)
             }
         ) {}
     }
