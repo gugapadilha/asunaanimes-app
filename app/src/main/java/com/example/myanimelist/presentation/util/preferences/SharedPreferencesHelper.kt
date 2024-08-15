@@ -42,4 +42,14 @@ object SharedPreferencesHelper {
         val type = object : TypeToken<List<Data>>() {}.type
         return if (json.isNullOrEmpty()) emptyList() else gson.fromJson(json, type)
     }
+
+    // Novo método para salvar o estado de abertura do aplicativo
+    fun setAppOpenedBefore(context: Context, opened: Boolean) {
+        getSharedPreferences(context).edit().putBoolean(APP_OPENED_BEFORE_KEY, opened).apply()
+    }
+
+    // Novo método para verificar se o aplicativo já foi aberto antes
+    fun isAppOpenedBefore(context: Context): Boolean {
+        return getSharedPreferences(context).getBoolean(APP_OPENED_BEFORE_KEY, false)
+    }
 }
