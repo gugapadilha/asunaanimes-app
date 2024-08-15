@@ -11,6 +11,7 @@ object SharedPreferencesHelper {
     private const val PREFERENCES_FILE_KEY = "com.example.myanimelist.PREFERENCE_FILE_KEY"
     private const val WATCHED_ANIMES_KEY = "watched_animes"
     private const val FAVORITE_ANIMES_KEY = "favorite_animes"
+    private const val APP_OPENED_BEFORE_KEY = "app_opened_before"
 
     private fun getSharedPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences(PREFERENCES_FILE_KEY, Context.MODE_PRIVATE)
