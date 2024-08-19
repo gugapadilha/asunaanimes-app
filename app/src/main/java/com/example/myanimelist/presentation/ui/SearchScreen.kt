@@ -22,7 +22,7 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.myanimelist.R
 import com.example.myanimelist.data.service.AnimeService
-import com.example.myanimelist.domain.model2.Data
+import com.example.myanimelist.domain.model.Data
 import com.example.myanimelist.presentation.ui.bottomsheet.AnimeDetailsBottomSheet
 import com.example.myanimelist.presentation.ui.viewmodel.SearchViewModel
 import com.example.myanimelist.presentation.util.AnimeItem

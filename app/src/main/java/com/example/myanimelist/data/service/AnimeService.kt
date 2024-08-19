@@ -1,9 +1,8 @@
 package com.example.myanimelist.data.service
 
 
-import com.example.myanimelist.domain.model2.SearchedAnime
-import com.example.myanimelist.domain.model2.TopAnime
-import retrofit2.Call
+import com.example.myanimelist.domain.model.SearchedAnime
+import com.example.myanimelist.domain.model.TopAnime
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET

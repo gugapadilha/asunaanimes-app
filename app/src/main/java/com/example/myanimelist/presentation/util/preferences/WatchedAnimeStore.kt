@@ -3,7 +3,7 @@ package com.example.myanimelist.presentation.util.preferences
 import android.content.Context
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import com.example.myanimelist.domain.model2.Data
+import com.example.myanimelist.domain.model.Data
 
 object WatchedAnimeStore {
     private val _watchedAnimeList = mutableStateListOf<Data>()

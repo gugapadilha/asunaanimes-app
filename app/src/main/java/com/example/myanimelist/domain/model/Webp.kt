@@ -1,9 +1,9 @@
-package com.example.myanimelist.domain.model2
+package com.example.myanimelist.domain.model
 
 
 import com.google.gson.annotations.SerializedName
 
-data class Jpg(
+data class Webp(
     @SerializedName("image_url")
     val imageUrl: String,
     @SerializedName("large_image_url")

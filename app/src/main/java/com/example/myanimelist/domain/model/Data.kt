@@ -1,4 +1,4 @@
-package com.example.myanimelist.domain.model2
+package com.example.myanimelist.domain.model
 
 
 import com.google.gson.annotations.SerializedName

@@ -1,9 +1,9 @@
-package com.example.myanimelist.domain.model2
+package com.example.myanimelist.domain.model
 
 
 import com.google.gson.annotations.SerializedName
 
-data class Genre(
+data class Studio(
     @SerializedName("mal_id")
     val malId: Int,
     @SerializedName("name")

@@ -29,7 +29,7 @@ import androidx.compose.ui.window.Dialog
 import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.example.myanimelist.R
-import com.example.myanimelist.domain.model2.Data
+import com.example.myanimelist.domain.model.Data
 import com.example.myanimelist.presentation.ui.AnimatedBorderCard
 import com.example.myanimelist.presentation.util.preferences.FavoriteAnimeStore
 import com.example.myanimelist.presentation.util.preferences.WatchedAnimeStore

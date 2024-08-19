@@ -2,7 +2,7 @@ package com.example.myanimelist.presentation.util.preferences
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.myanimelist.domain.model2.Data
+import com.example.myanimelist.domain.model.Data
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
