@@ -20,7 +20,7 @@
    + Android;
    + Jetpack Compose.
   
-   ### Images Mobile Project:
+   ### Images Mobile Project [OLD MOCKED VERSION]:
   
 ![photo1](https://github.com/gugapadilha/animelist-app/assets/79876042/ffbe60d5-9484-4e47-bb70-7d4402ed38fe)
  <br>
