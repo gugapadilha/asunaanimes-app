@@ -30,7 +30,13 @@
   <br>
   <br>
   ![image2](https://github.com/user-attachments/assets/5aedd484-4288-4129-9b4c-6bcd61729238)
+  <br>
+  <br>
+![image3](https://github.com/user-attachments/assets/3360e8d0-03f1-48df-9f2f-6d6c32b5c48a)
+  <br>
+  <br>
 
+  
    ### Images Mobile Project [OLD MOCKED VERSION]:
   
 ![photo1](https://github.com/gugapadilha/animelist-app/assets/79876042/ffbe60d5-9484-4e47-bb70-7d4402ed38fe)
