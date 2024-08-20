@@ -16,6 +16,7 @@
   + Animation;
   + Details;
   + API Rest;
+  + Shared Preference;
   + BottomSheet;
   + Navigation.
   
