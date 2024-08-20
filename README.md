@@ -1,8 +1,10 @@
-<h1> Project: MY ANIME LIST <h1> 
+<h1> Project: ASUNA ANIMES <h1> 
 
   > Status: Finished ✔️
   
-  ### The application shows a couple of examples that what kind of screens we can do with Jetpack Compose, using animations e beatufiul fade effects as well. Clean Architecture did a great job here to maintain the system really smooth and optimal.
+  ### Discover, track, and favorite all your favorite anime in one place! Explore detailed information, create your personal watchlist, and keep track of the anime you've watched. The entire application was build with Compose, I also used MVVM and Clean Architecture ot maintain best practices.
+
+
   
   <br>
   
@@ -13,12 +15,17 @@
   + Cards;
   + Animation;
   + Details;
+  + API Rest;
+  + BottomSheet;
   + Navigation.
   
   <strong>Technologies Used: </strong>
    + Kotlin;
    + Android;
    + Jetpack Compose.
+
+  ### Images Mobile Project [OLD MOCKED VERSION]:
+
   
    ### Images Mobile Project [OLD MOCKED VERSION]:
   
