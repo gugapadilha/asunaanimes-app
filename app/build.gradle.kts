@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.myanimelist"
+    namespace = "com.guga.myanimelist"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.myanimelist"
+        applicationId = "com.guga.myanimelist"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
