@@ -78,7 +78,6 @@ fun SearchBox(
                     onDone = {
                         onSearch(text)
                         keyboardController?.hide()
-                        text = ""
                         suggestions = emptyList()
                     }
                 )
@@ -86,7 +85,6 @@ fun SearchBox(
             AnimeCard(onSearchClick = {
                 onSearch(text)
                 keyboardController?.hide()
-                text = ""
                 suggestions = emptyList()
             })
         }
