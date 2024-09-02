@@ -4,7 +4,7 @@
   
   ### Discover, track, and favorite all your favorite anime in one place! Explore detailed information, create your personal watchlist, and keep track of the anime you've watched. The entire application was build with Compose, I also used MVVM and Clean Architecture ot maintain best practices.
 
-
+<h1> Available on Playstore: https://play.google.com/store/apps/details?id=com.guga.myanimelist <h1> 
   
   <br>
   
