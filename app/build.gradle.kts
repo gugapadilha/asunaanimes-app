@@ -5,10 +5,10 @@ plugins {
 
 android {
     namespace = "com.guga.myanimelist"
-    compileSdk = 34
+    compileSdkVersion(rootProject.extra["compileSdkVersion"] as Int)
 
     defaultConfig {
-        applicationId = "com.guga.myanimelist"
+        applicationId = "com.guga.asunaanimes"
         minSdk = 24
         targetSdk = 34
         versionCode = 4
@@ -53,6 +53,7 @@ android {
             excludes += "META-INF/*.kotlin_module"
         }
     }
+    buildToolsVersion = "30.0.2"
 }
 
 dependencies {
