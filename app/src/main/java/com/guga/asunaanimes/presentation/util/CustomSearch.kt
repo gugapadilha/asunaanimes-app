@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.guga.asunaanimes.domain.model.Data
-import com.guga.asunaanimes.presentation.ui.AnimatedBorderCard
+
 @Composable
 fun SearchBox(
     onSearch: (String) -> Unit,

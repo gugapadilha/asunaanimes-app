@@ -29,10 +29,10 @@ import androidx.compose.ui.window.Dialog
 import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.guga.asunaanimes.domain.model.Data
-import com.guga.asunaanimes.presentation.ui.AnimatedBorderCard
+import com.guga.asunaanimes.presentation.util.AnimatedBorderCard
 import com.guga.asunaanimes.presentation.util.preferences.FavoriteAnimeStore
 import com.guga.asunaanimes.presentation.util.preferences.WatchedAnimeStore
-import com.guga.myanimelist.R
+import com.guga.asunaanimes.R
 import java.text.SimpleDateFormat
 
 @Composable

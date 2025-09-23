@@ -1,6 +1,5 @@
 package com.guga.asunaanimes.nav
 
-import SearchScreen
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -9,6 +8,7 @@ import com.guga.asunaanimes.presentation.ui.SplashScreen
 import com.guga.asunaanimes.presentation.ui.FavoriteScreen
 import com.guga.asunaanimes.presentation.ui.HomeScreen
 import com.guga.asunaanimes.presentation.ui.WatchedScreen
+import com.guga.asunaanimes.presentation.ui.SearchScreen
 
 @Composable
 fun SetupNavGraph(
@@ -16,7 +16,7 @@ fun SetupNavGraph(
 ) {
     NavHost(navController = navController, startDestination = "splash_screen") {
         composable(route = "splash_screen") {
-            SplashScreen()
+            SplashScreen(navController = navController)
         }
         composable(route = "home_screen") {
             HomeScreen(navController = navController)

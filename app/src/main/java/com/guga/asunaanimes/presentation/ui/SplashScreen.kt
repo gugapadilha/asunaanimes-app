@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,12 +21,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.guga.myanimelist.R
+import com.guga.asunaanimes.R
+import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen() {
+fun SplashScreen(navController: NavController) {
     val painter = rememberAsyncImagePainter(R.drawable.splashscreen)
+
+    // Navigate to home screen after 2 seconds
+    LaunchedEffect(Unit) {
+        delay(2000) // Wait for 2 seconds
+        navController.navigate("home_screen") {
+            popUpTo("splash_screen") { inclusive = true }
+        }
+    }
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -58,5 +69,5 @@ fun SplashScreen() {
                     .background(Color.White)
             )
         }
-}
+    }
 }

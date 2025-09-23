@@ -26,12 +26,12 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.guga.asunaanimes.domain.model.Data
-import com.guga.asunaanimes.presentation.ui.AnimatedBorderCard
+import com.guga.asunaanimes.presentation.util.AnimatedBorderCard
 import com.guga.asunaanimes.presentation.util.preferences.FavoriteAnimeStore
 import com.guga.asunaanimes.presentation.util.preferences.WatchedAnimeStore
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import com.guga.myanimelist.R
+import com.guga.asunaanimes.R
 
 @Composable
 fun RemoveAnimeBottomSheet(

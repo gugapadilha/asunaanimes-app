@@ -1,3 +1,5 @@
+package com.guga.asunaanimes.presentation.ui
+
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -26,7 +28,7 @@ import com.guga.asunaanimes.presentation.ui.bottomsheet.AnimeDetailsBottomSheet
 import com.guga.asunaanimes.presentation.ui.viewmodel.SearchViewModel
 import com.guga.asunaanimes.presentation.util.AnimeItem
 import com.guga.asunaanimes.presentation.util.SearchBox
-import com.guga.myanimelist.R
+import com.guga.asunaanimes.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

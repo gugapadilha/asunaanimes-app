@@ -28,7 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.guga.myanimelist.R
+import com.guga.asunaanimes.R
+import com.guga.asunaanimes.presentation.util.AnimatedBorderCard
 
 @Composable
 fun HomeScreen(navController: NavController) {

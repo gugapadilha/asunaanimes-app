@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.guga.myanimelist"
+    namespace = "com.guga.asunaanimes"
     compileSdkVersion(rootProject.extra["compileSdkVersion"] as Int)
 
     defaultConfig {

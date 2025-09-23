@@ -41,7 +41,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
-import com.guga.myanimelist.R
+import com.guga.asunaanimes.R
+import com.guga.asunaanimes.presentation.util.AnimatedBorderCard
 
 @Composable
 fun InitialScreen(
@@ -100,56 +101,6 @@ fun InitialScreen(
                     color = Color.White,
                 )
             }
-        }
-    }
-}
-
-@Composable
-fun AnimatedBorderCard(
-    modifier: Modifier = Modifier,
-    shape: Shape = RoundedCornerShape(size = 0.dp),
-    borderWidth: Dp = 2.dp,
-    gradient: Brush = Brush.sweepGradient(listOf(Color.Gray, Color.White)),
-    animationDuration: Int = 10000,
-    onCardClick: () -> Unit = {},
-    content: @Composable () -> Unit,
-
-    ) {
-    val infiniteTransition = rememberInfiniteTransition(label = "Infinite Color Animation")
-    val degrees by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = animationDuration, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "Infinite Colors"
-    )
-
-    Surface(
-        modifier = modifier
-            .clip(shape)
-            .clickable { onCardClick() },
-        shape = shape
-    ) {
-        Surface(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(borderWidth)
-                .drawWithContent {
-                    rotate(degrees = degrees) {
-                        drawCircle(
-                            brush = gradient,
-                            radius = size.width,
-                            blendMode = BlendMode.SrcIn,
-                        )
-                    }
-                    drawContent()
-                },
-            color = Color(rgb(217, 136, 78)).copy(alpha = 0.0f),
-            shape = shape
-        ) {
-            content()
         }
     }
 }

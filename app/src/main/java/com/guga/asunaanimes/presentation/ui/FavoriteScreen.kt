@@ -45,8 +45,9 @@ import com.guga.asunaanimes.presentation.ui.bottomsheet.RemoveAnimeBottomSheet
 import com.guga.asunaanimes.presentation.ui.viewmodel.SearchViewModel
 import com.guga.asunaanimes.presentation.util.AnimeItem
 import com.guga.asunaanimes.presentation.util.SearchBox
+import com.guga.asunaanimes.presentation.util.AnimatedBorderCard
 import com.guga.asunaanimes.presentation.util.preferences.FavoriteAnimeStore
-import com.guga.myanimelist.R
+import com.guga.asunaanimes.R
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
