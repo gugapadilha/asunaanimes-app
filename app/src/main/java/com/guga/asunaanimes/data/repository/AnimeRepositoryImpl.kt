@@ -28,15 +28,39 @@ class AnimeRepositoryImpl @Inject constructor(
 ) : AnimeRepository {
 
     override suspend fun getTopAnime(page: Int): AppResult<AnimePage> = withContext(ioDispatcher) {
-        safeApiCall { animeApi.getTopAnime(page) }.map { it.toDomain(requestedPage = page) }
+        safeApiCall { animeApi.getTopAnime(page = page) }.map { it.toDomain(requestedPage = page) }
     }
 
     override suspend fun getSeasonalAnime(page: Int): AppResult<AnimePage> = withContext(ioDispatcher) {
         safeApiCall { animeApi.getSeasonalAnime(page) }.map { it.toDomain(requestedPage = page) }
     }
 
+    /**
+     * Recent Jikan "recommendations" pages are extremely duplicate-heavy, so infinite scroll stalls
+     * around one useful page. Prefer AniList popularity (clean pagination); fall back to Jikan
+     * top-by-popularity if AniList is unavailable.
+     */
     override suspend fun getRecommendedAnime(page: Int): AppResult<AnimePage> = withContext(ioDispatcher) {
-        safeApiCall { animeApi.getRecommendedAnime(page) }.map { it.toDomain(requestedPage = page) }
+        val aniListResult = safeApiCall {
+            aniListApi.search(
+                AniListSearchRequest(
+                    query = AniListApi.POPULAR_QUERY,
+                    variables = AniListSearchVariables(page = page, perPage = PAGE_SIZE)
+                )
+            )
+        }.map { it.toDomain(requestedPage = page) }
+
+        if (aniListResult is AppResult.Success && aniListResult.data.animes.isNotEmpty()) {
+            return@withContext aniListResult
+        }
+
+        if (aniListResult is AppResult.Failure) {
+            Log.w(TAG, "AniList popular page $page failed: ${aniListResult.error}. Falling back to Jikan.")
+        }
+
+        safeApiCall {
+            animeApi.getTopAnime(page = page, filter = JIKAN_POPULARITY_FILTER)
+        }.map { it.toDomain(requestedPage = page) }
     }
 
     override suspend fun getAnimeById(id: Int): AppResult<Anime> = withContext(ioDispatcher) {
@@ -54,33 +78,46 @@ class AnimeRepositoryImpl @Inject constructor(
     }
 
     /**
-     * Jikan's `/anime?q=` endpoint is currently very flaky (frequent 504s). We still try it first,
-     * then fall back to AniList GraphQL so title search keeps working for any anime.
+     * Title search prefers AniList (Jikan `/anime?q=` is frequently flaky with 504s). Jikan is
+     * used only when AniList fails or returns nothing, so titles outside the browse cache still
+     * resolve (e.g. "Sword Art Online").
      */
     override suspend fun searchAnime(query: String): AppResult<AnimePage> = withContext(ioDispatcher) {
-        val jikanResult = safeApiCall {
-            animeApi.searchAnime(query = query, limit = AnimeApi.DEFAULT_SEARCH_LIMIT)
-        }.map { it.toDomain(requestedPage = 1) }
-
-        if (jikanResult is AppResult.Success && jikanResult.data.animes.isNotEmpty()) {
-            return@withContext jikanResult
-        }
-
-        if (jikanResult is AppResult.Failure) {
-            Log.w(TAG, "Jikan search failed for \"$query\": ${jikanResult.error}. Falling back to AniList.")
-        }
-
-        safeApiCall {
+        val aniListResult = safeApiCall {
             aniListApi.search(
                 AniListSearchRequest(
                     query = AniListApi.SEARCH_QUERY,
-                    variables = AniListSearchVariables(search = query)
+                    variables = AniListSearchVariables(search = query, page = 1, perPage = PAGE_SIZE)
                 )
             )
         }.map { it.toDomain(requestedPage = 1) }
+
+        if (aniListResult is AppResult.Success && aniListResult.data.animes.isNotEmpty()) {
+            return@withContext aniListResult
+        }
+
+        if (aniListResult is AppResult.Failure) {
+            Log.w(TAG, "AniList search failed for \"$query\": ${aniListResult.error}. Falling back to Jikan.")
+        }
+
+        val jikanResult = safeApiCall {
+            animeApi.searchAnime(
+                query = query,
+                limit = AnimeApi.DEFAULT_SEARCH_LIMIT,
+                page = 1
+            )
+        }.map { it.toDomain(requestedPage = 1) }
+
+        when {
+            jikanResult is AppResult.Success -> jikanResult
+            aniListResult is AppResult.Success -> aniListResult
+            else -> jikanResult
+        }
     }
 
     private companion object {
         const val TAG = "AnimeRepositoryImpl"
+        const val PAGE_SIZE = 25
+        const val JIKAN_POPULARITY_FILTER = "bypopularity"
     }
 }

@@ -60,10 +60,13 @@ class SearchViewModel @Inject constructor(
     private var loadJob: Job? = null
     private var detailsJob: Job? = null
     private var debounceJob: Job? = null
+    private var cooldownRetryJob: Job? = null
     private var browseCache: List<Anime> = emptyList()
     /** Ignores finally-blocks from cancelled browse jobs so they cannot clear a newer load. */
     private var loadGeneration = 0
     private var loadMoreCooldownUntilMs = 0L
+    /** One automatic retry per failure streak; further attempts need a scroll / EndOfGridEffect pulse. */
+    private var autoRetryPending = false
 
     init {
         observeSearchHistory()
@@ -79,6 +82,7 @@ class SearchViewModel @Inject constructor(
         }
         debounceJob?.cancel()
         loadJob?.cancel()
+        cooldownRetryJob?.cancel()
         browseMode = mode
         listingMode = ListingMode.BROWSE
         _uiState.update {
@@ -133,6 +137,8 @@ class SearchViewModel @Inject constructor(
         if (_uiState.value.isLoading || _uiState.value.isLoadingMore) return
         if (loadJob?.isActive == true) return
         if (System.currentTimeMillis() < loadMoreCooldownUntilMs) return
+        // Manual / UI pulse: allow one automatic retry again if this attempt fails.
+        autoRetryPending = false
         loadBrowse(restart = false)
     }
 
@@ -210,6 +216,7 @@ class SearchViewModel @Inject constructor(
 
     private fun performRemoteSearch(query: String, persistHistory: Boolean) {
         loadJob?.cancel()
+        cooldownRetryJob?.cancel()
         listingMode = ListingMode.SEARCH_RESULTS
         _uiState.update {
             it.copy(
@@ -274,10 +281,12 @@ class SearchViewModel @Inject constructor(
 
         if (restart) {
             loadJob?.cancel()
+            cooldownRetryJob?.cancel()
             listingMode = ListingMode.BROWSE
             nextPage = GetTopAnimeUseCase.FIRST_PAGE
             browseCache = emptyList()
             loadMoreCooldownUntilMs = 0L
+            autoRetryPending = false
             _uiState.update {
                 it.copy(
                     animes = emptyList(),
@@ -302,7 +311,7 @@ class SearchViewModel @Inject constructor(
                 var emptyStreak = 0
 
                 // Keep fetching while:
-                // - pages are all duplicates (recommendations), or
+                // - pages are all duplicates (legacy recommendation pages), or
                 // - the grid is still too short to scroll (first paint / large screens).
                 while (emptyStreak <= MAX_EMPTY_PAGE_SKIPS) {
                     val result = fetchBrowsePage(pageToFetch)
@@ -313,7 +322,7 @@ class SearchViewModel @Inject constructor(
                             _messages.send(UiMessage(R.string.message_search_error))
                             hasNext = false
                         } else {
-                            // Keep pagination armed so a later scroll can retry.
+                            // Keep pagination armed so a later scroll / cooldown retry can continue.
                             hasNext = true
                         }
                         break
@@ -325,6 +334,7 @@ class SearchViewModel @Inject constructor(
                     val added = browseCache.size - beforeCount
                     hasNext = page.hasNextPage
                     nextPage = pageToFetch + 1
+                    autoRetryPending = false
 
                     if (generation == loadGeneration && listingMode == ListingMode.BROWSE) {
                         _uiState.update { state ->
@@ -343,7 +353,7 @@ class SearchViewModel @Inject constructor(
 
                     if (added == 0) {
                         emptyStreak++
-                        // Only pause when burning through duplicate-heavy recommendation pages.
+                        // Pause only when burning through duplicate-heavy pages.
                         delay(PAGE_RETRY_GAP_MS)
                     } else {
                         emptyStreak = 0
@@ -363,13 +373,32 @@ class SearchViewModel @Inject constructor(
                 }
             } finally {
                 if (encounteredFailure && hasNext) {
-                    loadMoreCooldownUntilMs =
-                        System.currentTimeMillis() + LOAD_MORE_FAILURE_COOLDOWN_MS
+                    scheduleLoadMoreRetry()
                 }
                 if (generation == loadGeneration) {
                     _uiState.update { it.copy(isLoading = false, isLoadingMore = false) }
                 }
             }
+        }
+    }
+
+    /**
+     * After a failed page, [EndOfGridEffect] may already be "near end" and will not re-fire when
+     * the cooldown expires (distinctUntilChanged). One automatic retry unsticks Top at ~25 items
+     * without spinning forever if the API stays down.
+     */
+    private fun scheduleLoadMoreRetry() {
+        loadMoreCooldownUntilMs = System.currentTimeMillis() + LOAD_MORE_FAILURE_COOLDOWN_MS
+        if (autoRetryPending) return
+        autoRetryPending = true
+        cooldownRetryJob?.cancel()
+        cooldownRetryJob = viewModelScope.launch {
+            delay(LOAD_MORE_FAILURE_COOLDOWN_MS)
+            if (listingMode != ListingMode.BROWSE) return@launch
+            if (!_uiState.value.canLoadMore) return@launch
+            if (_uiState.value.isLoading || _uiState.value.isLoadingMore) return@launch
+            if (loadJob?.isActive == true) return@launch
+            loadBrowse(restart = false)
         }
     }
 

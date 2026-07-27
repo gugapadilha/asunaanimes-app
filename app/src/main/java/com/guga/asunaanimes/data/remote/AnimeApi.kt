@@ -10,7 +10,10 @@ import retrofit2.http.Query
 interface AnimeApi {
 
     @GET("top/anime")
-    suspend fun getTopAnime(@Query("page") page: Int): AnimePageDto
+    suspend fun getTopAnime(
+        @Query("page") page: Int,
+        @Query("filter") filter: String? = null
+    ): AnimePageDto
 
     @GET("seasons/now")
     suspend fun getSeasonalAnime(@Query("page") page: Int): AnimePageDto
@@ -24,7 +27,8 @@ interface AnimeApi {
     @GET("anime")
     suspend fun searchAnime(
         @Query("q") query: String,
-        @Query("limit") limit: Int
+        @Query("limit") limit: Int,
+        @Query("page") page: Int = 1
     ): AnimePageDto
 
     companion object {

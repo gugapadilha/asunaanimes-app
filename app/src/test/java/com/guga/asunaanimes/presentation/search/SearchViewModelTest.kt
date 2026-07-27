@@ -157,6 +157,18 @@ class SearchViewModelTest {
     }
 
     @Test
+    fun `search failure falls back to browse cache titles`() = runTest(mainDispatcherRule.testDispatcher) {
+        val viewModel = createViewModel()
+        animeRepository.searchResponse = { AppResult.Failure(AppError.Network()) }
+
+        viewModel.onSearch("Anime 0")
+
+        assertTrue(viewModel.uiState.value.animes.isNotEmpty())
+        assertTrue(viewModel.uiState.value.isSearchActive)
+        assertEquals(R.string.message_search_error, viewModel.messages.first().textResId)
+    }
+
+    @Test
     fun `selecting a stub anime loads full details`() {
         val viewModel = createViewModel()
         val stub = anime(malId = 42, title = "Stub")

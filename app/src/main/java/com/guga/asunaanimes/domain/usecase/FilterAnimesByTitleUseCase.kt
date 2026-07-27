@@ -4,8 +4,8 @@ import com.guga.asunaanimes.domain.model.Anime
 import javax.inject.Inject
 
 /**
- * Local, case-insensitive title matching used by collection screens and as an instant fallback
- * while the remote search is in flight.
+ * Local, case-insensitive title matching used by collection screens, ranking remote search hits,
+ * and as a last-resort fallback when remote search fails.
  *
  * Matching is intentionally loose: "sw" and "Sword" both hit "Sword Art Online" because every
  * title word is checked as a prefix, not only the full string.

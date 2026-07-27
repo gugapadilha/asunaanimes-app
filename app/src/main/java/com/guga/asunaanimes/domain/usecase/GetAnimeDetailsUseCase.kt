@@ -10,8 +10,8 @@ class GetAnimeDetailsUseCase @Inject constructor(
 ) {
 
     /**
-     * Recommendations (and some seasonal cards) arrive as stubs. We only hit the network when the
-     * selected anime is clearly missing the fields the detail sheet needs.
+     * Some browse cards arrive as stubs (missing synopsis/score/etc). We only hit the network when
+     * the selected anime is clearly missing the fields the detail sheet needs.
      */
     suspend operator fun invoke(anime: Anime): AppResult<Anime> {
         if (!anime.needsDetailsEnrichment()) {

@@ -17,7 +17,25 @@ interface AniListApi {
             query (${'$'}search: String, ${'$'}page: Int, ${'$'}perPage: Int) {
               Page(page: ${'$'}page, perPage: ${'$'}perPage) {
                 pageInfo { hasNextPage currentPage }
-                media(search: ${'$'}search, type: ANIME, sort: POPULARITY_DESC) {
+                media(search: ${'$'}search, type: ANIME, sort: SEARCH_MATCH) {
+                  idMal
+                  title { romaji english }
+                  coverImage { large medium }
+                  description
+                  episodes
+                  averageScore
+                  siteUrl
+                }
+              }
+            }
+        """
+
+        /** Paginated popular catalog — used for Recommendations browse (unique pages, no Jikan quota). */
+        const val POPULAR_QUERY = """
+            query (${'$'}page: Int, ${'$'}perPage: Int) {
+              Page(page: ${'$'}page, perPage: ${'$'}perPage) {
+                pageInfo { hasNextPage currentPage }
+                media(type: ANIME, sort: POPULARITY_DESC) {
                   idMal
                   title { romaji english }
                   coverImage { large medium }

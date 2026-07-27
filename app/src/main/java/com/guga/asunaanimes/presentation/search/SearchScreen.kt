@@ -33,8 +33,8 @@ import com.guga.asunaanimes.presentation.components.AnimeGrid
 import com.guga.asunaanimes.presentation.components.BrowseModeChips
 import com.guga.asunaanimes.presentation.components.SearchBox
 import com.guga.asunaanimes.presentation.theme.AsunaOrange
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 
 @Composable
 fun SearchScreen(viewModel: SearchViewModel = hiltViewModel()) {
@@ -150,7 +150,8 @@ private fun SearchContent(
 /**
  * Fires [onEndReached] when the user is near the end of the grid and idle. Observing the loading
  * flags inside the flow means finishing a page can immediately request the next one while still
- * scrolled to the bottom — without a tight retry loop on hard failures (ViewModel cooldown).
+ * scrolled to the bottom. While still eligible after a no-op (e.g. ViewModel cooldown), we pulse
+ * again so pagination does not stay stuck at the first page.
  */
 @Composable
 private fun EndOfGridEffect(
@@ -166,23 +167,22 @@ private fun EndOfGridEffect(
             val lastVisible = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
             val total = listState.layoutInfo.totalItemsCount
             val nearEnd = lastVisible != null && total > 0 && lastVisible >= total - 6
-            NearEndGate(
-                nearEnd = nearEnd,
-                canLoadMore = canLoadMore,
-                isLoadingMore = isLoadingMore
-            )
+            nearEnd && canLoadMore && !isLoadingMore
         }
             .distinctUntilChanged()
-            .map { gate -> gate.nearEnd && gate.canLoadMore && !gate.isLoadingMore }
-            .distinctUntilChanged()
             .collect { shouldLoad ->
-                if (shouldLoad) currentOnEndReached()
+                if (!shouldLoad) return@collect
+                currentOnEndReached()
+                // If still near the end after a rejected/no-op call (cooldown), try again shortly.
+                delay(END_REACHED_RETRY_MS)
+                val lastVisible = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
+                val total = listState.layoutInfo.totalItemsCount
+                val stillNearEnd = lastVisible != null && total > 0 && lastVisible >= total - 6
+                if (stillNearEnd && canLoadMore && !isLoadingMore) {
+                    currentOnEndReached()
+                }
             }
     }
 }
 
-private data class NearEndGate(
-    val nearEnd: Boolean,
-    val canLoadMore: Boolean,
-    val isLoadingMore: Boolean
-)
+private const val END_REACHED_RETRY_MS = 2_600L
