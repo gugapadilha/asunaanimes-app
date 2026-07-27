@@ -32,6 +32,6 @@ class JikanRateLimitInterceptor(
     }
 
     private companion object {
-        const val DEFAULT_MIN_INTERVAL_MS = 450L
+        const val DEFAULT_MIN_INTERVAL_MS = 350L
     }
 }

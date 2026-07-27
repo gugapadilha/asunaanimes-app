@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,6 +39,7 @@ import com.guga.asunaanimes.domain.model.Anime
 import com.guga.asunaanimes.presentation.theme.AsunaLink
 import com.guga.asunaanimes.presentation.theme.AsunaOnSurface
 import com.guga.asunaanimes.presentation.theme.AsunaOnSurfaceMuted
+import com.guga.asunaanimes.presentation.theme.AsunaOrange
 import com.guga.asunaanimes.presentation.theme.AsunaOrangeSoft
 import com.guga.asunaanimes.presentation.theme.AsunaScore
 import com.guga.asunaanimes.presentation.theme.AsunaSurface
@@ -51,7 +54,8 @@ fun AnimeDetailsSheet(
     anime: Anime,
     actionLabel: String,
     onActionClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isDetailsLoading: Boolean = false
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
@@ -157,15 +161,36 @@ fun AnimeDetailsSheet(
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            Text(
-                text = anime.synopsis ?: stringResource(R.string.anime_synopsis_unavailable),
-                color = AsunaOnSurfaceMuted,
-                fontSize = 15.sp,
-                lineHeight = 22.sp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 12.dp)
-            )
+            if (isDetailsLoading && anime.synopsis.isNullOrBlank()) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    CircularProgressIndicator(
+                        color = AsunaOrange,
+                        strokeWidth = 2.dp,
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Text(
+                        text = stringResource(R.string.anime_synopsis_loading),
+                        color = AsunaOnSurfaceMuted,
+                        fontSize = 15.sp
+                    )
+                }
+            } else {
+                Text(
+                    text = anime.synopsis ?: stringResource(R.string.anime_synopsis_unavailable),
+                    color = AsunaOnSurfaceMuted,
+                    fontSize = 15.sp,
+                    lineHeight = 22.sp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 12.dp)
+                )
+            }
         }
     }
 }

@@ -6,6 +6,8 @@ import com.guga.asunaanimes.domain.model.AnimeBrowseMode
 data class SearchUiState(
     val animes: List<Anime> = emptyList(),
     val isLoading: Boolean = true,
+    val isLoadingMore: Boolean = false,
+    val isDetailsLoading: Boolean = false,
     val canLoadMore: Boolean = false,
     val browseMode: AnimeBrowseMode = AnimeBrowseMode.TOP,
     val isSearchActive: Boolean = false,

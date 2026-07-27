@@ -32,7 +32,8 @@ fun BrowseModeChips(
 ) {
     val modes = listOf(
         AnimeBrowseMode.TOP to R.string.filter_top_anime,
-        AnimeBrowseMode.SEASONAL to R.string.filter_seasonal_anime
+        AnimeBrowseMode.SEASONAL to R.string.filter_seasonal_anime,
+        AnimeBrowseMode.RECOMMENDATIONS to R.string.filter_recommendations
     )
 
     LazyRow(

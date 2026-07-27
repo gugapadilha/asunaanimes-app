@@ -1,19 +1,24 @@
 package com.guga.asunaanimes.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.MovieFilter
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,6 +45,7 @@ fun AnimeGrid(
     onAnimeClick: (Anime) -> Unit,
     modifier: Modifier = Modifier,
     listState: LazyGridState = rememberLazyGridState(),
+    isLoadingMore: Boolean = false,
     emptyTitle: String = stringResource(R.string.empty_list_title),
     emptySubtitle: String = stringResource(R.string.empty_list_subtitle)
 ) {
@@ -56,7 +62,7 @@ fun AnimeGrid(
         columns = GridCells.Fixed(ANIME_GRID_COLUMNS),
         modifier = modifier.fillMaxSize(),
         state = listState,
-        contentPadding = PaddingValues(start = 12.dp, end = 12.dp, bottom = 20.dp, top = 8.dp),
+        contentPadding = PaddingValues(start = 12.dp, end = 12.dp, bottom = 28.dp, top = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
@@ -68,6 +74,26 @@ fun AnimeGrid(
                 anime = anime,
                 onClick = { onAnimeClick(anime) }
             )
+        }
+
+        if (isLoadingMore) {
+            item(
+                key = "loading-more",
+                span = { GridItemSpan(maxLineSpan) }
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(
+                        color = AsunaOrange,
+                        strokeWidth = 3.dp,
+                        modifier = Modifier.size(28.dp)
+                    )
+                }
+            }
         }
     }
 }

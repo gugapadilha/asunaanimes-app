@@ -32,6 +32,7 @@ fun AnimeDetailsBottomSheetLayout(
     actionLabel: String,
     onActionClick: () -> Unit,
     onDismissed: () -> Unit,
+    isDetailsLoading: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(
@@ -64,7 +65,8 @@ fun AnimeDetailsBottomSheetLayout(
                 AnimeDetailsSheet(
                     anime = selectedAnime,
                     actionLabel = actionLabel,
-                    onActionClick = onActionClick
+                    onActionClick = onActionClick,
+                    isDetailsLoading = isDetailsLoading
                 )
             }
         },

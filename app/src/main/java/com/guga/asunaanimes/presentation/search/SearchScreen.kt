@@ -34,7 +34,7 @@ import com.guga.asunaanimes.presentation.components.BrowseModeChips
 import com.guga.asunaanimes.presentation.components.SearchBox
 import com.guga.asunaanimes.presentation.theme.AsunaOrange
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.map
 
 @Composable
 fun SearchScreen(viewModel: SearchViewModel = hiltViewModel()) {
@@ -73,7 +73,8 @@ private fun SearchContent(
 
     EndOfGridEffect(
         listState = listState,
-        itemCount = uiState.animes.size,
+        canLoadMore = uiState.canLoadMore && !uiState.isSearchActive,
+        isLoadingMore = uiState.isLoadingMore || uiState.isLoading,
         onEndReached = onLoadMore
     )
 
@@ -81,7 +82,8 @@ private fun SearchContent(
         selectedAnime = uiState.selectedAnime,
         actionLabel = stringResource(R.string.anime_add_to_list),
         onActionClick = onAddToListClick,
-        onDismissed = onDetailsDismissed
+        onDismissed = onDetailsDismissed,
+        isDetailsLoading = uiState.isDetailsLoading
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             AnimatedBackground(
@@ -127,19 +129,10 @@ private fun SearchContent(
                             animes = uiState.animes,
                             onAnimeClick = onAnimeClick,
                             listState = listState,
+                            isLoadingMore = uiState.isLoadingMore,
                             emptyTitle = stringResource(R.string.empty_search_title),
                             emptySubtitle = stringResource(R.string.empty_search_subtitle)
                         )
-                        if (uiState.isLoading) {
-                            CircularProgressIndicator(
-                                color = AsunaOrange,
-                                strokeWidth = 3.dp,
-                                modifier = Modifier
-                                    .align(Alignment.TopCenter)
-                                    .padding(top = 12.dp)
-                                    .size(28.dp)
-                            )
-                        }
                     }
                 }
             }
@@ -154,21 +147,42 @@ private fun SearchContent(
     }
 }
 
+/**
+ * Fires [onEndReached] when the user is near the end of the grid and idle. Observing the loading
+ * flags inside the flow means finishing a page can immediately request the next one while still
+ * scrolled to the bottom — without a tight retry loop on hard failures (ViewModel cooldown).
+ */
 @Composable
 private fun EndOfGridEffect(
     listState: LazyGridState,
-    itemCount: Int,
+    canLoadMore: Boolean,
+    isLoadingMore: Boolean,
     onEndReached: () -> Unit
 ) {
     val currentOnEndReached by rememberUpdatedState(onEndReached)
 
-    LaunchedEffect(listState, itemCount) {
-        if (itemCount == 0) return@LaunchedEffect
-        snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
-            .filterNotNull()
+    LaunchedEffect(listState, canLoadMore, isLoadingMore) {
+        snapshotFlow {
+            val lastVisible = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
+            val total = listState.layoutInfo.totalItemsCount
+            val nearEnd = lastVisible != null && total > 0 && lastVisible >= total - 6
+            NearEndGate(
+                nearEnd = nearEnd,
+                canLoadMore = canLoadMore,
+                isLoadingMore = isLoadingMore
+            )
+        }
             .distinctUntilChanged()
-            .collect { lastVisibleIndex ->
-                if (lastVisibleIndex >= itemCount - 3) currentOnEndReached()
+            .map { gate -> gate.nearEnd && gate.canLoadMore && !gate.isLoadingMore }
+            .distinctUntilChanged()
+            .collect { shouldLoad ->
+                if (shouldLoad) currentOnEndReached()
             }
     }
 }
+
+private data class NearEndGate(
+    val nearEnd: Boolean,
+    val canLoadMore: Boolean,
+    val isLoadingMore: Boolean
+)

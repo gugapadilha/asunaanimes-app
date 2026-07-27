@@ -17,6 +17,7 @@ class FakeAnimeRepository : AnimeRepository {
 
     val requestedPages = mutableListOf<Int>()
     val requestedSeasonalPages = mutableListOf<Int>()
+    val requestedRecommendedPages = mutableListOf<Int>()
     val requestedQueries = mutableListOf<String>()
 
     var topAnimeResponse: (Int) -> AppResult<AnimePage> = { page ->
@@ -41,9 +42,33 @@ class FakeAnimeRepository : AnimeRepository {
         )
     }
 
+    var recommendedAnimeResponse: (Int) -> AppResult<AnimePage> = { page ->
+        AppResult.Success(
+            AnimePage(
+                animes = List(PAGE_SIZE) { index ->
+                    anime(malId = 20_000 + (page - 1) * PAGE_SIZE + index, title = "Recommended $index")
+                },
+                currentPage = page,
+                hasNextPage = true
+            )
+        )
+    }
+
     var searchResponse: (String) -> AppResult<AnimePage> = {
         AppResult.Success(AnimePage(animes = listOf(anime(malId = 999)), currentPage = 1, hasNextPage = false))
     }
+
+    var animeByIdResponse: (Int) -> AppResult<Anime> = { id ->
+        AppResult.Success(
+            anime(
+                malId = id,
+                title = "Detailed $id",
+                synopsis = "Full synopsis for $id"
+            )
+        )
+    }
+
+    val requestedAnimeIds = mutableListOf<Int>()
 
     override suspend fun getTopAnime(page: Int): AppResult<AnimePage> {
         requestedPages += page
@@ -53,6 +78,16 @@ class FakeAnimeRepository : AnimeRepository {
     override suspend fun getSeasonalAnime(page: Int): AppResult<AnimePage> {
         requestedSeasonalPages += page
         return seasonalAnimeResponse(page)
+    }
+
+    override suspend fun getRecommendedAnime(page: Int): AppResult<AnimePage> {
+        requestedRecommendedPages += page
+        return recommendedAnimeResponse(page)
+    }
+
+    override suspend fun getAnimeById(id: Int): AppResult<Anime> {
+        requestedAnimeIds += id
+        return animeByIdResponse(id)
     }
 
     override suspend fun searchAnime(query: String): AppResult<AnimePage> {

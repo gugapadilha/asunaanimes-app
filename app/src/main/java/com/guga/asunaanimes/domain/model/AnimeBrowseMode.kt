@@ -5,5 +5,6 @@ package com.guga.asunaanimes.domain.model
  */
 enum class AnimeBrowseMode {
     TOP,
-    SEASONAL
+    SEASONAL,
+    RECOMMENDATIONS
 }
