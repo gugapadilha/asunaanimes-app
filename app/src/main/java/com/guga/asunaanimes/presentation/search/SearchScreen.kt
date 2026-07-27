@@ -1,14 +1,14 @@
 package com.guga.asunaanimes.presentation.search
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -16,21 +16,21 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.rememberAsyncImagePainter
 import com.guga.asunaanimes.R
 import com.guga.asunaanimes.domain.model.Anime
 import com.guga.asunaanimes.domain.model.AnimeCollectionType
 import com.guga.asunaanimes.presentation.common.UiMessageEffect
 import com.guga.asunaanimes.presentation.components.ANIME_GRID_COLUMNS
+import com.guga.asunaanimes.presentation.components.AnimatedBackground
 import com.guga.asunaanimes.presentation.components.AnimeCollectionDialog
 import com.guga.asunaanimes.presentation.components.AnimeDetailsBottomSheetLayout
 import com.guga.asunaanimes.presentation.components.AnimeGrid
 import com.guga.asunaanimes.presentation.components.SearchBox
+import com.guga.asunaanimes.presentation.theme.AsunaOrange
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 
@@ -63,7 +63,6 @@ private fun SearchContent(
     onCollectionDialogDismissed: () -> Unit,
     onCollectionSelected: (AnimeCollectionType) -> Unit
 ) {
-    val painter = rememberAsyncImagePainter(R.drawable.search_screen)
     val listState = rememberLazyListState()
 
     EndOfListEffect(
@@ -79,33 +78,38 @@ private fun SearchContent(
         onDismissed = onDetailsDismissed
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            Image(
-                modifier = Modifier.fillMaxSize(),
-                painter = painter,
-                contentDescription = stringResource(R.string.content_description_background_image),
-                contentScale = ContentScale.FillBounds
-            )
+            AnimatedBackground(imageRes = R.drawable.search_screen)
 
-            Column(modifier = Modifier.fillMaxSize()) {
-                Spacer(modifier = Modifier.padding(top = 15.dp))
-
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .statusBarsPadding()
+            ) {
                 SearchBox(
                     onSearch = onSearch,
-                    previousSearches = uiState.recentSearches
+                    previousSearches = uiState.recentSearches,
+                    modifier = Modifier.padding(top = 8.dp)
                 )
 
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 4.dp)
+                        .padding(top = 4.dp),
+                    contentAlignment = Alignment.Center
                 ) {
                     if (uiState.isLoading) {
-                        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                        CircularProgressIndicator(
+                            color = AsunaOrange,
+                            strokeWidth = 3.dp,
+                            modifier = Modifier.size(42.dp)
+                        )
                     } else {
                         AnimeGrid(
                             animes = uiState.animes,
                             onAnimeClick = onAnimeClick,
-                            listState = listState
+                            listState = listState,
+                            emptyTitle = stringResource(R.string.empty_search_title),
+                            emptySubtitle = stringResource(R.string.empty_search_subtitle)
                         )
                     }
                 }

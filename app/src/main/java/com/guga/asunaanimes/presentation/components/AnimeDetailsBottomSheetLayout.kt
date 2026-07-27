@@ -2,6 +2,7 @@ package com.guga.asunaanimes.presentation.components
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
@@ -14,6 +15,8 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.guga.asunaanimes.domain.model.Anime
+import com.guga.asunaanimes.presentation.theme.AsunaScrim
+import com.guga.asunaanimes.presentation.theme.AsunaSurface
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
 
@@ -31,7 +34,10 @@ fun AnimeDetailsBottomSheetLayout(
     onDismissed: () -> Unit,
     content: @Composable () -> Unit
 ) {
-    val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+    val sheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden,
+        skipHalfExpanded = true
+    )
     val currentOnDismissed by rememberUpdatedState(onDismissed)
 
     LaunchedEffect(selectedAnime) {
@@ -47,6 +53,9 @@ fun AnimeDetailsBottomSheetLayout(
 
     ModalBottomSheetLayout(
         sheetState = sheetState,
+        sheetShape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+        sheetBackgroundColor = AsunaSurface,
+        scrimColor = AsunaScrim,
         sheetContent = {
             if (selectedAnime == null) {
                 // A sheet without content has no anchors to animate to and would crash the layout.

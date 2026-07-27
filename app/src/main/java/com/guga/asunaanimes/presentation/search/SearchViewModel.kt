@@ -115,6 +115,7 @@ class SearchViewModel @Inject constructor(
                     R.string.message_storage_error
                 }
             }
+            _uiState.update { it.copy(isCollectionDialogVisible = false) }
             _messages.send(UiMessage(message))
         }
     }

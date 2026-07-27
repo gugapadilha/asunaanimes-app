@@ -3,17 +3,22 @@ package com.guga.asunaanimes.presentation.theme
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
-/** Brand gradient shared by every bordered card and dialog in the app. */
-val AsunaGradientStart = Color(red = 117, green = 27, blue = 16)
-val AsunaGradientEnd = Color(red = 219, green = 136, blue = 81)
+/** Brand gradient shared by bordered cards and primary accents. */
+val AsunaGradientStart = Color(0xFF751B10)
+val AsunaGradientEnd = Color(0xFFDB8851)
 val AsunaGradient: Brush = Brush.linearGradient(listOf(AsunaGradientStart, AsunaGradientEnd))
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
-
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
-val lightBlue = Color(0xFFADD8E6) // lightBlue
-val darkBlue = Color(0xFF00008B)   // darkBlue
+val AsunaOrange = Color(0xFFFF8A3D)
+val AsunaOrangeDark = Color(0xFFE05A1A)
+val AsunaOrangeSoft = Color(0xFFFFB074)
+val AsunaBlack = Color(0xFF0A0A0A)
+val AsunaSurface = Color(0xFF161210)
+val AsunaSurfaceElevated = Color(0xFF221A14)
+val AsunaOnSurface = Color(0xFFFFF6EE)
+val AsunaOnSurfaceMuted = Color(0xFFC9B8A8)
+val AsunaScore = Color(0xFFFFD54F)
+val AsunaLink = Color(0xFFFF9B55)
+val AsunaScrim = Color(0xCC000000)
+val AsunaNavBar = Color(0xF214100C)
+val AsunaSearchField = Color(0xFFF5EDE4)
+val AsunaSearchFieldText = Color(0xFF1A120C)

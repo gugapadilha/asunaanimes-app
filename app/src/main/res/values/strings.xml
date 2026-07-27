@@ -2,23 +2,35 @@
     <string name="app_name">ASUNA ANIMES</string>
     <string name="asuna_animes">ASUNA ANIMES</string>
 
-    <!-- Home -->
-    <string name="home_search_animes">Search Animes</string>
-    <string name="home_watched_animes">Watched Animes</string>
-    <string name="home_favorite_animes">Favorite Animes</string>
+    <!-- Bottom navigation -->
+    <string name="nav_search">Search</string>
+    <string name="nav_watched">Watched</string>
+    <string name="nav_favorite">Favorites</string>
 
     <!-- Collections -->
-    <string name="favorite_screen_header">Here you can see all your favorite animes</string>
-    <string name="watched_screen_header">Here you can see all your animes watched</string>
+    <string name="favorite_screen_header">Your favorite animes</string>
+    <string name="watched_screen_header">Your watched animes</string>
 
     <!-- Search -->
     <string name="search_placeholder">eg: Sword Art Online</string>
     <string name="search_action">Search</string>
+    <string name="search_clear">Clear search</string>
+
+    <!-- Empty states -->
+    <string name="empty_list_title">Nothing here yet</string>
+    <string name="empty_list_subtitle">Add animes from Search to see them in this list.</string>
+    <string name="empty_search_title">No animes found</string>
+    <string name="empty_search_subtitle">Try another title or clear the search to browse top animes.</string>
+    <string name="empty_favorites_title">No favorites yet</string>
+    <string name="empty_favorites_subtitle">Open an anime in Search and tap Add to your list.</string>
+    <string name="empty_watched_title">No watched animes yet</string>
+    <string name="empty_watched_subtitle">Mark animes as watched from the Search tab.</string>
 
     <!-- Anime details -->
     <string name="anime_add_to_list">Add to your list</string>
     <string name="anime_remove">Remove Anime</string>
     <string name="anime_know_more">Know more</string>
+    <string name="anime_synopsis_label">Synopsis</string>
     <string name="anime_synopsis_unavailable">Synopsis not available.</string>
     <string name="anime_score">Score: %1$s</string>
     <string name="anime_episodes">%1$s episodes</string>
@@ -30,8 +42,10 @@
     <string name="value_unknown">Unknown</string>
 
     <!-- Collection dialog -->
-    <string name="collection_dialog_favorite">Favorite Animes</string>
-    <string name="collection_dialog_watched">Watched Animes</string>
+    <string name="collection_dialog_title">Add to your list</string>
+    <string name="collection_dialog_subtitle">Choose where you want to save this anime.</string>
+    <string name="collection_dialog_favorite">Favorites</string>
+    <string name="collection_dialog_watched">Watched</string>
 
     <!-- Feedback messages -->
     <string name="message_added_to_favorites">Anime added to your favorites!</string>
