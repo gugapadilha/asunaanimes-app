@@ -1,11 +1,13 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
     namespace = "com.guga.asunaanimes"
-    compileSdkVersion(rootProject.extra["compileSdkVersion"] as Int)
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.guga.asunaanimes"
@@ -21,28 +23,36 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("boolean", "ENABLE_NETWORK_LOGGING", "true")
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("boolean", "ENABLE_NETWORK_LOGGING", "false")
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
-    packagingOptions {
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
+    packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
             excludes += "META-INF/DEPENDENCIES"
@@ -53,59 +63,54 @@ android {
             excludes += "META-INF/*.kotlin_module"
         }
     }
-    buildToolsVersion = "30.0.2"
 }
 
 dependencies {
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.browser)
 
-    implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-    implementation("androidx.activity:activity-compose:1.9.0")
-    implementation(platform("androidx.compose:compose-bom:2023.08.00"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.appcompat:appcompat:1.7.0")
+    // Lifecycle
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    // Compose
+    implementation(platform(libs.compose.bom))
+    implementation(libs.compose.ui)
+    implementation(libs.compose.ui.graphics)
+    implementation(libs.compose.ui.tooling.preview)
+    implementation(libs.compose.material3)
+    implementation(libs.compose.material)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.navigation.compose)
 
-    // Coil
-    implementation("io.coil-kt:coil-compose:2.6.0")
-
-    // Navigation
-    implementation("androidx.navigation:navigation-compose:2.7.7")
-
-    // Orbital
-    implementation("com.github.skydoves:orbital:0.3.2")
-
-    // Retrofit OkHttp
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okio:okio:3.0.0")
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("androidx.browser:browser:1.8.0")
-
-    // Gson
-    implementation("com.google.code.gson:gson:2.10")
-
-    // Picasso
-    implementation("com.squareup.picasso:picasso:2.71828")
+    // Dependency injection
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation.compose)
+    ksp(libs.hilt.compiler)
 
     // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation(libs.kotlinx.coroutines.android)
 
-    // Bottom sheet
-    implementation("androidx.compose.material:material:1.6.8")
+    // Networking
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
+    implementation(libs.gson)
 
-    //Browser
-    implementation("androidx.browser:browser:1.8.0")
+    // Image loading
+    implementation(libs.coil.compose)
 
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+
+    androidTestImplementation(libs.androidx.test.junit)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.compose.ui.test.junit4)
+
+    debugImplementation(libs.compose.ui.tooling)
+    debugImplementation(libs.compose.ui.test.manifest)
 }

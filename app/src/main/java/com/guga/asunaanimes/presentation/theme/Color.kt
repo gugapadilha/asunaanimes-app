@@ -1,6 +1,12 @@
 package com.guga.asunaanimes.presentation.theme
 
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+
+/** Brand gradient shared by every bordered card and dialog in the app. */
+val AsunaGradientStart = Color(red = 117, green = 27, blue = 16)
+val AsunaGradientEnd = Color(red = 219, green = 136, blue = 81)
+val AsunaGradient: Brush = Brush.linearGradient(listOf(AsunaGradientStart, AsunaGradientEnd))
 
 val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)

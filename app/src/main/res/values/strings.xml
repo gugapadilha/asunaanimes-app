@@ -1,4 +1,51 @@
 <resources>
     <string name="app_name">ASUNA ANIMES</string>
     <string name="asuna_animes">ASUNA ANIMES</string>
+
+    <!-- Home -->
+    <string name="home_search_animes">Search Animes</string>
+    <string name="home_watched_animes">Watched Animes</string>
+    <string name="home_favorite_animes">Favorite Animes</string>
+
+    <!-- Collections -->
+    <string name="favorite_screen_header">Here you can see all your favorite animes</string>
+    <string name="watched_screen_header">Here you can see all your animes watched</string>
+
+    <!-- Search -->
+    <string name="search_placeholder">eg: Sword Art Online</string>
+    <string name="search_action">Search</string>
+
+    <!-- Anime details -->
+    <string name="anime_add_to_list">Add to your list</string>
+    <string name="anime_remove">Remove Anime</string>
+    <string name="anime_know_more">Know more</string>
+    <string name="anime_synopsis_unavailable">Synopsis not available.</string>
+    <string name="anime_score">Score: %1$s</string>
+    <string name="anime_episodes">%1$s episodes</string>
+    <string name="anime_rating">Rating: %1$s</string>
+    <string name="anime_aired_ongoing">%1$s - ongoing</string>
+    <string name="anime_aired_range">%1$s - %2$s</string>
+    <string name="anime_aired_unknown_start">Unknown start date</string>
+    <string name="value_not_available">N/A</string>
+    <string name="value_unknown">Unknown</string>
+
+    <!-- Collection dialog -->
+    <string name="collection_dialog_favorite">Favorite Animes</string>
+    <string name="collection_dialog_watched">Watched Animes</string>
+
+    <!-- Feedback messages -->
+    <string name="message_added_to_favorites">Anime added to your favorites!</string>
+    <string name="message_already_in_favorites">You already added this anime to your favorites.</string>
+    <string name="message_added_to_watched">Anime added to your watched list!</string>
+    <string name="message_already_in_watched">You already added this anime to your watched list.</string>
+    <string name="message_removed_from_favorites">Anime Removed from Favorites!</string>
+    <string name="message_removed_from_watched">Anime Removed from Watched!</string>
+    <string name="message_storage_error">Something went wrong, please try again.</string>
+    <string name="message_cannot_open_link">No app available to open this link.</string>
+
+    <!-- Content descriptions -->
+    <string name="content_description_anime_screen">Anime Screen</string>
+    <string name="content_description_background_image">Background Image</string>
+    <string name="content_description_anime_picture">Anime picture</string>
+    <string name="content_description_previous_search">Previous search</string>
 </resources>
