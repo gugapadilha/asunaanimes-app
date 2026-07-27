@@ -30,12 +30,12 @@ import com.guga.asunaanimes.R
 fun AnimatedBackground(
     @DrawableRes imageRes: Int,
     modifier: Modifier = Modifier,
-    overlayAlpha: Float = 0.45f
+    overlayAlpha: Float = 0.16f
 ) {
     val transition = rememberInfiniteTransition(label = "ken_burns")
     val scale by transition.animateFloat(
         initialValue = 1.08f,
-        targetValue = 1.18f,
+        targetValue = 1.16f,
         animationSpec = infiniteRepeatable(
             animation = tween(durationMillis = 18_000, easing = LinearEasing),
             repeatMode = RepeatMode.Reverse
@@ -81,9 +81,9 @@ fun AnimatedBackground(
                 .background(
                     Brush.verticalGradient(
                         colors = listOf(
-                            Color.Black.copy(alpha = overlayAlpha * 0.7f),
+                            Color.Black.copy(alpha = overlayAlpha * 0.55f),
                             Color.Black.copy(alpha = overlayAlpha),
-                            Color.Black.copy(alpha = overlayAlpha + 0.15f)
+                            Color.Black.copy(alpha = overlayAlpha + 0.12f)
                         )
                     )
                 )

@@ -1,24 +1,17 @@
 package com.guga.asunaanimes.presentation.components
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.MovieFilter
 import androidx.compose.material3.Icon
@@ -38,62 +31,43 @@ import com.guga.asunaanimes.presentation.theme.AsunaOrange
 const val ANIME_GRID_COLUMNS = 3
 
 /**
- * Three column grid of anime posters. Built on top of [LazyColumn] with chunked rows so it keeps
- * the exact layout the app shipped with.
+ * Three-column poster grid. Uses [LazyVerticalGrid] so row heights stay stable while scrolling —
+ * the previous chunked LazyColumn + placement animation was overlapping cards.
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AnimeGrid(
     animes: List<Anime>,
     onAnimeClick: (Anime) -> Unit,
     modifier: Modifier = Modifier,
-    listState: LazyListState = rememberLazyListState(),
+    listState: LazyGridState = rememberLazyGridState(),
     emptyTitle: String = stringResource(R.string.empty_list_title),
     emptySubtitle: String = stringResource(R.string.empty_list_subtitle)
 ) {
     if (animes.isEmpty()) {
-        AnimatedVisibility(
-            visible = true,
-            enter = fadeIn() + scaleIn(initialScale = 0.96f),
-            exit = fadeOut(),
+        EmptyAnimeState(
+            title = emptyTitle,
+            subtitle = emptySubtitle,
             modifier = modifier.fillMaxSize()
-        ) {
-            EmptyAnimeState(
-                title = emptyTitle,
-                subtitle = emptySubtitle
-            )
-        }
+        )
         return
     }
 
-    LazyColumn(
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(ANIME_GRID_COLUMNS),
         modifier = modifier.fillMaxSize(),
         state = listState,
-        contentPadding = PaddingValues(start = 12.dp, end = 12.dp, bottom = 20.dp, top = 4.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp)
+        contentPadding = PaddingValues(start = 12.dp, end = 12.dp, bottom = 20.dp, top = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         items(
-            items = animes.chunked(ANIME_GRID_COLUMNS),
-            key = { rowItems -> rowItems.first().malId }
-        ) { rowItems ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .animateItemPlacement(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                rowItems.forEach { anime ->
-                    Box(modifier = Modifier.weight(1f)) {
-                        AnimeItem(
-                            anime = anime,
-                            onClick = { onAnimeClick(anime) }
-                        )
-                    }
-                }
-                repeat(ANIME_GRID_COLUMNS - rowItems.size) {
-                    Spacer(modifier = Modifier.weight(1f))
-                }
-            }
+            items = animes,
+            key = { anime -> anime.malId }
+        ) { anime ->
+            AnimeItem(
+                anime = anime,
+                onClick = { onAnimeClick(anime) }
+            )
         }
     }
 }
@@ -105,9 +79,7 @@ fun EmptyAnimeState(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(horizontal = 32.dp),
+        modifier = modifier.padding(horizontal = 32.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

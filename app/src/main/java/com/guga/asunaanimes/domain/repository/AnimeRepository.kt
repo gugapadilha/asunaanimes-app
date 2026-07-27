@@ -7,5 +7,7 @@ interface AnimeRepository {
 
     suspend fun getTopAnime(page: Int): AppResult<AnimePage>
 
+    suspend fun getSeasonalAnime(page: Int): AppResult<AnimePage>
+
     suspend fun searchAnime(query: String): AppResult<AnimePage>
 }

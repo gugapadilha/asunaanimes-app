@@ -61,6 +61,10 @@ abstract class CollectionViewModel(
         initialValue = CollectionUiState()
     )
 
+    fun onQueryChanged(rawQuery: String) {
+        query.value = rawQuery.trim()
+    }
+
     fun onSearch(rawQuery: String) {
         val sanitizedQuery = rawQuery.trim()
         query.value = sanitizedQuery

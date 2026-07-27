@@ -23,6 +23,10 @@ class AnimeRepositoryImpl @Inject constructor(
         safeApiCall { animeApi.getTopAnime(page) }.map { it.toDomain(requestedPage = page) }
     }
 
+    override suspend fun getSeasonalAnime(page: Int): AppResult<AnimePage> = withContext(ioDispatcher) {
+        safeApiCall { animeApi.getSeasonalAnime(page) }.map { it.toDomain(requestedPage = page) }
+    }
+
     override suspend fun searchAnime(query: String): AppResult<AnimePage> = withContext(ioDispatcher) {
         safeApiCall { animeApi.searchAnime(query) }.map { it.toDomain(requestedPage = 1) }
     }

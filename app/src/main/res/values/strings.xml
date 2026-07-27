@@ -8,13 +8,15 @@
     <string name="nav_favorite">Favorites</string>
 
     <!-- Collections -->
-    <string name="favorite_screen_header">Your favorite animes</string>
-    <string name="watched_screen_header">Your watched animes</string>
+    <string name="favorite_screen_header">Favorites</string>
+    <string name="watched_screen_header">Watched</string>
 
     <!-- Search -->
     <string name="search_placeholder">eg: Sword Art Online</string>
     <string name="search_action">Search</string>
     <string name="search_clear">Clear search</string>
+    <string name="filter_top_anime">Top Anime</string>
+    <string name="filter_seasonal_anime">Seasonal Anime</string>
 
     <!-- Empty states -->
     <string name="empty_list_title">Nothing here yet</string>
@@ -55,6 +57,7 @@
     <string name="message_removed_from_favorites">Anime Removed from Favorites!</string>
     <string name="message_removed_from_watched">Anime Removed from Watched!</string>
     <string name="message_storage_error">Something went wrong, please try again.</string>
+    <string name="message_search_error">Could not search right now. Please try again.</string>
     <string name="message_cannot_open_link">No app available to open this link.</string>
 
     <!-- Content descriptions -->

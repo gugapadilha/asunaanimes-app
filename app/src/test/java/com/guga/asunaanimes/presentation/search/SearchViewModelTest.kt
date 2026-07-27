@@ -3,9 +3,11 @@ package com.guga.asunaanimes.presentation.search
 import com.guga.asunaanimes.R
 import com.guga.asunaanimes.core.common.AppError
 import com.guga.asunaanimes.core.common.AppResult
+import com.guga.asunaanimes.domain.model.AnimeBrowseMode
 import com.guga.asunaanimes.domain.model.AnimeCollectionType
-import com.guga.asunaanimes.domain.model.AnimePage
 import com.guga.asunaanimes.domain.usecase.AddAnimeToCollectionUseCase
+import com.guga.asunaanimes.domain.usecase.FilterAnimesByTitleUseCase
+import com.guga.asunaanimes.domain.usecase.GetSeasonalAnimeUseCase
 import com.guga.asunaanimes.domain.usecase.GetTopAnimeUseCase
 import com.guga.asunaanimes.domain.usecase.ObserveSearchHistoryUseCase
 import com.guga.asunaanimes.domain.usecase.SaveSearchQueryUseCase
@@ -35,50 +37,39 @@ class SearchViewModelTest {
 
     private fun createViewModel() = SearchViewModel(
         getTopAnime = GetTopAnimeUseCase(animeRepository),
+        getSeasonalAnime = GetSeasonalAnimeUseCase(animeRepository),
         searchAnime = SearchAnimeUseCase(animeRepository),
+        filterAnimesByTitle = FilterAnimesByTitleUseCase(),
         addAnimeToCollection = AddAnimeToCollectionUseCase(collectionRepository),
         saveSearchQuery = SaveSearchQueryUseCase(searchHistoryRepository),
         observeSearchHistory = ObserveSearchHistoryUseCase(searchHistoryRepository)
     )
 
     @Test
-    fun `preloads the first pages and stops loading`() {
+    fun `loads the first top page on start`() {
         val viewModel = createViewModel()
 
-        assertEquals(listOf(1, 2, 3, 4), animeRepository.requestedPages)
-        assertEquals(100, viewModel.uiState.value.animes.size)
+        assertEquals(listOf(1), animeRepository.requestedPages)
+        assertEquals(25, viewModel.uiState.value.animes.size)
         assertFalse(viewModel.uiState.value.isLoading)
         assertTrue(viewModel.uiState.value.canLoadMore)
+        assertEquals(AnimeBrowseMode.TOP, viewModel.uiState.value.browseMode)
     }
 
     @Test
-    fun `stops preloading as soon as a page fails`() {
-        animeRepository.topAnimeResponse = { page ->
-            if (page >= 3) AppResult.Failure(AppError.Network()) else defaultPage(page)
-        }
+    fun `reports failure when the first browse page fails`() = runTest(mainDispatcherRule.testDispatcher) {
+        animeRepository.topAnimeResponse = { AppResult.Failure(AppError.Network()) }
 
         val viewModel = createViewModel()
 
-        assertEquals(listOf(1, 2, 3), animeRepository.requestedPages)
-        assertEquals(50, viewModel.uiState.value.animes.size)
+        assertEquals(listOf(1), animeRepository.requestedPages)
+        assertTrue(viewModel.uiState.value.animes.isEmpty())
         assertFalse(viewModel.uiState.value.isLoading)
+        assertEquals(R.string.message_search_error, viewModel.messages.first().textResId)
     }
 
     @Test
-    fun `never lists the same anime twice when pages overlap`() {
-        animeRepository.topAnimeResponse = { page ->
-            AppResult.Success(
-                AnimePage(animes = listOf(anime(1), anime(2)), currentPage = page, hasNextPage = true)
-            )
-        }
-
-        val viewModel = createViewModel()
-
-        assertEquals(listOf(1, 2), viewModel.uiState.value.animes.map { it.malId })
-    }
-
-    @Test
-    fun `searching replaces the listing, disables pagination and records the query`() {
+    fun `searching hits the remote API instead of filtering the browse page`() {
         val viewModel = createViewModel()
 
         viewModel.onSearch("  naruto ")
@@ -86,6 +77,7 @@ class SearchViewModelTest {
         assertEquals(listOf("naruto"), animeRepository.requestedQueries)
         assertEquals(listOf(999), viewModel.uiState.value.animes.map { it.malId })
         assertFalse(viewModel.uiState.value.canLoadMore)
+        assertTrue(viewModel.uiState.value.isSearchActive)
         assertEquals(listOf("naruto"), searchHistoryRepository.savedQueries)
     }
 
@@ -101,26 +93,39 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun `an empty query restores the top anime listing without saving it to history`() {
+    fun `an empty query restores the browse listing without saving it to history`() {
         val viewModel = createViewModel()
         viewModel.onSearch("naruto")
         animeRepository.requestedPages.clear()
 
         viewModel.onSearch("   ")
 
-        assertEquals(listOf(1, 2, 3, 4), animeRepository.requestedPages)
+        assertEquals(listOf(1), animeRepository.requestedPages)
         assertEquals(listOf("naruto"), searchHistoryRepository.savedQueries)
+        assertFalse(viewModel.uiState.value.isSearchActive)
     }
 
     @Test
-    fun `loading more appends the next page`() {
+    fun `loading more appends the next browse page`() {
         val viewModel = createViewModel()
         animeRepository.requestedPages.clear()
 
         viewModel.onLoadMore()
 
-        assertEquals(listOf(5), animeRepository.requestedPages)
-        assertEquals(125, viewModel.uiState.value.animes.size)
+        assertEquals(listOf(2), animeRepository.requestedPages)
+        assertEquals(50, viewModel.uiState.value.animes.size)
+    }
+
+    @Test
+    fun `seasonal filter loads the seasonal catalog`() {
+        val viewModel = createViewModel()
+
+        viewModel.onBrowseModeSelected(AnimeBrowseMode.SEASONAL)
+
+        assertEquals(listOf(1), animeRepository.requestedSeasonalPages)
+        assertEquals(AnimeBrowseMode.SEASONAL, viewModel.uiState.value.browseMode)
+        assertEquals(25, viewModel.uiState.value.animes.size)
+        assertTrue(viewModel.uiState.value.animes.first().title.startsWith("Seasonal"))
     }
 
     @Test
@@ -150,14 +155,4 @@ class SearchViewModelTest {
         assertNull(viewModel.uiState.value.selectedAnime)
         assertFalse(viewModel.uiState.value.isCollectionDialogVisible)
     }
-
-    private fun defaultPage(page: Int) = AppResult.Success(
-        AnimePage(
-            animes = List(FakeAnimeRepository.PAGE_SIZE) { index ->
-                anime(malId = (page - 1) * FakeAnimeRepository.PAGE_SIZE + index)
-            },
-            currentPage = page,
-            hasNextPage = true
-        )
-    )
 }

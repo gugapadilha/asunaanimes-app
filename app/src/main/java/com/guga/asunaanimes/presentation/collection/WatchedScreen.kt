@@ -21,6 +21,7 @@ fun WatchedScreen(viewModel: WatchedViewModel = hiltViewModel()) {
         emptyTitle = stringResource(R.string.empty_watched_title),
         emptySubtitle = stringResource(R.string.empty_watched_subtitle),
         onSearch = viewModel::onSearch,
+        onQueryChange = viewModel::onQueryChanged,
         onAnimeClick = viewModel::onAnimeSelected,
         onDetailsDismissed = viewModel::onDetailsDismissed,
         onRemoveClick = viewModel::onRemoveSelectedAnime

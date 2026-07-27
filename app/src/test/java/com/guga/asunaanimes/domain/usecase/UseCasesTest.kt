@@ -72,6 +72,13 @@ class FilterAnimesByTitleUseCaseTest {
 
         assertEquals(listOf(1, 3), result.map { it.malId })
     }
+
+    @Test
+    fun `matches title words by prefix so short queries still find the anime`() {
+        val result = filterAnimes(animes, "sw")
+
+        assertEquals(listOf(1, 3), result.map { it.malId })
+    }
 }
 
 class GetTopAnimeUseCaseTest {

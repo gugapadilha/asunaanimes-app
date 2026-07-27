@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.guga.asunaanimes.BuildConfig
 import com.guga.asunaanimes.data.remote.AnimeApi
+import com.guga.asunaanimes.data.remote.JikanRateLimitInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,6 +31,7 @@ object NetworkModule {
     fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
         .connectTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
         .readTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
+        .addInterceptor(JikanRateLimitInterceptor())
         .apply {
             if (BuildConfig.ENABLE_NETWORK_LOGGING) {
                 addInterceptor(

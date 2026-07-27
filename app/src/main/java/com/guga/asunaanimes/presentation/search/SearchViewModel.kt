@@ -4,11 +4,16 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.guga.asunaanimes.R
+import com.guga.asunaanimes.core.common.AppError
 import com.guga.asunaanimes.core.common.AppResult
 import com.guga.asunaanimes.domain.model.AddToCollectionOutcome
 import com.guga.asunaanimes.domain.model.Anime
+import com.guga.asunaanimes.domain.model.AnimeBrowseMode
 import com.guga.asunaanimes.domain.model.AnimeCollectionType
+import com.guga.asunaanimes.domain.model.AnimePage
 import com.guga.asunaanimes.domain.usecase.AddAnimeToCollectionUseCase
+import com.guga.asunaanimes.domain.usecase.FilterAnimesByTitleUseCase
+import com.guga.asunaanimes.domain.usecase.GetSeasonalAnimeUseCase
 import com.guga.asunaanimes.domain.usecase.GetTopAnimeUseCase
 import com.guga.asunaanimes.domain.usecase.ObserveSearchHistoryUseCase
 import com.guga.asunaanimes.domain.usecase.SaveSearchQueryUseCase
@@ -18,6 +23,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,7 +36,9 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val getTopAnime: GetTopAnimeUseCase,
+    private val getSeasonalAnime: GetSeasonalAnimeUseCase,
     private val searchAnime: SearchAnimeUseCase,
+    private val filterAnimesByTitle: FilterAnimesByTitleUseCase,
     private val addAnimeToCollection: AddAnimeToCollectionUseCase,
     private val saveSearchQuery: SaveSearchQueryUseCase,
     observeSearchHistory: ObserveSearchHistoryUseCase
@@ -42,51 +50,82 @@ class SearchViewModel @Inject constructor(
     private val _messages = Channel<UiMessage>(Channel.BUFFERED)
     val messages = _messages.receiveAsFlow()
 
-    private var listingMode = ListingMode.TOP_ANIME
+    private var listingMode = ListingMode.BROWSE
+    private var browseMode = AnimeBrowseMode.TOP
     private var nextPage = GetTopAnimeUseCase.FIRST_PAGE
     private var loadJob: Job? = null
+    private var debounceJob: Job? = null
+    private var browseCache: List<Anime> = emptyList()
 
     init {
         observeSearchHistory()
             .onEach { queries -> _uiState.update { it.copy(recentSearches = queries) } }
             .launchIn(viewModelScope)
 
-        loadTopAnime(restart = true)
+        loadBrowse(restart = true)
+    }
+
+    fun onBrowseModeSelected(mode: AnimeBrowseMode) {
+        if (browseMode == mode && listingMode == ListingMode.BROWSE && !_uiState.value.isLoading) {
+            return
+        }
+        debounceJob?.cancel()
+        loadJob?.cancel()
+        browseMode = mode
+        listingMode = ListingMode.BROWSE
+        _uiState.update {
+            it.copy(
+                browseMode = mode,
+                isSearchActive = false,
+                searchBoxResetKey = it.searchBoxResetKey + 1
+            )
+        }
+        loadBrowse(restart = true)
+    }
+
+    /**
+     * Live typing path. Waits for a short debounce and then always hits the remote search API —
+     * never filters only the currently loaded browse page.
+     */
+    fun onQueryChanged(rawQuery: String) {
+        val query = rawQuery.trim()
+        debounceJob?.cancel()
+
+        if (query.isEmpty()) {
+            loadJob?.cancel()
+            listingMode = ListingMode.BROWSE
+            _uiState.update { it.copy(isSearchActive = false) }
+            loadBrowse(restart = true)
+            return
+        }
+
+        if (query.length < MIN_REMOTE_QUERY_LENGTH) return
+
+        debounceJob = viewModelScope.launch {
+            delay(SEARCH_DEBOUNCE_MS)
+            performRemoteSearch(query, persistHistory = false)
+        }
     }
 
     fun onSearch(rawQuery: String) {
         val query = rawQuery.trim()
+        debounceJob?.cancel()
         loadJob?.cancel()
 
         if (query.isEmpty()) {
-            loadTopAnime(restart = true)
+            listingMode = ListingMode.BROWSE
+            _uiState.update { it.copy(isSearchActive = false) }
+            loadBrowse(restart = true)
             return
         }
 
-        loadJob = viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
-            when (val result = searchAnime(query)) {
-                is AppResult.Success -> {
-                    listingMode = ListingMode.SEARCH_RESULTS
-                    _uiState.update {
-                        it.copy(animes = result.data.animes, isLoading = false, canLoadMore = false)
-                    }
-                }
-
-                is AppResult.Failure -> {
-                    Log.w(TAG, "Unable to search for \"$query\": ${result.error}")
-                    _uiState.update { it.copy(animes = emptyList(), isLoading = false, canLoadMore = false) }
-                }
-            }
-            saveSearchQuery(query)
-        }
+        performRemoteSearch(query, persistHistory = true)
     }
 
-    /** Called when the user scrolls to the end of the top anime listing. */
     fun onLoadMore() {
-        if (listingMode != ListingMode.TOP_ANIME) return
+        if (listingMode != ListingMode.BROWSE) return
         if (!_uiState.value.canLoadMore) return
-        loadTopAnime(restart = false)
+        loadBrowse(restart = false)
     }
 
     fun onAnimeSelected(anime: Anime) {
@@ -120,44 +159,129 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Loads the top anime listing. A restart resets the pagination and pre-loads the first pages,
-     * matching the amount of content the screen has always shown on entry.
-     */
-    private fun loadTopAnime(restart: Boolean) {
+    private fun performRemoteSearch(query: String, persistHistory: Boolean) {
+        loadJob?.cancel()
+        listingMode = ListingMode.SEARCH_RESULTS
+        _uiState.update {
+            it.copy(
+                isLoading = true,
+                isSearchActive = true,
+                canLoadMore = false
+            )
+        }
+
+        loadJob = viewModelScope.launch {
+            val result = searchWithRetry(query)
+            when (result) {
+                is AppResult.Success -> {
+                    val ranked = rankRemoteResults(result.data.animes, query)
+                    _uiState.update {
+                        it.copy(
+                            animes = ranked,
+                            isLoading = false,
+                            canLoadMore = false,
+                            isSearchActive = true
+                        )
+                    }
+                }
+
+                is AppResult.Failure -> {
+                    Log.w(TAG, "Unable to search for \"$query\": ${result.error}")
+                    // Soft fallback only — never pretend the local page is the full catalog.
+                    val fallback = filterAnimesByTitle(browseCache, query)
+                    _uiState.update {
+                        it.copy(
+                            animes = fallback,
+                            isLoading = false,
+                            canLoadMore = false,
+                            isSearchActive = true
+                        )
+                    }
+                    _messages.send(UiMessage(R.string.message_search_error))
+                }
+            }
+            if (persistHistory) {
+                saveSearchQuery(query)
+            }
+        }
+    }
+
+    private fun rankRemoteResults(animes: List<Anime>, query: String): List<Anime> {
+        val ranked = filterAnimesByTitle(animes, query)
+        // Keep every remote hit; ranking only reorders the ones that clearly match the query.
+        if (ranked.isEmpty()) return animes
+        val rankedIds = ranked.mapTo(mutableSetOf()) { it.malId }
+        return ranked + animes.filterNot { rankedIds.contains(it.malId) }
+    }
+
+    private suspend fun searchWithRetry(query: String): AppResult<AnimePage> {
+        var lastFailure: AppResult.Failure? = null
+        repeat(SEARCH_RETRY_COUNT) { attempt ->
+            when (val result = searchAnime(query)) {
+                is AppResult.Success -> return result
+                is AppResult.Failure -> {
+                    lastFailure = result
+                    if (attempt < SEARCH_RETRY_COUNT - 1) {
+                        delay(SEARCH_RETRY_DELAY_MS * (attempt + 1))
+                    }
+                }
+            }
+        }
+        return lastFailure ?: AppResult.Failure(AppError.Unknown())
+    }
+
+    private fun loadBrowse(restart: Boolean) {
         if (!restart && loadJob?.isActive == true) return
 
         if (restart) {
             loadJob?.cancel()
-            listingMode = ListingMode.TOP_ANIME
+            listingMode = ListingMode.BROWSE
             nextPage = GetTopAnimeUseCase.FIRST_PAGE
+            browseCache = emptyList()
             _uiState.update {
-                it.copy(animes = emptyList(), isLoading = true, canLoadMore = false)
+                it.copy(
+                    animes = emptyList(),
+                    isLoading = true,
+                    canLoadMore = false,
+                    browseMode = browseMode,
+                    isSearchActive = false
+                )
             }
         }
 
         loadJob = viewModelScope.launch {
-            val pagesToLoad = if (restart) INITIAL_PAGE_COUNT else 1
-            var loadedPages = 0
-            while (loadedPages < pagesToLoad) {
-                val result = getTopAnime(nextPage)
-                if (result is AppResult.Failure) {
-                    Log.w(TAG, "Unable to load top anime page $nextPage: ${result.error}")
-                    break
+            val result = fetchBrowsePage(nextPage)
+            if (result is AppResult.Failure) {
+                Log.w(TAG, "Unable to load $browseMode page $nextPage: ${result.error}")
+                if (restart) {
+                    _uiState.update { it.copy(isLoading = false, canLoadMore = false) }
+                    _messages.send(UiMessage(R.string.message_search_error))
                 }
-                val page = (result as AppResult.Success).data
-                nextPage = page.currentPage + 1
-                loadedPages++
+                return@launch
+            }
+
+            val page = (result as AppResult.Success).data
+            nextPage = page.currentPage + 1
+            browseCache = browseCache.plusDistinct(page.animes)
+            if (listingMode == ListingMode.BROWSE) {
                 _uiState.update { state ->
                     state.copy(
-                        animes = state.animes.plusDistinct(page.animes),
-                        canLoadMore = page.hasNextPage
+                        animes = browseCache,
+                        canLoadMore = page.hasNextPage,
+                        isLoading = false,
+                        browseMode = browseMode,
+                        isSearchActive = false
                     )
                 }
             }
-            _uiState.update { it.copy(isLoading = false) }
         }
     }
+
+    private suspend fun fetchBrowsePage(page: Int): AppResult<AnimePage> =
+        when (browseMode) {
+            AnimeBrowseMode.TOP -> getTopAnime(page)
+            AnimeBrowseMode.SEASONAL -> getSeasonalAnime(page)
+        }
 
     private fun messageFor(type: AnimeCollectionType, outcome: AddToCollectionOutcome): Int =
         when (type) {
@@ -177,10 +301,13 @@ class SearchViewModel @Inject constructor(
         return this + newAnimes.filter { knownIds.add(it.malId) }
     }
 
-    private enum class ListingMode { TOP_ANIME, SEARCH_RESULTS }
+    private enum class ListingMode { BROWSE, SEARCH_RESULTS }
 
     private companion object {
         const val TAG = "SearchViewModel"
-        const val INITIAL_PAGE_COUNT = 4
+        const val MIN_REMOTE_QUERY_LENGTH = 2
+        const val SEARCH_DEBOUNCE_MS = 450L
+        const val SEARCH_RETRY_COUNT = 3
+        const val SEARCH_RETRY_DELAY_MS = 800L
     }
 }

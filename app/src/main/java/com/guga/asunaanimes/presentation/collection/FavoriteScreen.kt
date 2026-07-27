@@ -21,6 +21,7 @@ fun FavoriteScreen(viewModel: FavoriteViewModel = hiltViewModel()) {
         emptyTitle = stringResource(R.string.empty_favorites_title),
         emptySubtitle = stringResource(R.string.empty_favorites_subtitle),
         onSearch = viewModel::onSearch,
+        onQueryChange = viewModel::onQueryChanged,
         onAnimeClick = viewModel::onAnimeSelected,
         onDetailsDismissed = viewModel::onDetailsDismissed,
         onRemoveClick = viewModel::onRemoveSelectedAnime

@@ -16,12 +16,25 @@ import kotlinx.coroutines.flow.map
 class FakeAnimeRepository : AnimeRepository {
 
     val requestedPages = mutableListOf<Int>()
+    val requestedSeasonalPages = mutableListOf<Int>()
     val requestedQueries = mutableListOf<String>()
 
     var topAnimeResponse: (Int) -> AppResult<AnimePage> = { page ->
         AppResult.Success(
             AnimePage(
                 animes = List(PAGE_SIZE) { index -> anime(malId = (page - 1) * PAGE_SIZE + index) },
+                currentPage = page,
+                hasNextPage = true
+            )
+        )
+    }
+
+    var seasonalAnimeResponse: (Int) -> AppResult<AnimePage> = { page ->
+        AppResult.Success(
+            AnimePage(
+                animes = List(PAGE_SIZE) { index ->
+                    anime(malId = 10_000 + (page - 1) * PAGE_SIZE + index, title = "Seasonal $index")
+                },
                 currentPage = page,
                 hasNextPage = true
             )
@@ -35,6 +48,11 @@ class FakeAnimeRepository : AnimeRepository {
     override suspend fun getTopAnime(page: Int): AppResult<AnimePage> {
         requestedPages += page
         return topAnimeResponse(page)
+    }
+
+    override suspend fun getSeasonalAnime(page: Int): AppResult<AnimePage> {
+        requestedSeasonalPages += page
+        return seasonalAnimeResponse(page)
     }
 
     override suspend fun searchAnime(query: String): AppResult<AnimePage> {
