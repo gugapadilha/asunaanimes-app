@@ -5,6 +5,7 @@ import com.guga.asunaanimes.core.common.AppError
 import com.guga.asunaanimes.core.common.AppResult
 import com.guga.asunaanimes.domain.model.AnimeBrowseMode
 import com.guga.asunaanimes.domain.model.AnimeCollectionType
+import com.guga.asunaanimes.domain.model.AnimePage
 import com.guga.asunaanimes.domain.usecase.AddAnimeToCollectionUseCase
 import com.guga.asunaanimes.domain.usecase.FilterAnimesByTitleUseCase
 import com.guga.asunaanimes.domain.usecase.GetAnimeDetailsUseCase
@@ -79,21 +80,33 @@ class SearchViewModelTest {
         viewModel.onSearch("  naruto ")
 
         assertEquals(listOf("naruto"), animeRepository.requestedQueries)
+        assertEquals(listOf(1), animeRepository.requestedSearchPages)
         assertEquals(listOf(999), viewModel.uiState.value.animes.map { it.malId })
-        assertFalse(viewModel.uiState.value.canLoadMore)
+        assertTrue(viewModel.uiState.value.canLoadMore)
         assertTrue(viewModel.uiState.value.isSearchActive)
         assertEquals(listOf("naruto"), searchHistoryRepository.savedQueries)
     }
 
     @Test
-    fun `pagination is ignored while showing search results`() {
+    fun `loading more appends the next search page`() {
         val viewModel = createViewModel()
+        animeRepository.searchResponse = { _, page ->
+            AppResult.Success(
+                AnimePage(
+                    animes = listOf(anime(malId = 900 + page, title = "Hit $page")),
+                    currentPage = page,
+                    hasNextPage = page < 3
+                )
+            )
+        }
         viewModel.onSearch("naruto")
-        val pagesBefore = animeRepository.requestedPages.size
+        animeRepository.requestedSearchPages.clear()
 
         viewModel.onLoadMore()
 
-        assertEquals(pagesBefore, animeRepository.requestedPages.size)
+        assertEquals(listOf(2), animeRepository.requestedSearchPages)
+        assertEquals(listOf(901, 902), viewModel.uiState.value.animes.map { it.malId })
+        assertTrue(viewModel.uiState.value.canLoadMore)
     }
 
     @Test
@@ -159,7 +172,7 @@ class SearchViewModelTest {
     @Test
     fun `search failure falls back to browse cache titles`() = runTest(mainDispatcherRule.testDispatcher) {
         val viewModel = createViewModel()
-        animeRepository.searchResponse = { AppResult.Failure(AppError.Network()) }
+        animeRepository.searchResponse = { _, _ -> AppResult.Failure(AppError.Network()) }
 
         viewModel.onSearch("Anime 0")
 
@@ -179,6 +192,19 @@ class SearchViewModelTest {
         assertEquals("Full synopsis for 42", viewModel.uiState.value.selectedAnime?.synopsis)
         assertFalse(viewModel.uiState.value.isDetailsLoading)
     }
+
+    @Test
+    fun `adding to favorites also adds the anime to watched`() =
+        runTest(mainDispatcherRule.testDispatcher) {
+            val viewModel = createViewModel()
+            viewModel.onAnimeSelected(anime(1))
+
+            viewModel.onAddToCollection(AnimeCollectionType.FAVORITE)
+
+            assertEquals(R.string.message_added_to_favorites, viewModel.messages.first().textResId)
+            assertEquals(listOf(1), collectionRepository.getCollection(AnimeCollectionType.FAVORITE).map { it.malId })
+            assertEquals(listOf(1), collectionRepository.getCollection(AnimeCollectionType.WATCHED).map { it.malId })
+        }
 
     @Test
     fun `adding the same anime twice reports it is already in the collection`() =

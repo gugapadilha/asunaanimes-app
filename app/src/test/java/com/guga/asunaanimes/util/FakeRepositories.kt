@@ -19,6 +19,7 @@ class FakeAnimeRepository : AnimeRepository {
     val requestedSeasonalPages = mutableListOf<Int>()
     val requestedRecommendedPages = mutableListOf<Int>()
     val requestedQueries = mutableListOf<String>()
+    val requestedSearchPages = mutableListOf<Int>()
 
     var topAnimeResponse: (Int) -> AppResult<AnimePage> = { page ->
         AppResult.Success(
@@ -54,8 +55,14 @@ class FakeAnimeRepository : AnimeRepository {
         )
     }
 
-    var searchResponse: (String) -> AppResult<AnimePage> = {
-        AppResult.Success(AnimePage(animes = listOf(anime(malId = 999)), currentPage = 1, hasNextPage = false))
+    var searchResponse: (String, Int) -> AppResult<AnimePage> = { _, page ->
+        AppResult.Success(
+            AnimePage(
+                animes = listOf(anime(malId = 999, title = "Naruto")),
+                currentPage = page,
+                hasNextPage = page < 2
+            )
+        )
     }
 
     var animeByIdResponse: (Int) -> AppResult<Anime> = { id ->
@@ -90,9 +97,10 @@ class FakeAnimeRepository : AnimeRepository {
         return animeByIdResponse(id)
     }
 
-    override suspend fun searchAnime(query: String): AppResult<AnimePage> {
+    override suspend fun searchAnime(query: String, page: Int): AppResult<AnimePage> {
         requestedQueries += query
-        return searchResponse(query)
+        requestedSearchPages += page
+        return searchResponse(query, page)
     }
 
     companion object {
@@ -133,6 +141,9 @@ class FakeAnimeCollectionRepository : AnimeCollectionRepository {
     fun setCollection(type: AnimeCollectionType, animes: List<Anime>) {
         collections.getValue(type).value = animes
     }
+
+    fun getCollection(type: AnimeCollectionType): List<Anime> =
+        collections.getValue(type).value
 }
 
 class FakeSearchHistoryRepository : SearchHistoryRepository {

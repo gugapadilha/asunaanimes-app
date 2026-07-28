@@ -30,12 +30,48 @@ interface AniListApi {
             }
         """
 
+        /** Score-ranked catalog — used for Top browse so pagination is not blocked by Jikan 504s. */
+        const val TOP_SCORE_QUERY = """
+            query (${'$'}page: Int, ${'$'}perPage: Int) {
+              Page(page: ${'$'}page, perPage: ${'$'}perPage) {
+                pageInfo { hasNextPage currentPage }
+                media(type: ANIME, sort: SCORE_DESC) {
+                  idMal
+                  title { romaji english }
+                  coverImage { large medium }
+                  description
+                  episodes
+                  averageScore
+                  siteUrl
+                }
+              }
+            }
+        """
+
         /** Paginated popular catalog — used for Recommendations browse (unique pages, no Jikan quota). */
         const val POPULAR_QUERY = """
             query (${'$'}page: Int, ${'$'}perPage: Int) {
               Page(page: ${'$'}page, perPage: ${'$'}perPage) {
                 pageInfo { hasNextPage currentPage }
                 media(type: ANIME, sort: POPULARITY_DESC) {
+                  idMal
+                  title { romaji english }
+                  coverImage { large medium }
+                  description
+                  episodes
+                  averageScore
+                  siteUrl
+                }
+              }
+            }
+        """
+
+        /** Current-season catalog — used for Seasonal browse with stable AniList pagination. */
+        const val SEASONAL_QUERY = """
+            query (${'$'}page: Int, ${'$'}perPage: Int, ${'$'}season: MediaSeason, ${'$'}seasonYear: Int) {
+              Page(page: ${'$'}page, perPage: ${'$'}perPage) {
+                pageInfo { hasNextPage currentPage }
+                media(type: ANIME, season: ${'$'}season, seasonYear: ${'$'}seasonYear, sort: POPULARITY_DESC) {
                   idMal
                   title { romaji english }
                   coverImage { large medium }

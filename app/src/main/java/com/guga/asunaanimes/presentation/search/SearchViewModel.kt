@@ -57,11 +57,14 @@ class SearchViewModel @Inject constructor(
     private var listingMode = ListingMode.BROWSE
     private var browseMode = AnimeBrowseMode.TOP
     private var nextPage = GetTopAnimeUseCase.FIRST_PAGE
+    private var nextSearchPage = SearchAnimeUseCase.FIRST_PAGE
+    private var activeSearchQuery = ""
     private var loadJob: Job? = null
     private var detailsJob: Job? = null
     private var debounceJob: Job? = null
     private var cooldownRetryJob: Job? = null
     private var browseCache: List<Anime> = emptyList()
+    private var searchCache: List<Anime> = emptyList()
     /** Ignores finally-blocks from cancelled browse jobs so they cannot clear a newer load. */
     private var loadGeneration = 0
     private var loadMoreCooldownUntilMs = 0L
@@ -85,6 +88,8 @@ class SearchViewModel @Inject constructor(
         cooldownRetryJob?.cancel()
         browseMode = mode
         listingMode = ListingMode.BROWSE
+        activeSearchQuery = ""
+        searchCache = emptyList()
         _uiState.update {
             it.copy(
                 browseMode = mode,
@@ -103,6 +108,8 @@ class SearchViewModel @Inject constructor(
         if (query.isEmpty()) {
             loadJob?.cancel()
             listingMode = ListingMode.BROWSE
+            activeSearchQuery = ""
+            searchCache = emptyList()
             _uiState.update { it.copy(isSearchActive = false, isLoadingMore = false) }
             loadBrowse(restart = true)
             return
@@ -112,7 +119,7 @@ class SearchViewModel @Inject constructor(
 
         debounceJob = viewModelScope.launch {
             delay(SEARCH_DEBOUNCE_MS)
-            performRemoteSearch(query, persistHistory = false)
+            loadSearch(query = query, restart = true, persistHistory = false)
         }
     }
 
@@ -123,23 +130,30 @@ class SearchViewModel @Inject constructor(
 
         if (query.isEmpty()) {
             listingMode = ListingMode.BROWSE
+            activeSearchQuery = ""
+            searchCache = emptyList()
             _uiState.update { it.copy(isSearchActive = false, isLoadingMore = false) }
             loadBrowse(restart = true)
             return
         }
 
-        performRemoteSearch(query, persistHistory = true)
+        loadSearch(query = query, restart = true, persistHistory = true)
     }
 
     fun onLoadMore() {
-        if (listingMode != ListingMode.BROWSE) return
         if (!_uiState.value.canLoadMore) return
         if (_uiState.value.isLoading || _uiState.value.isLoadingMore) return
         if (loadJob?.isActive == true) return
         if (System.currentTimeMillis() < loadMoreCooldownUntilMs) return
         // Manual / UI pulse: allow one automatic retry again if this attempt fails.
         autoRetryPending = false
-        loadBrowse(restart = false)
+        when (listingMode) {
+            ListingMode.BROWSE -> loadBrowse(restart = false)
+            ListingMode.SEARCH_RESULTS -> {
+                if (activeSearchQuery.isBlank()) return
+                loadSearch(query = activeSearchQuery, restart = false, persistHistory = false)
+            }
+        }
     }
 
     fun onAnimeSelected(anime: Anime) {
@@ -157,6 +171,9 @@ class SearchViewModel @Inject constructor(
                 is AppResult.Success -> {
                     val detailed = result.data
                     browseCache = browseCache.map { cached ->
+                        if (cached.malId == detailed.malId) detailed else cached
+                    }
+                    searchCache = searchCache.map { cached ->
                         if (cached.malId == detailed.malId) detailed else cached
                     }
                     _uiState.update { state ->
@@ -214,56 +231,107 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    private fun performRemoteSearch(query: String, persistHistory: Boolean) {
-        loadJob?.cancel()
-        cooldownRetryJob?.cancel()
-        listingMode = ListingMode.SEARCH_RESULTS
-        _uiState.update {
-            it.copy(
-                isLoading = true,
-                isLoadingMore = false,
-                isSearchActive = true,
-                canLoadMore = false
-            )
+    private fun loadSearch(query: String, restart: Boolean, persistHistory: Boolean) {
+        if (!restart && loadJob?.isActive == true) return
+        if (!restart && (_uiState.value.isLoading || _uiState.value.isLoadingMore)) return
+
+        if (restart) {
+            loadJob?.cancel()
+            cooldownRetryJob?.cancel()
+            listingMode = ListingMode.SEARCH_RESULTS
+            activeSearchQuery = query
+            nextSearchPage = SearchAnimeUseCase.FIRST_PAGE
+            searchCache = emptyList()
+            loadMoreCooldownUntilMs = 0L
+            autoRetryPending = false
+            _uiState.update {
+                it.copy(
+                    isLoading = true,
+                    isLoadingMore = false,
+                    isSearchActive = true,
+                    canLoadMore = false,
+                    animes = emptyList()
+                )
+            }
+        } else {
+            _uiState.update { it.copy(isLoadingMore = true) }
         }
 
+        val startPage = nextSearchPage
+        val generation = ++loadGeneration
         loadJob = viewModelScope.launch {
+            var hasNext = false
+            var encounteredFailure = false
             try {
-                when (val result = searchAnime(query)) {
+                when (val result = searchAnime(query, startPage)) {
                     is AppResult.Success -> {
-                        val ranked = rankRemoteResults(result.data.animes, query)
-                        _uiState.update {
-                            it.copy(
-                                animes = ranked,
-                                isLoading = false,
-                                canLoadMore = false,
-                                isSearchActive = true
-                            )
+                        val page = result.data
+                        val rankedPage = if (restart) {
+                            rankRemoteResults(page.animes, query)
+                        } else {
+                            page.animes
                         }
-                        if (ranked.isEmpty()) {
+                        searchCache = if (restart) {
+                            rankedPage
+                        } else {
+                            searchCache.plusDistinct(rankedPage)
+                        }
+                        hasNext = page.hasNextPage
+                        nextSearchPage = startPage + 1
+                        autoRetryPending = false
+
+                        if (generation == loadGeneration && listingMode == ListingMode.SEARCH_RESULTS) {
+                            _uiState.update {
+                                it.copy(
+                                    animes = searchCache,
+                                    isLoading = false,
+                                    canLoadMore = hasNext,
+                                    isSearchActive = true
+                                )
+                            }
+                        }
+                        if (restart && searchCache.isEmpty()) {
                             _messages.send(UiMessage(R.string.message_search_empty))
                         }
                     }
 
                     is AppResult.Failure -> {
-                        Log.w(TAG, "Unable to search for \"$query\": ${result.error}")
-                        val fallback = filterAnimesByTitle(browseCache, query)
-                        _uiState.update {
-                            it.copy(
-                                animes = fallback,
-                                isLoading = false,
-                                canLoadMore = false,
-                                isSearchActive = true
-                            )
+                        Log.w(TAG, "Unable to search for \"$query\" page $startPage: ${result.error}")
+                        encounteredFailure = true
+                        if (restart) {
+                            val fallback = filterAnimesByTitle(browseCache, query)
+                            searchCache = fallback
+                            hasNext = false
+                            if (generation == loadGeneration && listingMode == ListingMode.SEARCH_RESULTS) {
+                                _uiState.update {
+                                    it.copy(
+                                        animes = fallback,
+                                        isLoading = false,
+                                        canLoadMore = false,
+                                        isSearchActive = true
+                                    )
+                                }
+                            }
+                            _messages.send(UiMessage(R.string.message_search_error))
+                        } else {
+                            // Keep pagination armed so a later scroll / cooldown retry can continue.
+                            hasNext = true
+                            if (generation == loadGeneration && listingMode == ListingMode.SEARCH_RESULTS) {
+                                _uiState.update { it.copy(canLoadMore = true, isSearchActive = true) }
+                            }
                         }
-                        _messages.send(UiMessage(R.string.message_search_error))
                     }
                 }
                 if (persistHistory) {
                     saveSearchQuery(query)
                 }
             } finally {
-                _uiState.update { it.copy(isLoading = false, isLoadingMore = false) }
+                if (encounteredFailure && hasNext && listingMode == ListingMode.SEARCH_RESULTS) {
+                    scheduleLoadMoreRetry()
+                }
+                if (generation == loadGeneration) {
+                    _uiState.update { it.copy(isLoading = false, isLoadingMore = false) }
+                }
             }
         }
     }
@@ -394,11 +462,16 @@ class SearchViewModel @Inject constructor(
         cooldownRetryJob?.cancel()
         cooldownRetryJob = viewModelScope.launch {
             delay(LOAD_MORE_FAILURE_COOLDOWN_MS)
-            if (listingMode != ListingMode.BROWSE) return@launch
             if (!_uiState.value.canLoadMore) return@launch
             if (_uiState.value.isLoading || _uiState.value.isLoadingMore) return@launch
             if (loadJob?.isActive == true) return@launch
-            loadBrowse(restart = false)
+            when (listingMode) {
+                ListingMode.BROWSE -> loadBrowse(restart = false)
+                ListingMode.SEARCH_RESULTS -> {
+                    if (activeSearchQuery.isBlank()) return@launch
+                    loadSearch(query = activeSearchQuery, restart = false, persistHistory = false)
+                }
+            }
         }
     }
 

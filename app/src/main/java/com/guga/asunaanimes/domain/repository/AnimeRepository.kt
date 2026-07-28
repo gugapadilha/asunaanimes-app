@@ -14,5 +14,5 @@ interface AnimeRepository {
 
     suspend fun getAnimeById(id: Int): AppResult<Anime>
 
-    suspend fun searchAnime(query: String): AppResult<AnimePage>
+    suspend fun searchAnime(query: String, page: Int = 1): AppResult<AnimePage>
 }

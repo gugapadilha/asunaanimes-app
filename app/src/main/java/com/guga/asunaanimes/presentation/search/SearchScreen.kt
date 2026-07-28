@@ -31,6 +31,7 @@ import com.guga.asunaanimes.presentation.components.AnimeCollectionDialog
 import com.guga.asunaanimes.presentation.components.AnimeDetailsBottomSheetLayout
 import com.guga.asunaanimes.presentation.components.AnimeGrid
 import com.guga.asunaanimes.presentation.components.BrowseModeChips
+import com.guga.asunaanimes.presentation.components.DefaultSearchChromeClearance
 import com.guga.asunaanimes.presentation.components.SearchBox
 import com.guga.asunaanimes.presentation.theme.AsunaOrange
 import kotlinx.coroutines.delay
@@ -73,7 +74,7 @@ private fun SearchContent(
 
     EndOfGridEffect(
         listState = listState,
-        canLoadMore = uiState.canLoadMore && !uiState.isSearchActive,
+        canLoadMore = uiState.canLoadMore,
         isLoadingMore = uiState.isLoadingMore || uiState.isLoading,
         onEndReached = onLoadMore
     )
@@ -83,7 +84,8 @@ private fun SearchContent(
         actionLabel = stringResource(R.string.anime_add_to_list),
         onActionClick = onAddToListClick,
         onDismissed = onDetailsDismissed,
-        isDetailsLoading = uiState.isDetailsLoading
+        isDetailsLoading = uiState.isDetailsLoading,
+        topChromeClearance = DefaultSearchChromeClearance
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             AnimatedBackground(

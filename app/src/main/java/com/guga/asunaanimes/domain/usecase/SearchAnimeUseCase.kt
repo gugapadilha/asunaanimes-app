@@ -13,11 +13,15 @@ class SearchAnimeUseCase @Inject constructor(
      * A blank query has no meaning for the remote search endpoint, so it short-circuits to an
      * empty page instead of hitting the network.
      */
-    suspend operator fun invoke(query: String): AppResult<AnimePage> {
+    suspend operator fun invoke(query: String, page: Int = 1): AppResult<AnimePage> {
         val sanitizedQuery = query.trim()
         if (sanitizedQuery.isEmpty()) {
             return AppResult.Success(AnimePage(animes = emptyList(), currentPage = 1, hasNextPage = false))
         }
-        return animeRepository.searchAnime(sanitizedQuery)
+        return animeRepository.searchAnime(sanitizedQuery, page.coerceAtLeast(1))
+    }
+
+    companion object {
+        const val FIRST_PAGE = 1
     }
 }

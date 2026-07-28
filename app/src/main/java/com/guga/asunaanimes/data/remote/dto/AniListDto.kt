@@ -10,7 +10,9 @@ data class AniListSearchRequest(
 data class AniListSearchVariables(
     val search: String? = null,
     val page: Int = 1,
-    val perPage: Int = 25
+    val perPage: Int = 25,
+    val season: String? = null,
+    val seasonYear: Int? = null
 )
 
 data class AniListSearchResponse(

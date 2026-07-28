@@ -11,8 +11,18 @@ class AddAnimeToCollectionUseCase @Inject constructor(
     private val animeCollectionRepository: AnimeCollectionRepository
 ) {
 
+    /**
+     * Adds [anime] to [type]. Favoriting also ensures the title is in Watched — a favorite
+     * implies the user has already seen it.
+     */
     suspend operator fun invoke(
         type: AnimeCollectionType,
         anime: Anime
-    ): AppResult<AddToCollectionOutcome> = animeCollectionRepository.add(type, anime)
+    ): AppResult<AddToCollectionOutcome> {
+        val result = animeCollectionRepository.add(type, anime)
+        if (type == AnimeCollectionType.FAVORITE && result is AppResult.Success) {
+            animeCollectionRepository.add(AnimeCollectionType.WATCHED, anime)
+        }
+        return result
+    }
 }

@@ -15,6 +15,7 @@ import com.guga.asunaanimes.presentation.components.AnimatedBackground
 import com.guga.asunaanimes.presentation.components.AnimeDetailsBottomSheetLayout
 import com.guga.asunaanimes.presentation.components.AnimeGrid
 import com.guga.asunaanimes.presentation.components.CollectionScreenHeader
+import com.guga.asunaanimes.presentation.components.CollectionSearchChromeClearance
 import com.guga.asunaanimes.presentation.components.SearchBox
 
 /**
@@ -37,7 +38,8 @@ fun CollectionScreen(
         selectedAnime = uiState.selectedAnime,
         actionLabel = stringResource(R.string.anime_remove),
         onActionClick = onRemoveClick,
-        onDismissed = onDetailsDismissed
+        onDismissed = onDetailsDismissed,
+        topChromeClearance = CollectionSearchChromeClearance
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),

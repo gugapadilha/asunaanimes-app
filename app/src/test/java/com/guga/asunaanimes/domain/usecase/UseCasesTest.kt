@@ -1,6 +1,8 @@
 package com.guga.asunaanimes.domain.usecase
 
 import com.guga.asunaanimes.core.common.AppResult
+import com.guga.asunaanimes.domain.model.AnimeCollectionType
+import com.guga.asunaanimes.util.FakeAnimeCollectionRepository
 import com.guga.asunaanimes.util.FakeAnimeRepository
 import com.guga.asunaanimes.util.FakeSearchHistoryRepository
 import com.guga.asunaanimes.util.anime
@@ -27,6 +29,14 @@ class SearchAnimeUseCaseTest {
         searchAnime("  naruto  ")
 
         assertEquals(listOf("naruto"), repository.requestedQueries)
+        assertEquals(listOf(1), repository.requestedSearchPages)
+    }
+
+    @Test
+    fun `forwards the requested page`() = runTest {
+        searchAnime("naruto", page = 3)
+
+        assertEquals(listOf(3), repository.requestedSearchPages)
     }
 }
 
@@ -92,5 +102,28 @@ class GetTopAnimeUseCaseTest {
         getTopAnime(-3)
 
         assertEquals(listOf(1, 1), repository.requestedPages)
+    }
+}
+
+class AddAnimeToCollectionUseCaseTest {
+
+    private val repository = FakeAnimeCollectionRepository()
+    private val addAnime = AddAnimeToCollectionUseCase(repository)
+
+    @Test
+    fun `favoriting an anime also places it in watched`() = runTest {
+        val result = addAnime(AnimeCollectionType.FAVORITE, anime(42))
+
+        assertTrue(result is AppResult.Success)
+        assertEquals(listOf(42), repository.getCollection(AnimeCollectionType.FAVORITE).map { it.malId })
+        assertEquals(listOf(42), repository.getCollection(AnimeCollectionType.WATCHED).map { it.malId })
+    }
+
+    @Test
+    fun `adding only to watched does not touch favorites`() = runTest {
+        addAnime(AnimeCollectionType.WATCHED, anime(7))
+
+        assertEquals(emptyList<Int>(), repository.getCollection(AnimeCollectionType.FAVORITE).map { it.malId })
+        assertEquals(listOf(7), repository.getCollection(AnimeCollectionType.WATCHED).map { it.malId })
     }
 }
