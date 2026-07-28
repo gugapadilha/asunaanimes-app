@@ -7,4 +7,5 @@ sealed class Screen(val route: String) {
     data object Search : Screen(route = "search_screen")
     data object Watched : Screen(route = "watched_screen")
     data object Favorite : Screen(route = "favorite_screen")
+    data object Profile : Screen(route = "profile_screen")
 }

@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,6 +35,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.guga.asunaanimes.presentation.collection.FavoriteScreen
 import com.guga.asunaanimes.presentation.collection.WatchedScreen
+import com.guga.asunaanimes.presentation.profile.ProfileScreen
 import com.guga.asunaanimes.presentation.search.SearchScreen
 import com.guga.asunaanimes.presentation.theme.AsunaBlack
 import com.guga.asunaanimes.presentation.theme.AsunaNavBar
@@ -105,11 +107,13 @@ fun MainScaffold() {
                 }
             }
         }
-    ) { innerPadding ->
+    ) { _ ->
+        // Draw tab content edge-to-edge so AnimatedBackground reaches behind the floating bar.
+        // Screens reserve their own bottom clearance for the nav chrome.
         Box(
             modifier = Modifier
+                .fillMaxSize()
                 .background(AsunaBlack)
-                .padding(bottom = innerPadding.calculateBottomPadding())
         ) {
             NavHost(
                 navController = navController,
@@ -139,6 +143,9 @@ fun MainScaffold() {
                 }
                 composable(route = Screen.Favorite.route) {
                     FavoriteScreen()
+                }
+                composable(route = Screen.Profile.route) {
+                    ProfileScreen()
                 }
             }
         }

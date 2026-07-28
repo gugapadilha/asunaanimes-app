@@ -89,8 +89,7 @@ private fun SearchContent(
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             AnimatedBackground(
-                imageRes = R.drawable.search_screen,
-                overlayAlpha = 0.16f
+                imageRes = R.drawable.search_screen
             )
 
             Column(

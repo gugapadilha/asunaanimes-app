@@ -1,14 +1,18 @@
 package com.guga.asunaanimes.di
 
 import com.guga.asunaanimes.data.local.AnimeCollectionLocalDataSource
+import com.guga.asunaanimes.data.local.ProfileLocalDataSource
 import com.guga.asunaanimes.data.local.SearchHistoryLocalDataSource
 import com.guga.asunaanimes.data.local.SharedPrefsAnimeCollectionLocalDataSource
+import com.guga.asunaanimes.data.local.SharedPrefsProfileLocalDataSource
 import com.guga.asunaanimes.data.local.SharedPrefsSearchHistoryLocalDataSource
 import com.guga.asunaanimes.data.repository.AnimeCollectionRepositoryImpl
 import com.guga.asunaanimes.data.repository.AnimeRepositoryImpl
+import com.guga.asunaanimes.data.repository.ProfileRepositoryImpl
 import com.guga.asunaanimes.data.repository.SearchHistoryRepositoryImpl
 import com.guga.asunaanimes.domain.repository.AnimeCollectionRepository
 import com.guga.asunaanimes.domain.repository.AnimeRepository
+import com.guga.asunaanimes.domain.repository.ProfileRepository
 import com.guga.asunaanimes.domain.repository.SearchHistoryRepository
 import dagger.Binds
 import dagger.Module
@@ -38,6 +42,10 @@ abstract class DataModule {
 
     @Binds
     @Singleton
+    abstract fun bindProfileRepository(impl: ProfileRepositoryImpl): ProfileRepository
+
+    @Binds
+    @Singleton
     abstract fun bindAnimeCollectionLocalDataSource(
         impl: SharedPrefsAnimeCollectionLocalDataSource
     ): AnimeCollectionLocalDataSource
@@ -47,4 +55,10 @@ abstract class DataModule {
     abstract fun bindSearchHistoryLocalDataSource(
         impl: SharedPrefsSearchHistoryLocalDataSource
     ): SearchHistoryLocalDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindProfileLocalDataSource(
+        impl: SharedPrefsProfileLocalDataSource
+    ): ProfileLocalDataSource
 }

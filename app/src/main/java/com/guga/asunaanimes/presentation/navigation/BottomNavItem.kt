@@ -3,6 +3,7 @@ package com.guga.asunaanimes.presentation.navigation
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -27,5 +28,10 @@ enum class BottomNavItem(
         screen = Screen.Favorite,
         labelRes = R.string.nav_favorite,
         icon = Icons.Filled.Favorite
+    ),
+    Profile(
+        screen = Screen.Profile,
+        labelRes = R.string.nav_profile,
+        icon = Icons.Filled.Person
     )
 }

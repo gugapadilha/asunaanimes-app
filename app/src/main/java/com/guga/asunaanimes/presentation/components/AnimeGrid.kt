@@ -62,7 +62,12 @@ fun AnimeGrid(
         columns = GridCells.Fixed(ANIME_GRID_COLUMNS),
         modifier = modifier.fillMaxSize(),
         state = listState,
-        contentPadding = PaddingValues(start = 12.dp, end = 12.dp, bottom = 28.dp, top = 8.dp),
+        contentPadding = PaddingValues(
+            start = 12.dp,
+            end = 12.dp,
+            bottom = FloatingBottomNavClearance,
+            top = 8.dp
+        ),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
