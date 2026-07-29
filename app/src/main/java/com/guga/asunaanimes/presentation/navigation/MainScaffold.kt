@@ -57,7 +57,7 @@ fun MainScaffold() {
             Box(
                 modifier = Modifier
                     .navigationBarsPadding()
-                    .padding(start = 16.dp, end = 16.dp, top = 10.dp, bottom = 12.dp)
+                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 4.dp)
             ) {
                 Surface(
                     modifier = Modifier

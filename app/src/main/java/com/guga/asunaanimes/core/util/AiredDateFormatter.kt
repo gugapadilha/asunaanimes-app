@@ -9,17 +9,13 @@ import java.util.Locale
  */
 object AiredDateFormatter {
 
-    private const val UNKNOWN_DATE = "Unknown date"
-
-    private val inputFormat get() = SimpleDateFormat("yyyy-MM", Locale.US)
-    private val outputFormat get() = SimpleDateFormat("MMM-yyyy", Locale.US)
-
-    fun format(rawDate: String): String {
+    fun format(rawDate: String, locale: Locale = Locale.getDefault()): String? {
         if (!rawDate.contains("-")) return rawDate
         return runCatching {
             val yearAndMonth = rawDate.substring(0, rawDate.lastIndexOf("-"))
-            val parsed = inputFormat.parse(yearAndMonth) ?: return UNKNOWN_DATE
-            outputFormat.format(parsed)
-        }.getOrDefault(UNKNOWN_DATE)
+            val parsed = SimpleDateFormat("yyyy-MM", Locale.US).parse(yearAndMonth)
+                ?: return null
+            SimpleDateFormat("MMM-yyyy", locale).format(parsed)
+        }.getOrNull()
     }
 }

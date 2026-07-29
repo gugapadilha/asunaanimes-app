@@ -1,6 +1,7 @@
 package com.guga.asunaanimes.presentation.profile
 
 import com.guga.asunaanimes.domain.model.Anime
+import com.guga.asunaanimes.domain.model.AppLanguage
 
 data class ProfileUiState(
     val userName: String = "",
@@ -9,5 +10,6 @@ data class ProfileUiState(
     val favoriteAnimes: List<Anime> = emptyList(),
     val watchedCount: Int = 0,
     val favoriteCount: Int = 0,
-    val isSavingName: Boolean = false
+    val isSavingName: Boolean = false,
+    val appLanguage: AppLanguage = AppLanguage.ENGLISH
 )

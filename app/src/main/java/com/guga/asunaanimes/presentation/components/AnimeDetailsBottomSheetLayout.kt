@@ -107,6 +107,6 @@ val CollectionSearchChromeClearance = 140.dp
  * Space reserved at the bottom of scrollable tab content so items clear the floating nav pill
  * (bar height + outer padding around it).
  */
-val FloatingBottomNavClearance = 108.dp
+val FloatingBottomNavClearance = 100.dp
 
 private val MinSheetHeight = 280.dp

@@ -28,6 +28,10 @@
     <string name="message_profile_saved">Profile saved!</string>
     <string name="message_profile_avatar_updated">Profile photo updated!</string>
     <string name="content_description_profile_photo">Profile photo</string>
+    <string name="profile_language_section">Language</string>
+    <string name="profile_language_english">English</string>
+    <string name="profile_language_portuguese">Portuguese</string>
+    <string name="profile_language_hint">Choose the app language</string>
 
     <!-- Search -->
     <string name="search_placeholder">eg: Sword Art Online</string>
@@ -60,6 +64,7 @@
     <string name="anime_aired_ongoing">%1$s - ongoing</string>
     <string name="anime_aired_range">%1$s - %2$s</string>
     <string name="anime_aired_unknown_start">Unknown start date</string>
+    <string name="anime_aired_unknown_date">Unknown date</string>
     <string name="value_not_available">N/A</string>
     <string name="value_unknown">Unknown</string>
 

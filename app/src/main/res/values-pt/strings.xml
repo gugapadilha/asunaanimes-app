@@ -1,0 +1,94 @@
+<resources>
+    <string name="app_name">ASUNA ANIMES</string>
+    <string name="asuna_animes">ASUNA ANIMES</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_search">Buscar</string>
+    <string name="nav_watched">Assistidos</string>
+    <string name="nav_favorite">Favoritos</string>
+    <string name="nav_profile">Perfil</string>
+
+    <!-- Collections -->
+    <string name="favorite_screen_header">Favoritos</string>
+    <string name="watched_screen_header">Assistidos</string>
+
+    <!-- Profile -->
+    <string name="profile_screen_header">Perfil</string>
+    <string name="profile_guest_name">Seu nome de usuário</string>
+    <string name="profile_username_placeholder">Nome de usuário</string>
+    <string name="profile_save">Salvar perfil</string>
+    <string name="profile_saving">Salvando…</string>
+    <string name="profile_change_photo">Alterar foto</string>
+    <string name="profile_change_photo_hint">Toque na foto para alterá-la</string>
+    <string name="profile_watched_section">Assistidos</string>
+    <string name="profile_favorites_section">Favoritos</string>
+    <string name="profile_anime_count">%1$d animes</string>
+    <string name="profile_watched_empty">Nenhum anime assistido ainda.</string>
+    <string name="profile_favorites_empty">Nenhum anime favorito ainda.</string>
+    <string name="message_profile_saved">Perfil salvo!</string>
+    <string name="message_profile_avatar_updated">Foto de perfil atualizada!</string>
+    <string name="content_description_profile_photo">Foto de perfil</string>
+    <string name="profile_language_section">Idioma</string>
+    <string name="profile_language_english">Inglês</string>
+    <string name="profile_language_portuguese">Português</string>
+    <string name="profile_language_hint">Escolha o idioma do app</string>
+
+    <!-- Search -->
+    <string name="search_placeholder">ex: Sword Art Online</string>
+    <string name="search_action">Buscar</string>
+    <string name="search_clear">Limpar busca</string>
+    <string name="filter_top_anime">Top Animes</string>
+    <string name="filter_seasonal_anime">Animes da Temporada</string>
+    <string name="filter_recommendations">Recomendações</string>
+
+    <!-- Empty states -->
+    <string name="empty_list_title">Nada por aqui ainda</string>
+    <string name="empty_list_subtitle">Adicione animes em Buscar para vê-los nesta lista.</string>
+    <string name="empty_search_title">Nenhum anime encontrado</string>
+    <string name="empty_search_subtitle">Tente outro título ou limpe a busca para explorar os top animes.</string>
+    <string name="empty_favorites_title">Nenhum favorito ainda</string>
+    <string name="empty_favorites_subtitle">Abra um anime em Buscar e toque em Adicionar à sua lista.</string>
+    <string name="empty_watched_title">Nenhum anime assistido ainda</string>
+    <string name="empty_watched_subtitle">Marque animes como assistidos na aba Buscar.</string>
+
+    <!-- Anime details -->
+    <string name="anime_add_to_list">Adicionar à sua lista</string>
+    <string name="anime_remove">Remover anime</string>
+    <string name="anime_know_more">Saiba mais</string>
+    <string name="anime_synopsis_label">Sinopse</string>
+    <string name="anime_synopsis_loading">Carregando sinopse…</string>
+    <string name="anime_synopsis_unavailable">Sinopse indisponível.</string>
+    <string name="anime_score">Nota: %1$s</string>
+    <string name="anime_episodes">%1$s episódios</string>
+    <string name="anime_rating">Classificação: %1$s</string>
+    <string name="anime_aired_ongoing">%1$s - em exibição</string>
+    <string name="anime_aired_range">%1$s - %2$s</string>
+    <string name="anime_aired_unknown_start">Data de estreia desconhecida</string>
+    <string name="anime_aired_unknown_date">Data desconhecida</string>
+    <string name="value_not_available">N/D</string>
+    <string name="value_unknown">Desconhecido</string>
+
+    <!-- Collection dialog -->
+    <string name="collection_dialog_title">Adicionar à sua lista</string>
+    <string name="collection_dialog_subtitle">Escolha onde deseja salvar este anime.</string>
+    <string name="collection_dialog_favorite">Favoritos</string>
+    <string name="collection_dialog_watched">Assistidos</string>
+
+    <!-- Feedback messages -->
+    <string name="message_added_to_favorites">Anime adicionado aos favoritos!</string>
+    <string name="message_already_in_favorites">Você já adicionou este anime aos favoritos.</string>
+    <string name="message_added_to_watched">Anime adicionado à lista de assistidos!</string>
+    <string name="message_already_in_watched">Você já adicionou este anime à lista de assistidos.</string>
+    <string name="message_removed_from_favorites">Anime removido dos favoritos!</string>
+    <string name="message_removed_from_watched">Anime removido dos assistidos!</string>
+    <string name="message_storage_error">Algo deu errado, tente novamente.</string>
+    <string name="message_search_error">Não foi possível buscar agora. Tente novamente.</string>
+    <string name="message_search_empty">Nenhum anime corresponde a esse título. Tente outra busca.</string>
+    <string name="message_cannot_open_link">Nenhum app disponível para abrir este link.</string>
+
+    <!-- Content descriptions -->
+    <string name="content_description_anime_screen">Tela de anime</string>
+    <string name="content_description_background_image">Imagem de fundo</string>
+    <string name="content_description_anime_picture">Imagem do anime</string>
+    <string name="content_description_previous_search">Busca anterior</string>
+</resources>

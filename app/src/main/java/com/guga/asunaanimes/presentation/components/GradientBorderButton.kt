@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,6 +40,7 @@ fun AsunaPrimaryButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     fontSize: TextUnit = 15.sp,
+    minHeight: Dp = 48.dp,
     contentPadding: PaddingValues = PaddingValues(horizontal = 18.dp, vertical = 14.dp)
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -51,7 +53,7 @@ fun AsunaPrimaryButton(
     Box(
         modifier = modifier
             .scale(scale)
-            .defaultMinSize(minHeight = 48.dp)
+            .defaultMinSize(minHeight = minHeight)
             .clip(RoundedCornerShape(16.dp))
             .background(
                 Brush.horizontalGradient(

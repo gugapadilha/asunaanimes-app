@@ -207,10 +207,17 @@ private fun DetailText(text: String, color: Color = AsunaOnSurfaceMuted) {
 
 @Composable
 private fun airedLabel(anime: Anime): String {
+    val unknownDate = stringResource(R.string.anime_aired_unknown_date)
     val start = anime.airedFrom
-        ?.let { AiredDateFormatter.format(it) }
+        ?.let { AiredDateFormatter.format(it) ?: unknownDate }
         ?: stringResource(R.string.anime_aired_unknown_start)
     return anime.airedTo
-        ?.let { stringResource(R.string.anime_aired_range, start, AiredDateFormatter.format(it)) }
+        ?.let {
+            stringResource(
+                R.string.anime_aired_range,
+                start,
+                AiredDateFormatter.format(it) ?: unknownDate
+            )
+        }
         ?: stringResource(R.string.anime_aired_ongoing, start)
 }

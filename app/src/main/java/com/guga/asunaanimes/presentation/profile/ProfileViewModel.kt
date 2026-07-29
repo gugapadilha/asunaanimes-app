@@ -6,8 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.guga.asunaanimes.R
 import com.guga.asunaanimes.core.common.AppResult
 import com.guga.asunaanimes.domain.model.AnimeCollectionType
+import com.guga.asunaanimes.domain.model.AppLanguage
 import com.guga.asunaanimes.domain.usecase.ObserveAnimeCollectionUseCase
+import com.guga.asunaanimes.domain.usecase.ObserveAppLanguageUseCase
 import com.guga.asunaanimes.domain.usecase.ObserveProfileUseCase
+import com.guga.asunaanimes.domain.usecase.SetAppLanguageUseCase
 import com.guga.asunaanimes.domain.usecase.UpdateProfileAvatarUseCase
 import com.guga.asunaanimes.domain.usecase.UpdateProfileNameUseCase
 import com.guga.asunaanimes.presentation.common.UiMessage
@@ -27,8 +30,10 @@ import kotlinx.coroutines.launch
 class ProfileViewModel @Inject constructor(
     observeProfile: ObserveProfileUseCase,
     observeAnimeCollection: ObserveAnimeCollectionUseCase,
+    observeAppLanguage: ObserveAppLanguageUseCase,
     private val updateProfileName: UpdateProfileNameUseCase,
-    private val updateProfileAvatar: UpdateProfileAvatarUseCase
+    private val updateProfileAvatar: UpdateProfileAvatarUseCase,
+    private val setAppLanguage: SetAppLanguageUseCase
 ) : ViewModel() {
 
     private val draft = MutableStateFlow(ProfileDraft())
@@ -40,8 +45,9 @@ class ProfileViewModel @Inject constructor(
         observeProfile(),
         observeAnimeCollection(AnimeCollectionType.WATCHED),
         observeAnimeCollection(AnimeCollectionType.FAVORITE),
+        observeAppLanguage(),
         draft
-    ) { profile, watched, favorites, draftState ->
+    ) { profile, watched, favorites, language, draftState ->
         ProfileUiState(
             userName = draftState.userName ?: profile.userName,
             avatarUri = profile.avatarUri,
@@ -49,7 +55,8 @@ class ProfileViewModel @Inject constructor(
             favoriteAnimes = favorites,
             watchedCount = watched.size,
             favoriteCount = favorites.size,
-            isSavingName = draftState.isSavingName
+            isSavingName = draftState.isSavingName,
+            appLanguage = language
         )
     }.stateIn(
         scope = viewModelScope,
@@ -91,6 +98,18 @@ class ProfileViewModel @Inject constructor(
                 }
             }
             _messages.send(UiMessage(message))
+        }
+    }
+
+    fun onLanguageSelected(language: AppLanguage) {
+        viewModelScope.launch {
+            when (val result = setAppLanguage(language)) {
+                is AppResult.Success -> Unit
+                is AppResult.Failure -> {
+                    Log.w(TAG, "Unable to change app language: ${result.error}")
+                    _messages.send(UiMessage(R.string.message_storage_error))
+                }
+            }
         }
     }
 

@@ -10,6 +10,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -58,6 +59,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.guga.asunaanimes.R
 import com.guga.asunaanimes.domain.model.Anime
+import com.guga.asunaanimes.domain.model.AppLanguage
 import com.guga.asunaanimes.presentation.common.UiMessageEffect
 import com.guga.asunaanimes.presentation.components.AnimatedBackground
 import com.guga.asunaanimes.presentation.components.AsunaPrimaryButton
@@ -110,6 +112,13 @@ fun ProfileScreen(viewModel: ProfileViewModel = hiltViewModel()) {
                 isSaving = uiState.isSavingName,
                 onUserNameChanged = viewModel::onUserNameChanged,
                 onSaveClick = viewModel::onSaveName
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            ProfileLanguageSection(
+                selectedLanguage = uiState.appLanguage,
+                onLanguageSelected = viewModel::onLanguageSelected
             )
 
             Spacer(modifier = Modifier.height(28.dp))
@@ -222,27 +231,27 @@ private fun ProfileUserNameForm(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+            .padding(horizontal = 20.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Surface(
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(28.dp),
+            shape = RoundedCornerShape(24.dp),
             color = AsunaSurfaceElevated.copy(alpha = 0.92f),
             tonalElevation = 0.dp,
-            shadowElevation = 4.dp
+            shadowElevation = 3.dp
         ) {
             BasicTextField(
                 value = userName,
                 onValueChange = onUserNameChanged,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 6.dp)
-                    .heightIn(min = 40.dp),
+                    .padding(horizontal = 15.dp, vertical = 4.dp)
+                    .heightIn(min = 38.dp),
                 singleLine = true,
                 textStyle = TextStyle(
                     color = AsunaOnSurface,
-                    fontSize = 16.sp
+                    fontSize = 15.sp
                 ),
                 cursorBrush = SolidColor(AsunaOrange),
                 keyboardOptions = KeyboardOptions(
@@ -259,7 +268,7 @@ private fun ProfileUserNameForm(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 10.dp),
+                            .padding(vertical = 9.dp),
                         contentAlignment = Alignment.CenterStart
                     ) {
                         if (userName.isEmpty()) {
@@ -281,10 +290,89 @@ private fun ProfileUserNameForm(
                 if (isSaving) R.string.profile_saving else R.string.profile_save
             ),
             onClick = onSaveClick,
+            fontSize = 14.sp,
+            minHeight = 44.dp,
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
+
+@Composable
+private fun ProfileLanguageSection(
+    selectedLanguage: AppLanguage,
+    onLanguageSelected: (AppLanguage) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Text(
+            text = stringResource(R.string.profile_language_section),
+            color = AsunaOnSurface,
+            fontSize = 15.sp,
+            fontWeight = FontWeight.SemiBold
+        )
+        Text(
+            text = stringResource(R.string.profile_language_hint),
+            color = AsunaOnSurfaceMuted,
+            fontSize = 12.sp
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            LanguageOptionChip(
+                label = stringResource(R.string.profile_language_english),
+                selected = selectedLanguage == AppLanguage.ENGLISH,
+                onClick = { onLanguageSelected(AppLanguage.ENGLISH) },
+                modifier = Modifier.weight(1f)
+            )
+            LanguageOptionChip(
+                label = stringResource(R.string.profile_language_portuguese),
+                selected = selectedLanguage == AppLanguage.PORTUGUESE,
+                onClick = { onLanguageSelected(AppLanguage.PORTUGUESE) },
+                modifier = Modifier.weight(1f)
+            )
+        }
+    }
+}
+
+@Composable
+private fun LanguageOptionChip(
+    label: String,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        modifier = modifier
+            .heightIn(min = 40.dp)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onClick
+            ),
+        shape = RoundedCornerShape(20.dp),
+        color = if (selected) AsunaOrange else AsunaSurfaceElevated.copy(alpha = 0.92f),
+        tonalElevation = 0.dp,
+        shadowElevation = if (selected) 0.dp else 2.dp
+    ) {
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 4.dp)
-        )
+                .padding(vertical = 10.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = label,
+                color = if (selected) AsunaBlack else AsunaOnSurface,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
     }
 }
 
