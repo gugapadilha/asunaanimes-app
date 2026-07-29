@@ -26,5 +26,7 @@ data class AnimeEntity(
     @SerializedName("aired_from")
     val airedFrom: String?,
     @SerializedName("aired_to")
-    val airedTo: String?
+    val airedTo: String?,
+    @SerializedName("user_score")
+    val userScore: Int? = null
 )

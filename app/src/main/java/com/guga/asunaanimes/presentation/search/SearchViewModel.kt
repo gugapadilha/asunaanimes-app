@@ -216,10 +216,10 @@ class SearchViewModel @Inject constructor(
         _uiState.update { it.copy(isCollectionDialogVisible = false) }
     }
 
-    fun onAddToCollection(type: AnimeCollectionType) {
+    fun onAddToCollection(type: AnimeCollectionType, userScore: Int?) {
         val anime = _uiState.value.selectedAnime ?: return
         viewModelScope.launch {
-            val message = when (val result = addAnimeToCollection(type, anime)) {
+            val message = when (val result = addAnimeToCollection(type, anime, userScore)) {
                 is AppResult.Success -> messageFor(type, result.data)
                 is AppResult.Failure -> {
                     Log.w(TAG, "Unable to add anime to $type: ${result.error}")

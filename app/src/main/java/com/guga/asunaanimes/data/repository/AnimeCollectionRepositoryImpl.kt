@@ -37,6 +37,14 @@ class AnimeCollectionRepositoryImpl @Inject constructor(
     override suspend fun remove(type: AnimeCollectionType, anime: Anime): AppResult<Unit> =
         runStorageCatching { localDataSource.remove(type, anime.malId) }
 
+    override suspend fun updateUserScore(
+        type: AnimeCollectionType,
+        malId: Int,
+        userScore: Int?
+    ): AppResult<Boolean> = runStorageCatching {
+        localDataSource.updateUserScore(type, malId, userScore)
+    }
+
     private inline fun <T> runStorageCatching(block: () -> T): AppResult<T> = try {
         AppResult.Success(block())
     } catch (cancellation: CancellationException) {

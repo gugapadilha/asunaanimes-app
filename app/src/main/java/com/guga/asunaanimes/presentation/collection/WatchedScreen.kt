@@ -24,6 +24,9 @@ fun WatchedScreen(viewModel: WatchedViewModel = hiltViewModel()) {
         onQueryChange = viewModel::onQueryChanged,
         onAnimeClick = viewModel::onAnimeSelected,
         onDetailsDismissed = viewModel::onDetailsDismissed,
-        onRemoveClick = viewModel::onRemoveSelectedAnime
+        onRemoveClick = viewModel::onRemoveSelectedAnime,
+        onEditScoreClick = viewModel::onEditScoreClick,
+        onScoreDialogDismissed = viewModel::onScoreDialogDismissed,
+        onScoreConfirmed = viewModel::onScoreConfirmed
     )
 }

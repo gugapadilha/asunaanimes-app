@@ -13,6 +13,7 @@ import com.guga.asunaanimes.domain.usecase.ObserveAnimeCollectionUseCase
 import com.guga.asunaanimes.domain.usecase.ObserveSearchHistoryUseCase
 import com.guga.asunaanimes.domain.usecase.RemoveAnimeFromCollectionUseCase
 import com.guga.asunaanimes.domain.usecase.SaveSearchQueryUseCase
+import com.guga.asunaanimes.domain.usecase.UpdateAnimeUserScoreUseCase
 import com.guga.asunaanimes.presentation.common.UiMessage
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,6 +33,7 @@ abstract class CollectionViewModel(
     @StringRes private val removedMessageResId: Int,
     private val filterAnimesByTitle: FilterAnimesByTitleUseCase,
     private val removeAnimeFromCollection: RemoveAnimeFromCollectionUseCase,
+    private val updateAnimeUserScore: UpdateAnimeUserScoreUseCase,
     private val saveSearchQuery: SaveSearchQueryUseCase,
     observeAnimeCollection: ObserveAnimeCollectionUseCase,
     observeSearchHistory: ObserveSearchHistoryUseCase
@@ -39,6 +41,7 @@ abstract class CollectionViewModel(
 
     private val query = MutableStateFlow("")
     private val selectedAnime = MutableStateFlow<Anime?>(null)
+    private val isScoreDialogVisible = MutableStateFlow(false)
 
     private val _messages = Channel<UiMessage>(Channel.BUFFERED)
     val messages = _messages.receiveAsFlow()
@@ -47,13 +50,15 @@ abstract class CollectionViewModel(
         observeAnimeCollection(collectionType),
         observeSearchHistory(),
         query,
-        selectedAnime
-    ) { animes, recentSearches, currentQuery, selected ->
+        selectedAnime,
+        isScoreDialogVisible
+    ) { animes, recentSearches, currentQuery, selected, scoreDialogVisible ->
         CollectionUiState(
             animes = filterAnimesByTitle(animes, currentQuery),
             recentSearches = recentSearches,
-            // Keeps the detail sheet consistent when the selected anime leaves the collection.
-            selectedAnime = selected?.takeIf { anime -> animes.any { it.malId == anime.malId } }
+            // Refresh from the latest stored entry so score edits appear in the open sheet.
+            selectedAnime = selected?.let { sel -> animes.firstOrNull { it.malId == sel.malId } },
+            isScoreDialogVisible = scoreDialogVisible && selected != null
         )
     }.stateIn(
         scope = viewModelScope,
@@ -77,6 +82,33 @@ abstract class CollectionViewModel(
 
     fun onDetailsDismissed() {
         selectedAnime.value = null
+        isScoreDialogVisible.value = false
+    }
+
+    fun onEditScoreClick() {
+        if (selectedAnime.value == null) return
+        isScoreDialogVisible.value = true
+    }
+
+    fun onScoreDialogDismissed() {
+        isScoreDialogVisible.value = false
+    }
+
+    fun onScoreConfirmed(userScore: Int?) {
+        val anime = selectedAnime.value ?: return
+        viewModelScope.launch {
+            val message = when (
+                val result = updateAnimeUserScore(collectionType, anime.malId, userScore)
+            ) {
+                is AppResult.Success -> R.string.message_score_updated
+                is AppResult.Failure -> {
+                    Log.w(TAG, "Unable to update score for ${anime.malId}: ${result.error}")
+                    R.string.message_storage_error
+                }
+            }
+            isScoreDialogVisible.value = false
+            _messages.send(UiMessage(message))
+        }
     }
 
     fun onRemoveSelectedAnime() {
@@ -90,6 +122,7 @@ abstract class CollectionViewModel(
                 }
             }
             selectedAnime.value = null
+            isScoreDialogVisible.value = false
             _messages.send(UiMessage(message))
         }
     }

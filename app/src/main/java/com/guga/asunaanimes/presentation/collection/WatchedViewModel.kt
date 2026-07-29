@@ -7,6 +7,7 @@ import com.guga.asunaanimes.domain.usecase.ObserveAnimeCollectionUseCase
 import com.guga.asunaanimes.domain.usecase.ObserveSearchHistoryUseCase
 import com.guga.asunaanimes.domain.usecase.RemoveAnimeFromCollectionUseCase
 import com.guga.asunaanimes.domain.usecase.SaveSearchQueryUseCase
+import com.guga.asunaanimes.domain.usecase.UpdateAnimeUserScoreUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -14,6 +15,7 @@ import javax.inject.Inject
 class WatchedViewModel @Inject constructor(
     filterAnimesByTitle: FilterAnimesByTitleUseCase,
     removeAnimeFromCollection: RemoveAnimeFromCollectionUseCase,
+    updateAnimeUserScore: UpdateAnimeUserScoreUseCase,
     saveSearchQuery: SaveSearchQueryUseCase,
     observeAnimeCollection: ObserveAnimeCollectionUseCase,
     observeSearchHistory: ObserveSearchHistoryUseCase
@@ -22,6 +24,7 @@ class WatchedViewModel @Inject constructor(
     removedMessageResId = R.string.message_removed_from_watched,
     filterAnimesByTitle = filterAnimesByTitle,
     removeAnimeFromCollection = removeAnimeFromCollection,
+    updateAnimeUserScore = updateAnimeUserScore,
     saveSearchQuery = saveSearchQuery,
     observeAnimeCollection = observeAnimeCollection,
     observeSearchHistory = observeSearchHistory

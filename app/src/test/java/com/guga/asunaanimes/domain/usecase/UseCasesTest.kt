@@ -8,6 +8,7 @@ import com.guga.asunaanimes.util.FakeSearchHistoryRepository
 import com.guga.asunaanimes.util.anime
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -112,18 +113,37 @@ class AddAnimeToCollectionUseCaseTest {
 
     @Test
     fun `favoriting an anime also places it in watched`() = runTest {
-        val result = addAnime(AnimeCollectionType.FAVORITE, anime(42))
+        val result = addAnime(AnimeCollectionType.FAVORITE, anime(42), userScore = 9)
 
         assertTrue(result is AppResult.Success)
         assertEquals(listOf(42), repository.getCollection(AnimeCollectionType.FAVORITE).map { it.malId })
         assertEquals(listOf(42), repository.getCollection(AnimeCollectionType.WATCHED).map { it.malId })
+        assertEquals(9, repository.getCollection(AnimeCollectionType.FAVORITE).first().userScore)
+        assertEquals(9, repository.getCollection(AnimeCollectionType.WATCHED).first().userScore)
     }
 
     @Test
     fun `adding only to watched does not touch favorites`() = runTest {
-        addAnime(AnimeCollectionType.WATCHED, anime(7))
+        addAnime(AnimeCollectionType.WATCHED, anime(7), userScore = 7)
 
         assertEquals(emptyList<Int>(), repository.getCollection(AnimeCollectionType.FAVORITE).map { it.malId })
         assertEquals(listOf(7), repository.getCollection(AnimeCollectionType.WATCHED).map { it.malId })
+        assertEquals(7, repository.getCollection(AnimeCollectionType.WATCHED).first().userScore)
+    }
+
+    @Test
+    fun `rejects scores outside the 1 to 10 range`() = runTest {
+        val result = addAnime(AnimeCollectionType.WATCHED, anime(3), userScore = 11)
+
+        assertTrue(result is AppResult.Failure)
+        assertEquals(emptyList<Int>(), repository.getCollection(AnimeCollectionType.WATCHED).map { it.malId })
+    }
+
+    @Test
+    fun `allows skipping the score`() = runTest {
+        val result = addAnime(AnimeCollectionType.WATCHED, anime(5), userScore = null)
+
+        assertTrue(result is AppResult.Success)
+        assertNull(repository.getCollection(AnimeCollectionType.WATCHED).first().userScore)
     }
 }

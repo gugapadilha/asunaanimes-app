@@ -10,6 +10,7 @@ data class ProfileUiState(
     val favoriteAnimes: List<Anime> = emptyList(),
     val watchedCount: Int = 0,
     val favoriteCount: Int = 0,
+    val meanScore: Float? = null,
     val isSavingName: Boolean = false,
     val appLanguage: AppLanguage = AppLanguage.ENGLISH
 )

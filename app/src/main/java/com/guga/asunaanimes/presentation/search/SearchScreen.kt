@@ -53,7 +53,7 @@ fun SearchScreen(viewModel: SearchViewModel = hiltViewModel()) {
         onDetailsDismissed = viewModel::onDetailsDismissed,
         onAddToListClick = viewModel::onAddToListClick,
         onCollectionDialogDismissed = viewModel::onCollectionDialogDismissed,
-        onCollectionSelected = viewModel::onAddToCollection
+        onCollectionConfirmed = viewModel::onAddToCollection
     )
 }
 
@@ -68,7 +68,7 @@ private fun SearchContent(
     onDetailsDismissed: () -> Unit,
     onAddToListClick: () -> Unit,
     onCollectionDialogDismissed: () -> Unit,
-    onCollectionSelected: (AnimeCollectionType) -> Unit
+    onCollectionConfirmed: (AnimeCollectionType, Int?) -> Unit
 ) {
     val listState = rememberLazyGridState()
 
@@ -143,7 +143,7 @@ private fun SearchContent(
     if (uiState.isCollectionDialogVisible) {
         AnimeCollectionDialog(
             onDismiss = onCollectionDialogDismissed,
-            onCollectionSelected = onCollectionSelected
+            onConfirm = onCollectionConfirmed
         )
     }
 }

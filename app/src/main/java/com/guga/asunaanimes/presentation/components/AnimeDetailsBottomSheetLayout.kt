@@ -43,6 +43,8 @@ fun AnimeDetailsBottomSheetLayout(
     onActionClick: () -> Unit,
     onDismissed: () -> Unit,
     isDetailsLoading: Boolean = false,
+    secondaryActionLabel: String? = null,
+    onSecondaryActionClick: (() -> Unit)? = null,
     topChromeClearance: Dp = DefaultSearchChromeClearance,
     content: @Composable () -> Unit
 ) {
@@ -82,6 +84,8 @@ fun AnimeDetailsBottomSheetLayout(
                         anime = selectedAnime,
                         actionLabel = actionLabel,
                         onActionClick = onActionClick,
+                        secondaryActionLabel = secondaryActionLabel,
+                        onSecondaryActionClick = onSecondaryActionClick,
                         isDetailsLoading = isDetailsLoading,
                         modifier = Modifier
                             .fillMaxWidth()

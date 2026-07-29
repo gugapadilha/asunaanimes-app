@@ -5,6 +5,9 @@ package com.guga.asunaanimes.domain.model
  *
  * Every field the remote API may omit is modelled as nullable so the presentation layer is
  * forced to handle missing data instead of crashing on it.
+ *
+ * [userScore] is the personal 1–10 rating the user assigns when saving to a collection.
+ * Remote browse/search results leave it null.
  */
 data class Anime(
     val malId: Int,
@@ -16,5 +19,6 @@ data class Anime(
     val rating: String?,
     val detailsUrl: String?,
     val airedFrom: String?,
-    val airedTo: String?
+    val airedTo: String?,
+    val userScore: Int? = null
 )

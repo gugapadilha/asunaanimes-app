@@ -7,6 +7,7 @@ import com.guga.asunaanimes.domain.usecase.ObserveAnimeCollectionUseCase
 import com.guga.asunaanimes.domain.usecase.ObserveSearchHistoryUseCase
 import com.guga.asunaanimes.domain.usecase.RemoveAnimeFromCollectionUseCase
 import com.guga.asunaanimes.domain.usecase.SaveSearchQueryUseCase
+import com.guga.asunaanimes.domain.usecase.UpdateAnimeUserScoreUseCase
 import com.guga.asunaanimes.util.FakeAnimeCollectionRepository
 import com.guga.asunaanimes.util.FakeSearchHistoryRepository
 import com.guga.asunaanimes.util.MainDispatcherRule
@@ -90,6 +91,7 @@ class CollectionViewModelTest {
     private fun createViewModel() = FavoriteViewModel(
         filterAnimesByTitle = FilterAnimesByTitleUseCase(),
         removeAnimeFromCollection = RemoveAnimeFromCollectionUseCase(collectionRepository),
+        updateAnimeUserScore = UpdateAnimeUserScoreUseCase(collectionRepository),
         saveSearchQuery = SaveSearchQueryUseCase(searchHistoryRepository),
         observeAnimeCollection = ObserveAnimeCollectionUseCase(collectionRepository),
         observeSearchHistory = ObserveSearchHistoryUseCase(searchHistoryRepository)

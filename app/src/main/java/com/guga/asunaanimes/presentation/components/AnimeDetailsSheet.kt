@@ -43,6 +43,7 @@ import com.guga.asunaanimes.presentation.theme.AsunaOrange
 import com.guga.asunaanimes.presentation.theme.AsunaOrangeSoft
 import com.guga.asunaanimes.presentation.theme.AsunaScore
 import com.guga.asunaanimes.presentation.theme.AsunaSurface
+import com.guga.asunaanimes.presentation.theme.userScoreColor
 import com.guga.asunaanimes.presentation.util.openInBrowser
 
 /**
@@ -55,7 +56,9 @@ fun AnimeDetailsSheet(
     actionLabel: String,
     onActionClick: () -> Unit,
     modifier: Modifier = Modifier,
-    isDetailsLoading: Boolean = false
+    isDetailsLoading: Boolean = false,
+    secondaryActionLabel: String? = null,
+    onSecondaryActionClick: (() -> Unit)? = null
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
@@ -117,6 +120,12 @@ fun AnimeDetailsSheet(
                         ),
                         color = AsunaScore
                     )
+                    DetailText(
+                        text = anime.userScore?.let {
+                            stringResource(R.string.anime_your_score, it)
+                        } ?: stringResource(R.string.anime_your_score_unrated),
+                        color = anime.userScore?.let { userScoreColor(it) } ?: AsunaOnSurfaceMuted
+                    )
                     DetailText(text = airedLabel(anime))
                     DetailText(
                         text = stringResource(
@@ -144,6 +153,16 @@ fun AnimeDetailsSheet(
             }
 
             Spacer(modifier = Modifier.height(16.dp))
+
+            if (secondaryActionLabel != null && onSecondaryActionClick != null) {
+                AsunaPrimaryButton(
+                    text = secondaryActionLabel,
+                    onClick = onSecondaryActionClick,
+                    modifier = Modifier.fillMaxWidth(),
+                    fontSize = 15.sp
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+            }
 
             AsunaPrimaryButton(
                 text = actionLabel,

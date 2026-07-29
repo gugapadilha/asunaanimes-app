@@ -9,7 +9,8 @@ fun anime(
     synopsis: String? = null,
     score: Float? = null,
     episodes: Int? = null,
-    rating: String? = null
+    rating: String? = null,
+    userScore: Int? = null
 ) = Anime(
     malId = malId,
     title = title,
@@ -20,5 +21,6 @@ fun anime(
     rating = rating,
     detailsUrl = null,
     airedFrom = null,
-    airedTo = null
+    airedTo = null,
+    userScore = userScore
 )

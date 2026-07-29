@@ -12,4 +12,10 @@ interface AnimeCollectionLocalDataSource {
     suspend fun add(type: AnimeCollectionType, anime: AnimeEntity): Boolean
 
     suspend fun remove(type: AnimeCollectionType, malId: Int)
+
+    /**
+     * Updates [userScore] for [malId] when present.
+     * @return `true` when an entry was updated.
+     */
+    suspend fun updateUserScore(type: AnimeCollectionType, malId: Int, userScore: Int?): Boolean
 }

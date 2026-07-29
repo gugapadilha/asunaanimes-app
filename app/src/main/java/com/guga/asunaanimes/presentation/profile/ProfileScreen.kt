@@ -65,6 +65,7 @@ import com.guga.asunaanimes.presentation.components.AnimatedBackground
 import com.guga.asunaanimes.presentation.components.AsunaPrimaryButton
 import com.guga.asunaanimes.presentation.components.CollectionScreenHeader
 import com.guga.asunaanimes.presentation.components.FloatingBottomNavClearance
+import com.guga.asunaanimes.presentation.components.UserScoreBadge
 import com.guga.asunaanimes.presentation.theme.AsunaBlack
 import com.guga.asunaanimes.presentation.theme.AsunaOnSurface
 import com.guga.asunaanimes.presentation.theme.AsunaOnSurfaceMuted
@@ -98,6 +99,7 @@ fun ProfileScreen(viewModel: ProfileViewModel = hiltViewModel()) {
             ProfileIdentitySection(
                 avatarUri = uiState.avatarUri,
                 userName = uiState.userName,
+                meanScore = uiState.meanScore,
                 onChangePhotoClick = {
                     photoPicker.launch(
                         PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
@@ -146,6 +148,7 @@ fun ProfileScreen(viewModel: ProfileViewModel = hiltViewModel()) {
 private fun ProfileIdentitySection(
     avatarUri: String?,
     userName: String,
+    meanScore: Float?,
     onChangePhotoClick: () -> Unit
 ) {
     Column(
@@ -215,6 +218,30 @@ private fun ProfileIdentitySection(
             color = AsunaOnSurfaceMuted,
             fontSize = 13.sp,
             modifier = Modifier.padding(top = 4.dp)
+        )
+
+        Spacer(modifier = Modifier.height(14.dp))
+
+        ProfileMeanScore(meanScore = meanScore)
+    }
+}
+
+@Composable
+private fun ProfileMeanScore(meanScore: Float?) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            text = stringResource(R.string.profile_mean_score),
+            color = AsunaOnSurfaceMuted,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Medium
+        )
+        Text(
+            text = meanScore?.let { stringResource(R.string.profile_mean_score_value, it) }
+                ?: stringResource(R.string.profile_mean_score_empty),
+            color = AsunaOrange,
+            fontSize = 22.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(top = 2.dp)
         )
     }
 }
@@ -436,16 +463,28 @@ private fun CompactAnimePoster(anime: Anime) {
         modifier = Modifier.width(84.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            painter = rememberAsyncImagePainter(model = anime.imageUrl),
-            contentDescription = stringResource(R.string.content_description_anime_picture),
-            contentScale = ContentScale.Crop,
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(118.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .background(AsunaSurfaceElevated)
-        )
+        ) {
+            Image(
+                painter = rememberAsyncImagePainter(model = anime.imageUrl),
+                contentDescription = stringResource(R.string.content_description_anime_picture),
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
+            anime.userScore?.let { score ->
+                UserScoreBadge(
+                    score = score,
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(4.dp)
+                )
+            }
+        }
         Text(
             text = anime.title,
             color = AsunaOnSurface,

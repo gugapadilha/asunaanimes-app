@@ -121,7 +121,8 @@ fun AnimeEntity.toDomain(): Anime = Anime(
     rating = rating,
     detailsUrl = detailsUrl,
     airedFrom = airedFrom,
-    airedTo = airedTo
+    airedTo = airedTo,
+    userScore = userScore
 )
 
 fun Anime.toEntity(): AnimeEntity = AnimeEntity(
@@ -134,5 +135,6 @@ fun Anime.toEntity(): AnimeEntity = AnimeEntity(
     rating = rating,
     detailsUrl = detailsUrl,
     airedFrom = airedFrom,
-    airedTo = airedTo
+    airedTo = airedTo,
+    userScore = userScore
 )

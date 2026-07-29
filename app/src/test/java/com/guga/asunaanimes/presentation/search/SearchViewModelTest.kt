@@ -199,11 +199,12 @@ class SearchViewModelTest {
             val viewModel = createViewModel()
             viewModel.onAnimeSelected(anime(1))
 
-            viewModel.onAddToCollection(AnimeCollectionType.FAVORITE)
+            viewModel.onAddToCollection(AnimeCollectionType.FAVORITE, userScore = 8)
 
             assertEquals(R.string.message_added_to_favorites, viewModel.messages.first().textResId)
             assertEquals(listOf(1), collectionRepository.getCollection(AnimeCollectionType.FAVORITE).map { it.malId })
             assertEquals(listOf(1), collectionRepository.getCollection(AnimeCollectionType.WATCHED).map { it.malId })
+            assertEquals(8, collectionRepository.getCollection(AnimeCollectionType.FAVORITE).first().userScore)
         }
 
     @Test
@@ -212,10 +213,10 @@ class SearchViewModelTest {
             val viewModel = createViewModel()
             viewModel.onAnimeSelected(anime(1))
 
-            viewModel.onAddToCollection(AnimeCollectionType.FAVORITE)
+            viewModel.onAddToCollection(AnimeCollectionType.FAVORITE, userScore = 9)
             assertEquals(R.string.message_added_to_favorites, viewModel.messages.first().textResId)
 
-            viewModel.onAddToCollection(AnimeCollectionType.FAVORITE)
+            viewModel.onAddToCollection(AnimeCollectionType.FAVORITE, userScore = 9)
             assertEquals(
                 R.string.message_already_in_favorites,
                 viewModel.messages.first().textResId

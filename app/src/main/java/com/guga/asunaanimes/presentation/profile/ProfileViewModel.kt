@@ -7,6 +7,7 @@ import com.guga.asunaanimes.R
 import com.guga.asunaanimes.core.common.AppResult
 import com.guga.asunaanimes.domain.model.AnimeCollectionType
 import com.guga.asunaanimes.domain.model.AppLanguage
+import com.guga.asunaanimes.domain.model.UserScoreStats
 import com.guga.asunaanimes.domain.usecase.ObserveAnimeCollectionUseCase
 import com.guga.asunaanimes.domain.usecase.ObserveAppLanguageUseCase
 import com.guga.asunaanimes.domain.usecase.ObserveProfileUseCase
@@ -55,6 +56,7 @@ class ProfileViewModel @Inject constructor(
             favoriteAnimes = favorites,
             watchedCount = watched.size,
             favoriteCount = favorites.size,
+            meanScore = UserScoreStats.mean(watched),
             isSavingName = draftState.isSavingName,
             appLanguage = language
         )

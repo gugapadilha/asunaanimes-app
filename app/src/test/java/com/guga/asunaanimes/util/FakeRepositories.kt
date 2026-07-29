@@ -138,6 +138,21 @@ class FakeAnimeCollectionRepository : AnimeCollectionRepository {
         return AppResult.Success(Unit)
     }
 
+    override suspend fun updateUserScore(
+        type: AnimeCollectionType,
+        malId: Int,
+        userScore: Int?
+    ): AppResult<Boolean> {
+        if (failNextWrite) return AppResult.Failure(AppError.Storage())
+        val state = collections.getValue(type)
+        val index = state.value.indexOfFirst { it.malId == malId }
+        if (index < 0) return AppResult.Success(false)
+        state.value = state.value.toMutableList().also { list ->
+            list[index] = list[index].copy(userScore = userScore)
+        }
+        return AppResult.Success(true)
+    }
+
     fun setCollection(type: AnimeCollectionType, animes: List<Anime>) {
         collections.getValue(type).value = animes
     }

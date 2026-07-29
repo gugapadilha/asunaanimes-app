@@ -32,6 +32,8 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.guga.asunaanimes.R
 import com.guga.asunaanimes.domain.model.Anime
+import com.guga.asunaanimes.presentation.theme.userScoreColor
+import com.guga.asunaanimes.presentation.theme.userScoreContentColor
 
 @Composable
 fun AnimeItem(
@@ -67,6 +69,14 @@ fun AnimeItem(
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
+        anime.userScore?.let { score ->
+            UserScoreBadge(
+                score = score,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(6.dp)
+            )
+        }
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -92,5 +102,26 @@ fun AnimeItem(
                 overflow = TextOverflow.Ellipsis
             )
         }
+    }
+}
+
+@Composable
+fun UserScoreBadge(
+    score: Int,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(8.dp))
+            .background(userScoreColor(score))
+            .padding(horizontal = 7.dp, vertical = 3.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = stringResource(R.string.anime_user_score, score),
+            color = userScoreContentColor(score),
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Bold
+        )
     }
 }

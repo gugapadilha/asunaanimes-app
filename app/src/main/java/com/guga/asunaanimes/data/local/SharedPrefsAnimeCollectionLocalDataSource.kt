@@ -67,6 +67,22 @@ class SharedPrefsAnimeCollectionLocalDataSource @Inject constructor(
         if (updated.size != current.size) persist(type, updated)
     }
 
+    override suspend fun updateUserScore(
+        type: AnimeCollectionType,
+        malId: Int,
+        userScore: Int?
+    ): Boolean = writeLock.withLock {
+        ensureLoaded(type)
+        val current = cacheOf(type).value.orEmpty()
+        val index = current.indexOfFirst { it.malId == malId }
+        if (index < 0) return@withLock false
+        val updated = current.toMutableList().also { list ->
+            list[index] = list[index].copy(userScore = userScore)
+        }
+        persist(type, updated)
+        true
+    }
+
     private suspend fun ensureLoaded(type: AnimeCollectionType) {
         val cache = cacheOf(type)
         if (cache.value != null) return

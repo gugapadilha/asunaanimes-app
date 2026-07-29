@@ -73,6 +73,30 @@
     <string name="collection_dialog_subtitle">Escolha onde deseja salvar este anime.</string>
     <string name="collection_dialog_favorite">Favoritos</string>
     <string name="collection_dialog_watched">Assistidos</string>
+    <string name="collection_dialog_rating_title">Sua nota</string>
+    <string name="collection_dialog_rating_subtitle">Avalie este anime de 1 a 10.</string>
+    <string name="collection_dialog_confirm_rating">Salvar com nota</string>
+    <string name="collection_dialog_skip_rating">Pular por agora</string>
+    <string name="collection_dialog_back">Voltar</string>
+    <string name="anime_edit_score">Editar nota</string>
+    <string name="anime_user_score">%1$d</string>
+    <string name="anime_your_score">Sua nota: %1$d</string>
+    <string name="anime_your_score_unrated">Ainda sem nota</string>
+    <string name="message_score_updated">Nota atualizada!</string>
+    <string name="score_option_format">(%1$d) %2$s</string>
+    <string name="score_label_10">Obra-prima</string>
+    <string name="score_label_9">Ótimo</string>
+    <string name="score_label_8">Muito bom</string>
+    <string name="score_label_7">Bom</string>
+    <string name="score_label_6">Razoável</string>
+    <string name="score_label_5">Mediano</string>
+    <string name="score_label_4">Ruim</string>
+    <string name="score_label_3">Muito ruim</string>
+    <string name="score_label_2">Horrível</string>
+    <string name="score_label_1">Péssimo</string>
+    <string name="profile_mean_score">Nota média</string>
+    <string name="profile_mean_score_value">%1$.2f</string>
+    <string name="profile_mean_score_empty">Nenhuma nota ainda</string>
 
     <!-- Feedback messages -->
     <string name="message_added_to_favorites">Anime adicionado aos favoritos!</string>

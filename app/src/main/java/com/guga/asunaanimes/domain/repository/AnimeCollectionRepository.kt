@@ -13,4 +13,10 @@ interface AnimeCollectionRepository {
     suspend fun add(type: AnimeCollectionType, anime: Anime): AppResult<AddToCollectionOutcome>
 
     suspend fun remove(type: AnimeCollectionType, anime: Anime): AppResult<Unit>
+
+    suspend fun updateUserScore(
+        type: AnimeCollectionType,
+        malId: Int,
+        userScore: Int?
+    ): AppResult<Boolean>
 }

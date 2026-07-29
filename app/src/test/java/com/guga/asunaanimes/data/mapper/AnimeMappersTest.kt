@@ -71,6 +71,7 @@ class AnimeMappersTest {
     @Test
     fun `entity round trip preserves every field`() {
         val original = requireNotNull(animeDto(malId = 42, title = "Monster").toDomainOrNull())
+            .copy(userScore = 8)
 
         assertEquals(original, original.toEntity().toDomain())
     }
